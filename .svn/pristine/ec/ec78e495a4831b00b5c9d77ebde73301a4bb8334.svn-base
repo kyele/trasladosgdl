@@ -1,0 +1,42 @@
+var obj = {
+	initialize:function(){
+		$('#sidebar-toggle').click(function(e){
+			e.preventDefault();
+			$(".navbar-side").toggleClass("collapsed");
+    		$("#page-wrapper").toggleClass("collapsed");
+		});
+		$('.page-content').css('opacity','1');
+	},
+	alta_usuarios:function(){
+		$('#myform').submit(function(e){
+			e.preventDefault();
+			var form = new FormData(document.getElementById('myform'));
+		   	var file = document.getElementById('userfile').files[0];
+		    if (file) {   
+		        form.append('userfile', file);
+		    }
+			$.ajax({
+				url:$(this).attr('action'),
+				type:'POST',
+				dataType:'json',
+				data:form,
+				processData: false, 
+  				contentType: false, 
+				success:function(data){
+					if(data.statusError){
+						$('#contError').html(data.errors);
+					}else{
+						$('#myform input').val('');
+						$('#contError').empty().addClass('alert alert-success').html( data.usuario);
+						
+					}
+				}
+			});	
+		});
+	}
+};
+
+$(document).ready(function(){
+	obj.initialize();
+	obj.alta_usuarios();
+});

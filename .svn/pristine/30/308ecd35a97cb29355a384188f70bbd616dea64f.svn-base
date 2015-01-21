@@ -1,0 +1,70 @@
+var customers = {
+	url:'',
+	modal:function(rfc){
+
+ 		$.ajax({
+				url:this.url+'ver_cliente.html',
+				type:'POST',
+				dataType:'json',
+				data:{'cliente':rfc},
+				success:function(data){
+					if(data.status){
+						$('#modal_cliente').modal({ 
+				            backdrop:'static',
+				            keyboard:true 
+          				}).on('shown.bs.modal',function(e){
+			                $.each(data.cliente,function(key,value){
+            	    		$('#'+key).val(value);	
+                		});
+              
+         				}).on('hidden.bs.modal',function(){
+         					$('#myform_info_cliente [input]').val('');
+         				});
+					}
+					
+				},
+				error:function(){
+					$.bootstrapGrowl(
+ 					"El apartado al que intenta ingresar ha caducado o no existe, comuniquese con el administrador del sistema.",
+	 					{
+	 						type:'danger',	
+	 						align:'center',
+	 						width:'auto',
+	 						delay:3000,
+	 						allow_dismiss:false
+	 					}
+ 					);
+
+				}
+ 		});
+ 	
+ 	},
+ 	update_cliente:function(){
+ 		$('#myform_info_cliente').submit(function(e){
+			e.preventDefault();
+			$.ajax({
+				url:$(this).attr('action'),
+				type:'POST',
+				dataType:'json',
+				data:$(this).serialize(),
+				success:function(data){
+					(!data.status)?function(){
+						$('#contError').html(data.msg);
+					}
+					():function(){
+						$('#contError').empty().html(data.msg);
+						setTimeout(function(){
+							location.reload();
+						},2000);
+					}();
+				},
+				error:function(){
+					$('#contError').html('<div class="alert alert-danger">Parece que su conexión a internet no va bien, intentelo más tarde.</div>');
+				}
+			});
+ 		});
+ 	}
+};
+$(document).ready(function($) {
+	customers.update_cliente();	
+});

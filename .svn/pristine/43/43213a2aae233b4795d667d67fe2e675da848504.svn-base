@@ -1,0 +1,58 @@
+<?php
+class Users extends CI_Model
+{
+	function __construct()
+	{
+		$this->load->database();
+	}
+	public function login($username,$password)
+	{
+		$params  = array('email'=>$username,'password'=>md5($password));
+		$this->db->select('IDUSUARIO,ROLE,NOMBRE,APEPAT');
+		$query = $this->db->get_where('tbl_usuario',$params);
+		if($query->num_rows() === 1)
+		{
+			return $query->result();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public function nuevo($datos){
+
+		$params_usuario = array('IDUSUARIO'=>$datos['rfc']);
+		$this->db->select('IDUSUARIO');
+		$validar_usuario = $this->db->get_where('tbl_usuario',$params_usuario);
+		if($validar_usuario->num_rows() === 1){
+			return array('status'=>FALSE,'mensaje'=>"El RFC <b>".$datos['rfc']."</b> Ya existe.");
+		}
+
+		$params_email = array('EMAIL'=>$datos['email']);
+		$this->db->select('email');
+		$validar_mail = $this->db->get_where('tbl_usuario',$params_email);
+		if($validar_mail->num_rows() === 1){
+			return array('status'=>FALSE,'mensaje'=>"El correo electronico <b>".$datos['email']."</b> Ya existe.");
+		}
+		$data = array(
+				'IDUSUARIO' => strtoupper($datos['rfc']),
+				'PASSWORD'  => md5('nuevoregistro'),
+				'NOMBRE'    => strtoupper($datos['nombre']),
+				'APEPAT'    => strtoupper($datos['apepat']),
+				'APEMAT'    => strtoupper($datos['apemat']),
+				'ESTATUS'   => 1,
+				'EMAIL'     => $datos['email'],
+				'ROLE'      => $datos['role']
+			);
+		$this->db->insert('tbl_usuario',$data);
+		if($this->db->affected_rows() > 0){
+			return array('status'=>TRUE,'mensaje'=>'El usuario ha sido '. $datos['nombre'].' '.$datos['apepat'].' agregado correctamente.');
+		}
+		else{
+			return array('status'=>FALSE,'mensaje'=>'Opss!!! ha ocurrido un error, intentelo nuevamente.');
+		}
+		
+
+	}
+
+}

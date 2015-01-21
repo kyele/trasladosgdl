@@ -1,0 +1,116 @@
+var rides = {
+	data: Array(),
+	pos:0,
+	id_chk:'',
+	load_info:function(id){
+		this.id_chk = id;
+		this.pos = $('#txt_cliente').prop('selectedIndex');
+		
+		if($('#'+this.id_chk).is(':checked') === true){
+
+			$.each(rides.data[rides.pos], function(index, val) {
+				$('#'+index).val(val);
+			});	
+		}else{
+			$.each(rides.data[rides.pos], function(index, val) {
+		 		$('#'+index).val('');
+			});
+		}
+		
+	},
+	update_ride:function(id,status){
+		id_tmp = id.split('_');
+ 		$.ajax({
+ 			url:this.url+'estatus_traslado.html',
+ 			type:'POST',
+ 			dataType:'json',
+ 			data: {'ride':id_tmp[1],'stat':status},
+ 			success:function(data){
+ 				(data.status)?function(){
+ 					$.bootstrapGrowl(
+ 					data.msg,
+	 					{
+	 						type:'success',	
+	 						align:'center',
+	 						width:'auto',
+	 						delay:2000,
+	 						allow_dismiss:false
+	 					}
+ 					);
+ 					if(!status){
+
+						$('#'+id).parent().parent().removeClass('success');
+						$('#estado_t_'+id_tmp[1]).text('PENDIENTE');
+					}
+					else
+					{
+						$('#'+id).parent().parent().addClass('success');
+						$('#estado_t_'+id_tmp[1]).text('REALIZADO');
+					}
+ 				}()
+ 				:function(){
+						$.bootstrapGrowl(
+ 					data.msg,
+	 					{
+	 						type:'error',	
+	 						align:'center',
+	 						width:'auto',
+	 						delay:2000,
+	 						allow_dismiss:false
+	 					}
+ 					);
+ 				}();
+ 			},
+ 			error:function(){
+ 				$.bootstrapGrowl(
+ 					"Parece que su conexión a internet no va bien!!!",
+	 					{
+	 						type:'danger',	
+	 						align:'center',
+	 						width:'auto',
+	 						delay:3000,
+	 						allow_dismiss:false
+	 					}
+ 					);
+ 			}
+ 		});
+ 	},
+	init_components:function(){
+ 		
+       $('#table_traslados :checkbox').click(function(e){
+        	
+        	rides.update_ride($(this).attr('id'),$(this).is(':checked'));
+        });
+        
+        
+       
+
+       
+        $('#myform_info_chofer').submit(function(e){
+			e.preventDefault();
+			$.ajax({
+				url:$(this).attr('action'),
+				type:'POST',
+				dataType:'json',
+				data:$(this).serialize(),
+				success:function(data){
+					(!data.status)?function(){
+						$('#contError').html(data.msg);
+					}
+					():function(){
+						$('#contError').empty().html(data.msg);
+						setTimeout(function(){
+							location.reload();
+						},2000);
+					}();
+				},
+				error:function(){
+					$('#contError').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
+				}
+			});
+ 		});
+ 	},
+};
+$(document).ready(function() {
+	rides.init_components();
+});

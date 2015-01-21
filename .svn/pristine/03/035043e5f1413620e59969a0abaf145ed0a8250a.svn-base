@@ -1,0 +1,7 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class Rides extends CI_Model {
+	
+}
+
+/* End of file rides.php */
+/* Location: ./application/models/rides.php */

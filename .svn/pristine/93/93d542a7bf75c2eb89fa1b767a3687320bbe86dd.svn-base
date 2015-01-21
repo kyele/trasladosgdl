@@ -1,0 +1,274 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+class Rides extends CI_Model
+{	
+	public $data;
+	public $datos_sess;
+	public $id_traslado;
+	public $status;
+	public $status_vehiculo;
+	function __construct()
+	{	
+		parent::__construct();
+		$this->datos_sess = $this->session->userdata('logged_in');
+		$this->data = array();
+		$this->id_traslado = '';
+		$this->status = 'EC';
+		$this->status_vehiculo = 1;
+		
+	}
+	public function catalogos(){
+		$this->db->select("RFC,R_SOCIAL as txt_razon,CONCAT(NOMBRE ,' ', APEPAT) as txt_nombre,DOMICILIO as txt_domicilio, NUM_EXT as txt_num_ext, CRUCE_1  as txt_cruce_uno,CRUCE_2 as txt_cruce_dos, COLONIA as txt_colonia",FALSE);
+		$this->db->from('tbL_cliente');
+		$queryC = $this->db->get();
+		if($queryC->num_rows()>0){
+			$this->data['clientes'] = $queryC->result_array();
+		}else{
+			$this->data['msg'] = '<div class="alert alert-danger">No se encontraron Clientes, Registre uno <a href="'.base_url().'nuevo_cliente.html">Aquí</a> </div>';
+			return array('status'=>false,'msg'=>$this->data['msg']);
+		}
+
+		$this->db->select('IDCHOFER,NOMBRE,APEPAT');
+        $this->db->from('tbl_chofer');
+        $this->db->where('SITUACION <> "B" AND DISPONIBILIDAD = 1 ');
+        $queryCh = $this->db->get();
+        if($queryCh->num_rows()>0){
+        	$this->data['choferes'] = $queryCh->result_array();
+        }else{
+        	$this->data = array();
+        	$this->data['msg'] = '<div class="alert alert-danger">No se encontraron Choferes Disponible, Registre uno <a href="'.base_url().'nuevo_chofer.html">Aquí</a> o actualize la disponiblidad</div>';
+			return array('status'=>false,'msg'=>$this->data['msg']);
+        }
+
+        $this->db->select('tbl_vehiculos.IDVEHICULO,tbl_vehiculos.COLOR, tbl_modelo.MODELO');
+        $this->db->from('tbl_vehiculos , tbl_modelo ');
+		$this->db->where('tbl_vehiculos.DISPONIBILIDAD <> "B" AND tbl_vehiculos.DISPONIBILIDAD = 1 AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO ');
+        
+        $queryCh = $this->db->get();
+        if($queryCh->num_rows()>0){
+        	$this->data['vehiculos'] = $queryCh->result_array();
+        }else{
+        	$this->data = array();
+        	$this->data['msg'] = '<div class="alert alert-danger">No se encontraron Vehiculos Disponibles, Registre uno <a href="'.base_url().'nuevo_vehiculo.html">Aquí</a> o actualize la disponiblidad</div>';
+			return array('status'=>false,'msg'=>$this->data['msg']);
+        }
+
+
+        return array('info'=>$this->data,'status'=>true);
+
+		
+	}
+	public function crear(){
+		
+		$this->data = array(
+				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),     
+				'DOMICILIO'   => $this->input->post('txt_domicilio'),'NUM_EXT'=>$this->input->post('txt_num_ext'),
+				'COLONIA' => strtoupper($this->input->post('txt_colonia')),'CRUCE1'=>strtoupper($this->input->post('txt_cruce_uno')),
+				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos')),'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre')),
+				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_sol')),
+				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
+				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>strtoupper($this->input->post('txt_comprobante')),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
+				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>$this->input->post('txt_observaciones')
+ 			);
+
+		$params_chofer = array('IDCHOFER'=>$this->data['IDCHOFER']);
+		$this->db->select('HORA');
+		$this->db->from('tbl_traslados');
+		$array = array('IDCHOFER'=>$this->data['IDCHOFER'],'FECHA'=>$this->data['FECHA'],'ESTATUS'=>'EC');
+		$this->db->where($array);
+		$validar_chofer = $this->db->get();
+		$hora_validate = explode(':', $this->data['HORA']);
+		$char_agenda = '';
+		if($validar_chofer->num_rows() === 1){
+
+			foreach ($validar_chofer->result_array() as $chofer_agenda) {
+
+				$hora_tmp = explode(':', $chofer_agenda['HORA']);
+				
+				if(( (int)$hora_tmp[0] <= (int)$hora_validate[0]  ) || (  (   (int)$hora_tmp[0] - (int)$hora_validate[0]  )  < 2 ) ){
+					
+					$char_agenda.= 'FECHA : '.$this->data['FECHA'].'  - HORA: '.$chofer_agenda['HORA']."<br>";
+				}
+				
+			}
+			if(trim($char_agenda) !== ''){
+				return array('status'=>FALSE,'msg'=>"El chofer seleccionado tiene pendientes los siguientes traslados: <br><b>".$char_agenda."</b>");
+			}
+			
+
+		}
+		$params_vehiculo  = array('IDVEHICULO'=>$this->data['IDVEHICULO'],'DISPONIBILIDAD'=>1);
+		$this->db->select('MATRICULA');
+		$queryV = $this->db->get_where('tbl_vehiculos',$params_vehiculo);
+		if ($queryV->num_rows() === 0) {
+			return array('status'=>FALSE,'msg'=>"El vehiculo seleccionado, por el momento no esta disponible seleccione otra opción");
+		}
+
+		$param_folio = array('IDCOMPROBANTE'=>$this->data['IDCOMPROBANTE']);
+		$this->db->select('IDCOMPROBANTE');
+		$queryComprobante = $this->db->get_where('tbl_traslados',$param_folio);
+		if($queryComprobante->num_rows() === 1){
+			return array('status'=>FALSE,'msg'=>'El número de comprobante ya existe, pruebe con otro.');
+		}
+
+
+
+		//Guardamos el traslado....			
+		$this->db->trans_begin();
+		$data_v =  array('DISPONIBILIDAD'=>0);
+		$where_v = array('IDVEHICULO'=>$this->data['IDVEHICULO']);
+		$this->db->insert('tbl_traslados',$this->data);
+		$this->db->update('tbl_vehiculos',$data_v,$where_v);
+		if($this->db->trans_status() === TRUE){
+			$this->db->trans_commit();
+		 	return array('status'=>TRUE,'msg'=>'El traslado para '.$this->data['NOMBRE_PASAJERO'].' ha sido agendado correctamente, imprima el reporte para el chofer <a href="traslados/comprobante/'.$this->data['IDCOMPROBANTE'].'">AQUI</a>');
+		}else{
+			$this->db->trans_rollback();
+		 	return array('status'=>FALSE,'msg'=>"Ha ocurrido un error inesperado intentelo mas tarde.");	
+		}
+	}
+	public function catalogo_traslados($from = 'traslados'){
+
+		if($from ==='traslados'){
+			$queryChar = 'tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,tbl_traslados.FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS';
+		}else{
+			$queryChar = 'tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.FECHA_PAGO,tbl_traslados.FORMATO_PAGO,tbl_traslados.PAGADO,tbl_traslados.MONTO';
+		}
+		$this->db->select($queryChar);
+		$this->db->from('tbl_traslados,tbl_cliente');
+		$this->db->where('tbl_traslados.IDCLIENTE = tbl_cliente.RFC');
+		$queryT = $this->db->get();
+		if($queryT->num_rows()>0){
+			return $queryT->result_array();
+		}
+		return FALSE;
+	}
+	public function catalogo_servicios(){
+		$query = "tbl_servicio_chofer.IDREPORTE,tbl_servicio_chofer.IDVEHICULO,tbl_chofer.NOMBRE,tbl_servicio_chofer.FECHA,tbl_servicio_chofer.MONTO_GAS,".
+				 "tbl_servicio_chofer.MONTO,tbl_servicio_chofer.KM_INICIAL,tbL_servicio_chofer.KM_FINAL";
+		$this->db->select($query);
+		$this->db->from('tbl_servicio_chofer,tbl_chofer');
+		$this->db->where('tbl_servicio_chofer.IDCHOFER = tbl_chofer.IDCHOFER');
+		$result_servs = $this->db->get();
+		if($result_servs->num_rows() > 0)
+		{
+			return $result_servs->result_array();
+		}
+		return FALSE;
+	}
+	public  function reporte_servicio()
+	{
+		$this->id_traslado = $this->input->post('traslado');
+		$this->db->select('IDVEHICULO,IDCHOFER');
+		$this->db->from('tbl_traslados');
+		$this->db->where('IDTRASLADO',$this->id_traslado);
+		$res = $this->db->get();
+		$d_traslado =  $res->row_array();
+		$fecha =date('Y-m-d');
+		$param_servicio = array('IDCHOFER'=>$d_traslado['IDCHOFER'],'FECHA'=>$fecha,'IDVEHICULO'=>$d_traslado['IDVEHICULO'],
+								'MONTO_GAS'=>$this->input->post('txt_gasolina'),
+								'MONTO'=>$this->input->post('txt_monto'),'KM_INICIAL'=>$this->input->post('txt_km_init'),'KM_FINAL'=>$this->input->post('txt_km_fin'));
+		$this->db->trans_begin();
+		$this->db->insert('tbl_servicio_chofer',$param_servicio);
+
+		if($this->db->trans_status())
+		{
+			$this->db->trans_commit();
+			return array('status'=>TRUE,'msg'=>'<div class="alert alert-success">El reporte ha sido capturado correctamente </div>');
+		}
+		else{
+			$this->db->trans_rollback();
+			return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");
+		}
+
+	}
+	public function status_traslado(){
+		$this->id_traslado = $this->input->post('ride');
+		$this->status = $this->input->post('stat');
+		
+		$this->db->trans_begin();
+
+		if($this->status === 'false'){
+			$this->status  = 'EC';
+			$this->status_vehiculo = 0;
+		}else{
+			$this->status = 'T';
+			$this->status_vehiculo = 1;
+		}
+		
+		
+		$this->db->select('IDVEHICULO');
+		$this->db->from('tbl_traslados');
+		$this->db->where("IDTRASLADO ",$this->id_traslado);
+		$res = $this->db->get();
+		$vehiculo = $res->row_array();
+
+		$param_set_vehiculo = array('DISPONIBILIDAD' =>$this->status_vehiculo);
+		$param_vehiculo = array('IDVEHICULO'=>$vehiculo['IDVEHICULO']);
+		$this->db->update('tbl_vehiculos',$param_set_vehiculo,$param_vehiculo);
+
+
+		$param = array('IDTRASLADO'=>$this->id_traslado);
+		$param1 = array('ESTATUS'=>$this->status);
+		$this->db->update('tbl_traslados',$param1,$param);
+
+		if($this->db->trans_status() === TRUE){
+			$this->db->trans_commit();
+			return array('status' => TRUE,'msg'=>'<b>La información del traslado se actualizó correctamente.</b>');
+		}
+		else{
+			$this->db->trans_rollback();
+			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');	
+		}
+	}
+	public function pdf_traslado($param)
+	{
+		
+		$this->db->select('tbl_traslados.IDCOMPROBANTE,tbl_cliente.R_SOCIAL,tbl_traslados.HORA,tbl_traslados.FECHA,tbl_traslados.DOMICILIO,tbl_chofer.NOMBRE,tbl_traslados.NOMBRE_PASAJERO');
+		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer');
+		$this->db->where("tbl_traslados.IDCOMPROBANTE ='$param' AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER");
+		$res = $this->db->get();
+		if($res->num_rows()>0){
+			return $res->row_array();
+		}
+		return FALSE;
+	}
+	public function pdf_servicio($reporte,$vehiculo)
+	{
+		$query = "tbl_servicio_chofer.IDREPORTE,tbl_servicio_chofer.IDVEHICULO,tbl_chofer.NOMBRE,tbl_chofer.APEPAT,tbl_chofer.APEMAT,tbl_servicio_chofer.FECHA,tbl_servicio_chofer.MONTO_GAS,".
+				 "tbl_servicio_chofer.MONTO,tbl_servicio_chofer.KM_INICIAL,tbL_servicio_chofer.KM_FINAL";
+		$this->db->select($query);
+		$this->db->from('tbl_servicio_chofer,tbl_chofer');
+		$this->db->where("tbL_servicio_chofer.IDREPORTE = '$reporte' AND tbl_servicio_chofer.IDCHOFER = tbl_chofer.IDCHOFER");
+		$result_servs = $this->db->get();
+		if($result_servs->num_rows() > 0)
+		{
+			  $this->db->select('tbl_vehiculos.COLOR, tbl_modelo.MODELO');
+       		  $this->db->from('tbl_vehiculos , tbl_modelo ');
+			  $this->db->where("tbl_vehiculos.IDVEHICULO = '$vehiculo' AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO ");
+			  $result_vehi = $this->db->get();
+			  if ($result_vehi->num_rows() > 0) {
+			  	return array('REPORTE'=>$result_servs->row_array(),'VEHICULO'=>$result_vehi->row_array()); 
+			  }else{
+			  	return FALSE;
+			  }
+		}
+		return FALSE;
+	}
+
+	public function get_traslado(){
+		$param = array('RFC'=>strtoupper($this->input->post('cliente')));
+		$this->db->select('RFC as txt_rfc,NOMBRE as txt_nombre,R_SOCIAL as txt_razon,APEPAT as txt_apepat,APEMAT as txt_apemat,FECHA_NAC as txt_fecha_nac,'.
+						'DOMICILIO as txt_domicilio,NUM_EXT as txt_num_ext,NUM_INT as txt_num_int,COLONIA as txt_colonia,'.
+						'CRUCE_1 as txt_cruce_uno,CRUCE_2 as txt_cruce_dos,CODIGO_P as txt_cp,TELEFONO_1 as txt_telefono_uno,TELEFONO_2 as txt_telefono_dos,'.
+						'EMAIL as txt_email');
+		$query = $this->db->get_where('tbl_cliente',$param);
+		if($query->num_rows > 0){
+			return $query->row();
+		}
+		else{
+			return FALSE;
+		}
+	}
+
+	
+}

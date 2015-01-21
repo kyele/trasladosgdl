@@ -1,0 +1,48 @@
+
+<!-- saved from url=(0035)http://localhost/igniter/login.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>asdasd
+
+
+	<meta charset="UTF-8">
+	<title>Login</title>
+	<link rel="stylesheet" type="text/css" href="./Login_files/style.css">
+
+
+	<div class="wrap">
+		<div class="container">
+			<a href="./Login_files/Login.htm">
+				<img src="./Login_files/sej.png">
+			</a>
+			<h1>Bienvenido al Sistema de Consulta Escolar</h1>
+			
+
+				<fieldset class="login">
+				<legend>
+					<label for="">Iniciar Sesión</label>
+					<span></span>
+				</legend>
+								<form action="./Login_files/Login.htm" method="post" accept-charset="utf-8">				<label for="user">Usuario:</label>
+				<input type="text" name="user" value="hola" autofocus="">
+				<label for="pass">Password:</label>
+				<input type="password" name="pass" value="hola1">
+				<hr>
+				<button type="submit" name="submit">Ingresar</button>
+			</form>			
+			</fieldset>
+			
+
+		</div>
+	<div class="push"></div>
+	</div>
+	
+
+<div class="footer">
+	<p>
+		Dirección General de Acreditación, Incorporación y Revalidación Educativa<br>
+		Av. Avila Camacho 1015, Guadalajara, Jalisco C.P.44280<br>
+		Horario de atención: 9:00a.m. a 3:00 p.m. Telefono: 01 ( 33 ) 30 30 75 50 <br>
+		Webmaster: scejal.jalisco@gmail.com
+	</p>
+</div>
+
+</body></html>

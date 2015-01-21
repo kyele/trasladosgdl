@@ -1,0 +1,121 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+session_start();
+class Usuarios extends CI_Controller
+{	
+	public $char_error_open;
+	public $char_error_close;
+	function __construct()
+	{	
+		
+		parent::__construct();
+		$this->load->model('users','',TRUE);
+		$this->char_error_open = '<span class="btn btn-danger btn-xs" style="margin:3px;"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true"> &nbsp;×</button>';
+		$this->char_error_close = '</span>';
+	}
+	public function nuevo(){
+		if($this->session->userdata('logged_in'))
+		{	
+			
+			$session_data = $this->session->userdata('logged_in');
+			$data['nombre'] = $session_data['nombre'];
+			$data['apellido'] = $session_data['apellido'];
+			$data['usuario_i'] = $session_data['usuario_i'];
+
+			$data['titulo'] = 'Agregar Usuario';
+			$data['content']  = 'nuevo_usuario';
+			$this->load->view('main_template',$data);
+			
+		}
+		else
+		{
+			redirect('login','refresh');
+		}
+	}
+        function file_check($file){
+           if($_FILES['userfile']['type'] !== 'image/jpeg'){
+                        $this->form_validation->set_message('file_check','La extension del %s seleccionado no está permitida (solo JPG)');
+                        return FALSE;
+                    }
+            if($_FILES['userfile']['size'] > 20000){
+                $this->form_validation->set_message('file_check','El  %s excede el limite permitido de peso ( hasta 2MB )');
+                return FALSE;
+                    }
+        }
+	public function crear(){
+		
+		$this->form_validation->set_error_delimiters('<span class="btn btn-danger btn-xs" style="margin:3px;"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true"> &nbsp;×</button>','</span>');
+		$this->form_validation->set_rules('txt_rfc', 'RFC', 'required|trim|xss_clean|min_length[10]|max_length[10]');
+		$this->form_validation->set_rules('txt_nombre','Nombre', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('txt_apepat','Apellido Paterno', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('txt_apemat','Apellido Materno', 'required|trim|xss_clean|xss_clean');
+		$this->form_validation->set_rules('txt_email','Correo Electronico', 'required|valid_email|trim|xss_clean');	
+		$this->form_validation->set_rules('txt_role','Permiso', 'required|trim|xss_clean');
+                
+                if( empty($_FILES['userfile']['name'])){
+                    $this->form_validation->set_rules('userfile','Archivo de imagen', 'required|xss_clean');
+                }else{
+                    $this->form_validation->set_rules('userfile','Archivo de imagen', 'xss_clean|callback_file_check');
+                }
+                
+        $this->form_validation->set_message('required', 'El  %s es requerido');
+       	$this->form_validation->set_message('valid_email', 'El %s no es válido');
+
+
+		if ($this->form_validation->run() === FALSE)
+		{ 
+			$data = array('errors'=>validation_errors(),'statusError'=>TRUE);
+			echo json_encode($data);
+		}
+		else
+		{		
+			$datos = array(
+				'rfc'=>strtoupper($this->input->post('txt_rfc')),
+				'nombre'=>strtoupper($this->input->post('txt_nombre')),
+				'apepat'=>strtoupper($this->input->post('txt_apepat')),
+				'apemat'=>strtoupper($this->input->post('txt_apemat')),
+				'email'=>$this->input->post('txt_email'),
+				'role'=>$this->input->post('txt_role')
+				);
+			$result  = $this->users->nuevo($datos);
+			if(! $result['status'])
+			{
+				$data = array('errors'=>$this->char_error_open.$result['mensaje'].$this->char_error_close,'statusError'=>TRUE);
+				echo json_encode($data);
+			}
+			else
+			{
+				$upload = $this->upload();
+				if( ! $upload["status"])
+				{
+					$data = array('errors'=>$upload['errorUpload'],'statusError'=>TRUE);
+					echo json_encode($data);
+				}
+				else
+				{
+					$data = array('statusError'=>FALSE,'usuario'=>$result['mensaje']);
+					echo json_encode($data);
+				}
+			}
+		}
+	}
+	public function upload(){
+		$nombre_campo = "userfile";
+		$opt['upload_path'] = './img/profiles/';
+		$opt['allowed_types'] = 'jpg';
+		$opt['max_size'] = '2048';
+		$opt['max_width'] = '340';
+		$opt['max_height'] = '340';
+		$opt['file_name'] = $this->input->post('txt_rfc');
+		$opt['overwrite']  = TRUE;
+		$this->load->library('upload',$opt);
+		if( ! $this->upload->do_upload($nombre_campo))
+		{
+			return array("errorUpload"=> $this->upload->display_errors('<span class="btn btn-danger btn-xs"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>', '</span>'),'status'=>FALSE);
+		}
+		else{
+			return array('status'=>TRUE);
+		}
+
+	}
+	
+}

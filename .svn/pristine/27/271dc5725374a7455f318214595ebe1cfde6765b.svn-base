@@ -1,0 +1,226 @@
+vehi={
+
+	marca:Array(),
+	modelo:Array(),
+	url:'',
+	catalogoModelos:function(url,marca)
+	{
+		$("#cmb_modelo").empty();	
+		$.ajax({
+				url:url+'informe_modelo.html',
+				type:'POST',
+				dataType:'json',
+				data:{"marca":marca},
+				beforeSend:function(data){
+					
+				},
+				success:function(data){
+								
+					if(data.status){		
+					
+						options="";
+						 $.each(data.modelos,function(key,value){
+            	    		options+="<option value="+value["IDMODELO"]+">"+value.MODELO+"</option>";
+                		});
+						 $("#cmb_modelo").append(options);
+
+						 
+					}
+					else{
+						//$('#contError').html(data.msg);
+                                                vehi.modal_Modelo();
+					}
+				},
+				error:function(){
+					//alert("valio dick 2");
+				}
+ 		});	
+	},
+	catalagoMarca:function(url)
+	{
+		vehi.url=url;
+		$("#cmb_marca").empty();
+		$.ajax({
+				url:url+'informe_marca.html',
+				type:'POST',
+				dataType:'json',
+				beforeSend:function(data){
+					
+				},
+				success:function(data){
+					
+					if(data.status){
+						options="";
+						 $.each(data.marcas,function(key,value){
+            	    		options+="<option value="+value["IDMARCA"]+">"+value.MARCA+"</option>";
+                		});
+						 $("#cmb_marca").append(options);
+
+						 vehi.catalogoModelos(url,$("#cmb_marca").val());
+
+
+						 // alert("llego")
+					}
+					else{
+						//$('#contError').html(data.msg);
+                        vehi.modal_Marca();
+					}
+				},
+				error:function(){
+					//alert("valio dick 2");
+				}
+ 		});
+	},
+        modal_Modelo:function()
+        {
+             $("#modal_modelo").modal({ 
+                    backdrop:'static',
+                    keyboard:true 
+                }).on('shown.bs.modal',function(e){
+                    var text = $("#cmb_marca option:selected").html();
+                    var valor = $("#cmb_marca").val();
+                    $("#txtMarca").val(text);
+                    $("#txtMarcaValor").val(valor);
+                    $("#txtNuevoModelo").val('')
+                    
+                }).on('hidden.bs.modal',function(){
+                    $("#txtMarca").val('');
+                    $("#txtMarcaValor").val('');
+                });
+        },
+        modal_Marca:function()
+        {
+                 $("#modal_marca").modal({ 
+                    backdrop:'static',
+                    keyboard:true 
+                }).on('shown.bs.modal',function(e){
+                
+                    $("#txtNuevaMarca").val('');
+                }).on('hidden.bs.modal',function(){
+                        $("#txtNuevaMarca").val('');
+                });
+        },
+        inicio:function(url)
+        {
+        	vehi.catalagoMarca(url);
+	        $('#btn_agregarMarca').click(function(e){
+	            e.preventDefault();
+	            
+	        });
+	        $("#cmb_marca").change(function()
+	         {
+	            vehi.catalogoModelos(url,$("#cmb_marca").val());
+	         });
+	        setTimeout(function(){
+	            $("#contError").empty();
+
+	        },3000);
+	        $("#btn_agregarMarca").click(function(){
+	            vehi.modal_Marca();
+	        })
+	        $("#btn_agregarModelo").click(function(){
+	           vehi.modal_Modelo();
+	        })
+        	$('#myform_marca').submit(function(e){
+				e.preventDefault();
+				$.ajax({
+					url:$(this).attr('action'),
+					type:'POST',
+					dataType:'json',
+					data:$(this).serialize(),
+					success:function(data){
+						if(! data.status){
+							$('#contErrorMarca').html(data.msg);
+						}else{
+							
+							$('#contErrorMarca').empty().html(data.msg);
+							setTimeout(function(){
+								$("#modal_marca").modal('hide');
+								$('#contErrorMarca').empty()
+								vehi.catalagoMarca(vehi.url);
+							},3000);
+						}
+					},
+					error:function(){
+						$('#contError').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
+					}
+				});
+	 		});
+
+
+
+	 		$('#myform_modelo').submit(function(e){
+				e.preventDefault();
+				$.ajax({
+					url:$(this).attr('action'),
+					type:'POST',
+					dataType:'json',
+					data:$(this).serialize(),
+					success:function(data){
+						if(! data.status){
+							$('#contErrorModelo').html(data.msg);
+						}else{
+							
+							$('#contErrorModelo').empty().html(data.msg);
+							setTimeout(function(){
+								$("#modal_modelo").modal('hide');
+								$('#contErrorModelo').empty()
+								vehi.catalogoModelos(vehi.url,$("#cmb_marca").val());
+							},3000);
+						}
+					},
+					error:function(){
+						$('#contError').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
+					}
+				});
+	 		});
+
+	 		
+        },
+        file_selected:function(event) {
+		var selectedFile = event.target.files[0];
+    	var reader = new FileReader();
+		var imgtag = document.getElementById("img_src");
+        imgtag.title = selectedFile.name;
+        reader.onload = function(event) {
+            imgtag.src = event.target.result;
+    	};
+ 		reader.readAsDataURL(selectedFile);
+ 	},
+ 	modal_actualiza:function(url,vehiculo){
+ 		vehi.url=url;
+ 		//alert("Entro")
+ 		$.ajax({
+				url:vehi.url+'ver_vehiculo.html',
+				type:'POST',
+				dataType:'json',
+				data:{'vehiculo':vehiculo},
+				beforeSend:function(data){
+					
+				},
+				success:function(data){
+					
+					if(data.status){
+						$('#modal_actualiza_vehiculo').modal({ 
+				            backdrop:'static',
+				            keyboard:true 
+          				}).on('shown.bs.modal',function(e){
+			               //  $.each(data.vehiculo,function(key,value){
+            	    	// 	$('#'+key).val(value);	
+                		// });
+              
+         				}).on('hidden.bs.modal',function(){
+         					// $('#myform [input]').val('');
+         				});
+					}
+					else{
+						alert("valio dick")
+					}
+				},
+				error:function(){
+					
+				}
+ 		});
+ 	
+ 	},
+}
