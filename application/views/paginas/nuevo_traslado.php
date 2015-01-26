@@ -172,17 +172,14 @@
                     </div>
                     
                     <div class="form-group col-sm-8">
-                            <label for="txt_nombre_sol">Nombre del solicitante:</label>
-                            
-                            <div class="input-group">
-                                <select  class="form-control input-sm" id="txt_nombre_sol" style="text-transform:uppercase" name="txt_nombre_sol"   >
-                              
-                                </select>
-                                <input type="hidden" value="" name="txt_nombre_solicitante" id="txt_nombre_solicitante"> 
+                        <label for="txt_nombre_sol">Nombre del solicitante:</label>                            
+                        <div class="input-group">
+                            <select  class="form-control input-sm" id="txt_nombre_sol" style="text-transform:uppercase" name="txt_nombre_sol"></select>
+                            <input type="hidden" value="" name="txt_nombre_solicitante" id="txt_nombre_solicitante"> 
                             <span class="input-group-addon">
                                 <input type="checkbox" id="data_solicitante" name="data_solicitante" value="1"<?php echo set_checkbox("data_solicitante", "1"); ?> data-container="body" data-toggle="popover" data-placement="top" data-content="Rellenar campos con información disponible del solicitante"  >
                             </span>
-                            </div>
+                        </div>
                     </div>
                     <div class="col-sm-4">
                         <br>
@@ -191,6 +188,10 @@
                     <div class="form-group col-sm-12" id="form_group_txtNuevoModelo">
                         <label for="txt_nuevo_dir">Direccion Solicitante</label>
                         <input type="text" class="form-control input-sm" id="txt_nuevo_dir" style="text-transform:uppercase" name="txt_nuevo_dir"  value="<?php echo set_value('txt_nuevo_dir'); ?>" maxlength="20" autofocus>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="txt_ceco">CECO del Traslado</label>
+                        <input type="text" class="form-control input-sm" id="txt_ceco" style="text-transform:uppercase" name="txt_ceco"  value="<?php echo set_value('txt_ceco'); ?>" maxlength="20" autofocus>
                     </div>
                </div>
                 <div class="col-sm-6">
@@ -298,34 +299,35 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-center" id="title_chofer">Nueva Solicitante</h4>
+                <h4 class="modal-title text-center" id="title_chofer">Nuevo Solicitante</h4>
             </div>
             <div class="modal-body">
                  <div class="row">
                      <div class="col-sm-12">
-                         <div id="contErrorSolicitante"></div> 
-                         <?php $atributosMol = array('id' => 'myform_solicitante'); echo form_open(base_url().'nuevo_solicitante.html',$atributosMol); ?>
-                         <div class="form-group col-sm-6" id="form_group_txtMarca">
-                             <label for="txt_nvoCliente">Cliente</label>
-                             <input type="text" class="form-control input-sm" id="txt_nvoCliente" style="text-transform:uppercase" name="txt_nvoCliente"  value="<?php echo set_value('txt_nvoCliente'); ?>"  autofocus disabled>
-                             <input type="hidden" class="form-control input-sm" id="txt_nvo_cliente" style="text-transform:uppercase" name="txt_nvo_cliente"  value="<?php echo set_value('txt_nvo_cliente'); ?>"  autofocus>
+                        <div id="contErrorSolicitante"></div> 
+                        <?php $atributosMol = array('id' => 'myform_solicitante'); echo form_open(base_url().'nuevo_solicitante.html',$atributosMol); ?>
+                        <div class="form-group col-sm-6" id="form_group_txtMarca">
+                            <label for="txt_nvoCliente">Cliente</label>
+                            <input type="text" class="form-control input-sm" id="txt_nvoCliente" style="text-transform:uppercase" name="txt_nvoCliente"  value="<?php echo set_value('txt_nvoCliente'); ?>"  autofocus disabled>
+                            <input type="hidden" class="form-control input-sm" id="txt_nvo_cliente" style="text-transform:uppercase" name="txt_nvo_cliente"  value="<?php echo set_value('txt_nvo_cliente'); ?>"  autofocus>
                              
-                         </div>
+                        </div>
                          
-                          <div class="form-group col-sm-6" id="form_group_txtMarca">
-                             <label for="txt_nuevo_solicitante">Nombre solicitante</label>
-                             <input type="text" class="form-control input-sm" id="txt_nuevo_solicitante" style="text-transform:uppercase" name="txt_nuevo_solicitante"  value="<?php echo set_value('txt_nuevo_solicitante'); ?>"  autofocus>
+                        <div class="form-group col-sm-6" id="form_group_txtMarca">
+                            <label for="txt_nuevo_solicitante">Nombre solicitante</label>
+                            <input type="text" class="form-control input-sm" id="txt_nuevo_solicitante" style="text-transform:uppercase" name="txt_nuevo_solicitante"  value="<?php echo set_value('txt_nuevo_solicitante'); ?>"  autofocus>
                              
-                         </div>
-                          <div class="form-group col-sm-6" id="form_group_txtNuevoModelo">
-                             <label for="txt_nuevo_dir">Direccion Solicitante</label>
-                             <input type="text" class="form-control input-sm" id="txt_nuevo_dir" style="text-transform:uppercase" name="txt_nuevo_dir"  value="<?php echo set_value('txt_nuevo_dir'); ?>" maxlength="20" autofocus>
-                         </div>
+                        </div>
+                        <div class="form-group col-sm-6" id="form_group_txtNuevoModelo">
+                            <label for="txt_nuevo_dir">Direccion Solicitante</label>
+                            <input type="text" class="form-control input-sm" id="txt_nuevo_dir" style="text-transform:uppercase" name="txt_nuevo_dir"  value="<?php echo set_value('txt_nuevo_dir'); ?>" maxlength="20" autofocus>
+                        </div>
+
                          
-                         <div class="form-group col-sm-12" id="form_group">
-                             <br/>
-                             <button type="submit" class="btn btn-red pull-right">Guardar</button>   
-                         </div>
+                        <div class="form-group col-sm-12" id="form_group">
+                            <br/>
+                            <button type="submit" class="btn btn-red pull-right">Guardar</button>   
+                        </div>
                          
                          </form>
                      </div>

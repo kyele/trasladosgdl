@@ -112,7 +112,7 @@ class Rides extends CI_Model
 				'DOMICILIO'   => $this->input->post('txt_Direccion_sol'),'NOMBRE_PASAJERO'   => $this->input->post('txt_nombre_solicitante'),
 				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
 				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
-				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>strtoupper($this->input->post('txt_comprobante')),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
+				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>strtoupper($this->input->post('txt_comprobante')),'CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
 				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
  			);
 		}
@@ -126,7 +126,7 @@ class Rides extends CI_Model
 				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos')),'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre')),
 				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
 				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
-				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>'','IDVEHICULO'=>$this->input->post('txt_vehiculo'),
+				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>'','CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
 				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
  			);
 		}
@@ -217,14 +217,14 @@ class Rides extends CI_Model
 		$betweenT;
 		if($from ==='traslados'){
 			$betweenT = "BETWEEN '$fecha_ini' AND '$fecha_fin'";
-			$queryChar = "tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS";
+			$queryChar = "tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS";
 		}else{
 			$betweenT = '';
-			$queryChar = "tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.FORMATO_PAGO,tbl_traslados.PAGADO,tbl_traslados.MONTO";
+			$queryChar = "tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.FORMATO_PAGO,tbl_traslados.PAGADO,tbl_traslados.MONTO";
 		}
 		$this->db->select($queryChar,FALSE); 
-		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer');
-		$this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT");
+		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
+		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT");
 		$queryT = $this->db->get();
 		if($queryT->num_rows()>0){
 			return $queryT->result_array();
@@ -301,7 +301,7 @@ class Rides extends CI_Model
 		$this->db->select("IDCLIENTE as txt_cliente,LUGAR_REF as txt_referencial,".
 			"DOMICILIO as txt_domicilio,NUM_EXT as txt_num_ext,COLONIA as txt_colonia,CRUCE1 as txt_cruce_uno,".
 			"CRUCE2 as txt_cruce_dos,NUM_PASAJEROS as txt_num_pasajeros,NOMBRE_PASAJERO as txt_nombre_pasajero,".
-			"NOMBRE_SOLICITANTE as txt_nombre_solicitante,FECHA as txt_fecha,HORA as txt_hora,IDCHOFER as txt_conductor,".
+			"NOMBRE_SOLICITANTE as txt_nombre_solicitante,FECHA as txt_fecha,HORA as txt_hora,IDCHOFER as txt_conductor,CECO as txt_ceco,BAUCHER as txt_baucher".
 			"IDVEHICULO as txt_vehiculo,OBSERVACIONES as txt_observaciones,FORMATO_PAGO as txt_formato, FORMAT(MONTO,2) as txt_monto_traslado",false);
 		$query = $this->db->get_where('tbl_traslados',$param);
 		if($query->num_rows > 0){
