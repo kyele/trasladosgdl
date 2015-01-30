@@ -254,18 +254,38 @@ class Clientes extends CI_Controller
 			$char = "<table  border='1'  bordercolor='#3B5389'>"
 			."<thead bgcolor='#CCCCCC'  align ='center'>"
 			."<tr>"
-			."<th width='150'>Cliente</th>"
 			."<th>Fecha del Traslado</th>"
+			."<th>Ruta</th>"
+			."<th>Hora</th>"
+			."<th>Pasajero</th>"
+			."<th width='400'>Cliente</th>"
+			."<th>Solicitante</th>"
 			."<th>Monto</th>"
+			."<th>Folio</th>"
+			."<th>CECO</th>"
 			."</tr></thead><tbody>";
+			$remove = array('$',',');
+			$total = 0;
 			foreach($this->adeudos as $current){
+				$tmp  = str_replace($remove,'',$current['MONTO']);
+				$total+= $tmp;
 				$char.= "<tr>";
 				$nombre = 	($current['R_SOCIAL'] != "")?$current['R_SOCIAL']:($current['NOMBRE'].$current['APEPAT'].$current['APEMAT']);
-				$char.="<td width='150'>".$nombre."</td>";
-				$char.="<td>".$current['FECHA']."</td>";
-				$char.="<td>".$current['MONTO']."</td>";
+				
+				$char.="<td align='center'>".$current['FECHA']."</td>";
+				$char.="<td>".$current['DOMICILIO']."</td>";
+				$char.="<td>".$current['HORA']."</td>";
+				$char.="<td>".$current['NOMBRE_PASAJERO']."</td>";
+				$char.="<td width='400'>".$nombre."</td>";
+				$char.="<td>".$current['NOMBRE_SOLICITANTE']."</td>";
+				$char.="<td><b>".$current['MONTO']."</b></td>";
+				$char.="<td>".$current['BAUCHER']."</td>";
+				$char.="<td>".$current['CECO']."</td>";
 				$char.="</tr>";
 			}
+			setlocale(LC_MONETARY, "es_MX");
+
+			$char.='<tr><td colspan="6"><b>Total:</b></td><td><b>'.money_format('%(#10n',$total).'</b></td></tr>';
 			$char.="</tbody></table>";
 		}
 

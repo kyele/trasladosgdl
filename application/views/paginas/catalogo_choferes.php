@@ -1,10 +1,14 @@
 <script>
     $(document).ready(function() {
-        $('#table_choferes').on('click','a',function(e){
+        $('#table_choferes').on('click','a.btn-link',function(e){
             e.preventDefault();
             obj.url = '<?php echo base_url() ?>';
             obj.modal($(this).attr('id'));
-        })
+        });
+         $('#table_choferes').on('click','a.btn-myRides',function(e){
+            e.preventDefault();
+            obj.modalMyRides($(this).data('ref'),$(this).data('nombrech'));
+        });
 
         
     });
@@ -49,6 +53,7 @@
                                         <th>Teléfono</th>
                                         <th>Disponible</th>
                                         <th>Detalle</th>
+                                        <th>Traslados</th>
                                         <th>Desactivar</th>
                                     </tr>
                                 </thead>
@@ -62,6 +67,7 @@
                                             <td><?php echo $item['TELEFONO1'] ?></td>
                                             <td><?php echo ($item['DISPONIBILIDAD'] == 1) ? 'SI':'NO' ?></td>
                                             <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $item["IDCHOFER"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
+                                            <td class="text-center"><a title="ver" class="text-success btn-myRides" data-nombrech ="<?php echo $item['NOMBRE'] ?>" data-ref="<?php echo $item['IDCHOFER'] ?>"><span class="fa fa-eye fa-2x"></span></a></td>
                                             <td class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["IDCHOFER"] ?>'  <?php echo ($item["SITUACION"] === "A" ) ? "checked": "";?> ></td>
                                         </tr>
                                     <?php
@@ -224,6 +230,58 @@
                                                 </div>
                                                 
                                                  </form>
+                    </div>
+
+                </div>
+                                                
+            </div>
+           
+        </div>
+        
+    </div>
+    
+</div>
+
+<div class="modal modal-flex fade" id="modal_my_rides" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-center" id="title_chofer">Reporte de Traslados de <span id="nombre_chofer_tr"></span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="contError"></div> 
+                        <?php echo validation_errors();?> 
+               
+                 <?php $attributes = array('id' => 'myform_my_rides'); echo form_open(base_url().'mis_traslados.html',$attributes); ?>
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                        <input type="hidden" id="hidd_myride" name="rides">
+                      <label for="txt_fecha_ini" >Fecha inicial</label>
+                               
+                            <div class="input-group date" id="fecha_ini_container" >
+                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="years" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly>
+                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                            </div>
+                        
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                          <label for="txt_fecha_fin" >Fecha Final</label>
+                            <div class="input-group date" id="fecha_fin_container" >
+                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_fin" data-date-viewmode="years" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_fin" value="<?php echo set_value('txt_fecha_fin'); ?>"  readonly>
+                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                            </div>
+                    </div>
+                     <div class="form-group col-sm-12 col-md-12 col-lg-2">
+                        <br>
+                           <button type="submit" class="btn btn-red pull-right">Generar</button>   
+                    </div>
+                    </div>
+                    <hr>
+
+                </form>
                     </div>
 
                 </div>

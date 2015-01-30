@@ -190,4 +190,47 @@ class Choferes extends CI_Controller
 			show_404();
 		}
 	}
+	public function trasladosRealizados(){
+		$char = '';
+		 $this->misTraslados = $this->drivers->myRides();
+		if(($this->misTraslados) === FALSE){
+					echo "Este chofer no tiene traslados realizados con las fechas especificadas";
+		}else{
+			header('Content-type: application/vnd.ms-excel');
+        	header('Content-Disposition: attachment; filename=traslados_'.$this->misTraslados[0]['NOMBRECH'].'.xls');
+			$char = "<table  border='1'  bordercolor='#3B5389'>"
+			."<thead bgcolor='#CCCCCC'  align ='center'>"
+			."<tr>"
+			."<th>Fecha del Traslado</th>"
+			."<th width='200'>Traslado</th>"
+			."<th>Hora</th>"
+			."<th width='200'>vehiculo</th>"
+			."<th width='200'>Chofer</th>"
+			."<th width='200'>Pasajero</th>"
+			."<th width='200'>Empresa</th>"
+			."<th width='200'>Solicito</th>"
+			."<th width='200'>Comentarios</th>"
+			."</tr></thead><tbody>";
+			
+			
+			foreach($this->misTraslados as $current){
+				$char.= "<tr>";
+				$nombre = 	($current['CLIENTE'] != "")?$current['CLIENTE']:($current['NOMBRE']);
+				
+				$char.="<td align='center'>".$current['FECHA']."</td>";
+				$char.="<td width='200'>".$current['DOMICILIO']."</td>";
+				$char.="<td>".$current['HORA']."</td>";
+				$char.="<td width='200'>".$current['MODELO']." ".$current['COLOR']."</td>";
+				$char.="<td width='200'>".$current['NOMBRECH']."</td>";
+				$char.="<td width='200'>".$current['N_PASAJERO']."</td>";
+				$char.="<td width='200'>".$nombre."</td>";
+				$char.="<td width='200'>".$current['N_SOLICITANTE']."</td>";
+				$char.="<td width='200'><b>".$current['OBSERVACIONES']."</b></td>";
+				$char.="</tr>";
+			}
+			$char.="</tbody></table>";
+		}
+
+		echo $char;
+	}
 }

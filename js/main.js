@@ -123,7 +123,18 @@ var obj = {
 					
 				}
  		});
- 	
+ 	},
+ 	modalMyRides:function(rfc,nombre){
+ 		$('#hidd_myride').val(rfc);
+ 			$('#modal_my_rides').modal({ 
+	            backdrop:'static',
+	            keyboard:true 
+				}).on('shown.bs.modal',function(e){
+               		$('#nombre_chofer_tr').html(nombre);
+ 				}).on('hidden.bs.modal',function(){
+					$('#myform_my_rides [input]').val('');
+					$('#nombre_chofer_tr').html('');
+				});
  	},
  	
  	update_status:function(id,status){

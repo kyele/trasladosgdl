@@ -38,6 +38,7 @@
 */
 //$route['usuarios/(:any)'] ='usuarios/update_profile/$1';
 // $route['buscar_reporte'] ='traslados/reporte_gasolina';
+$route['mis_traslados'] = 'choferes/trasladosRealizados';
 $route['reporte_de_adeudos'] = 'clientes/reporteAdeudos';
 $route['gestion_de_adeudos'] = 'clientes/gestion_adeudos'; 
 $route['adeudos']  = 'clientes/adeudos';

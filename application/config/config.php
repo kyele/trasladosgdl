@@ -14,7 +14,8 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/trasladosgdl/';
+
+$config['base_url']	= 'http://'.$_SERVER['SERVER_NAME'].'/trasladosgdl/';
 
 /*
 |--------------------------------------------------------------------------

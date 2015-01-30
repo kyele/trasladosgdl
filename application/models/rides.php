@@ -301,7 +301,7 @@ class Rides extends CI_Model
 		$this->db->select("IDCLIENTE as txt_cliente,LUGAR_REF as txt_referencial,".
 			"DOMICILIO as txt_domicilio,NUM_EXT as txt_num_ext,COLONIA as txt_colonia,CRUCE1 as txt_cruce_uno,".
 			"CRUCE2 as txt_cruce_dos,NUM_PASAJEROS as txt_num_pasajeros,NOMBRE_PASAJERO as txt_nombre_pasajero,".
-			"NOMBRE_SOLICITANTE as txt_nombre_solicitante,FECHA as txt_fecha,HORA as txt_hora,IDCHOFER as txt_conductor,CECO as txt_ceco,BAUCHER as txt_baucher".
+			"NOMBRE_SOLICITANTE as txt_nombre_solicitante,FECHA as txt_fecha,HORA as txt_hora,IDCHOFER as txt_conductor,CECO as txt_ceco,BAUCHER as txt_baucher,".
 			"IDVEHICULO as txt_vehiculo,OBSERVACIONES as txt_observaciones,FORMATO_PAGO as txt_formato, FORMAT(MONTO,2) as txt_monto_traslado",false);
 		$query = $this->db->get_where('tbl_traslados',$param);
 		if($query->num_rows > 0){
