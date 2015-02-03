@@ -10,7 +10,11 @@
             showMeridian: false,
             showInputs: false
         });
-        
+        $('#table_traslados').on('change',":input[type='color']",function(){
+            var setColor = $(this).data('id');
+            $('.'+setColor+' > td').css('background',$(this).val());
+            $('[data-id="'+setColor+'"]').val($(this).val());
+        });
     });
 </script>
 <div class="row">
@@ -73,6 +77,7 @@
                             <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green">
                                 <thead style="font-size:12px;">
                                     <tr>
+                                        <th>Color</th>
                                         <th>ID</th>
                                         <th>Cliente</th>
                                         <th>Pasajero</th>
@@ -89,7 +94,8 @@
                                     <?php 
                                         foreach ($traslados as $item) {
                                     ?>
-                                        <tr class='<?php echo ($item["ESTATUS"] ==="EC") ? "": "success"; ?>'>
+                                        <tr class='<?php echo ($item["ESTATUS"] ==="EC") ? " ".$item['RFC']: "success ".$item['RFC']; ?>'>
+                                            <td><input type="color" data-id="<?php echo $item['RFC'] ?>"></td>
                                             <td><?php echo $item['ID'] ?></td>
                                             <td><?php echo ($item['CLIENTE']=='')?$item['NOMBRE']:$item['CLIENTE'] ?></td>
                                             <td><?php echo $item['N_PASAJERO'] ?></td>
