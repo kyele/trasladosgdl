@@ -33,7 +33,7 @@
                       <label for="txt_fecha_ini" >Fecha inicial</label>
                                
                             <div class="input-group date" id="fecha_ini_container" >
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="years" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly>
+                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly>
                                 <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                             </div>
                         
@@ -41,7 +41,7 @@
                     <div class="form-group col-sm-12 col-md-6 col-lg-2">
                           <label for="txt_fecha_fin" >Fecha Final</label>
                             <div class="input-group date" id="fecha_fin_container" >
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_fin" data-date-viewmode="years" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_fin" value="<?php echo set_value('txt_fecha_fin'); ?>"  readonly>
+                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_fin" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_fin" value="<?php echo set_value('txt_fecha_fin'); ?>"  readonly>
                                 <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                             </div>
                     </div>

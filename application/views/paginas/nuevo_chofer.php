@@ -74,7 +74,7 @@
                                                   <label for="txtFecha" >Fecha de Nacimiento</label>
                                                            
                                                         <div class="input-group date" id="fecha_nac_container" >
-                                                            <input class="form-control input-sm" size="16" type="text" id="txt_fecha_nac" data-date-viewmode="years" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_nac" value="<?php echo set_value('txt_fecha_nac'); ?>"  readonly style="cursor:pointer !important">
+                                                            <input class="form-control input-sm" size="16" type="text" id="txt_fecha_nac" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_nac" value="<?php echo set_value('txt_fecha_nac'); ?>"  readonly style="cursor:pointer !important">
                                                             <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                                                         </div>
                                                     

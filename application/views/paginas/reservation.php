@@ -117,7 +117,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 									    		<!-- <input type="text" id="txt_fecha_traslado" name="txt_fecha_traslado"> -->
 
 												<div class="" id="fecha_nac_container" style="width:100%;padding:0;">
-                                                            <input class="" size="16" type="text" id="txt_traslado" data-date-viewmode="years" data-date="01-01-2013" data-date-format="yyyy-mm-dd" name="txt_traslado" value="<?php echo set_value('txt_traslado'); ?>"  readonly>
+                                                            <input class="" size="16" type="text" id="txt_traslado" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy-mm-dd" name="txt_traslado" value="<?php echo set_value('txt_traslado'); ?>"  readonly>
                                                             <span class="input-group-addon input-sm" style="display:none"><i class="fa fa-calendar"></i></span>
                                                 </div>
 
