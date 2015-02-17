@@ -305,16 +305,16 @@ class Clientes extends CI_Controller
         	header('Content-Disposition: attachment; filename=AdeudosXCliente.xls');
 			$char = "<table  border='1'  bordercolor='#3B5389'>"
 			."<thead bgcolor='#CCCCCC'  align ='center'>"
-			."<tr>Adeudos del ".$this->session->userdata('fIAd')." al ".$this->session->userdata('fFAd')."</tr>"
+			."<tr width='800'>Adeudos del ".$this->session->userdata('fIAd')." al ".$this->session->userdata('fFAd')."</tr>"
 			."<tr>"
-			."<th width='150'>Cliente</th>"
+			."<th width='500'>Cliente</th>"
 			."<th>N&uacute;mero de Traslados</th>"
 			."<th>Monto</th>"
 			."</tr></thead><tbody>";
 			foreach($resultado as $current){
-				$char.= "<tr>";
+				$char.= "<tr width='800'>";
 				$nombre = 	($current['CLIENTE'] != "")?$current['CLIENTE']:($current['CLIENTE_ALT']);
-				$char.="<td width='150'>".$nombre."</td>";
+				$char.="<td width='500'>".$nombre."</td>";
 				$char.="<td>".$current['NUMTRASLADOS']."</td>";
 				$char.="<td>$".$current['MONTO']."</td>";
 				$char.="</tr>";
