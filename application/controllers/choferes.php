@@ -202,7 +202,7 @@ class Choferes extends CI_Controller
 			."<thead bgcolor='#CCCCCC'  align ='center'>"
 			."<tr>"
 			."<th>Fecha del Traslado</th>"
-			."<th width='200'>Traslado</th>"
+			."<th width='420'>Ruta</th>"
 			."<th>Hora</th>"
 			."<th width='200'>vehiculo</th>"
 			."<th width='200'>Chofer</th>"
@@ -218,7 +218,7 @@ class Choferes extends CI_Controller
 				$nombre = 	($current['CLIENTE'] != "")?$current['CLIENTE']:($current['NOMBRE']);
 				
 				$char.="<td align='center'>".$current['FECHA']."</td>";
-				$char.="<td width='200'>".$current['DOMICILIO']."</td>";
+				$char.="<td width='420'>".$current['LUGAR_REF']." <strong> A </strong> ".$current['DOMICILIO']."</td>";
 				$char.="<td>".$current['HORA']."</td>";
 				$char.="<td width='200'>".$current['MODELO']." ".$current['COLOR']."</td>";
 				$char.="<td width='200'>".$current['NOMBRECH']."</td>";

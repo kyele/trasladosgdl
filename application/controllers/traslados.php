@@ -48,7 +48,7 @@ class Traslados extends CI_Controller
 			// $this->form_validation->set_rules('txt_comprobante', 'Comprobante', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|numeric|xss_clean');
-			$this->form_validation->set_rules('txt_ceco', 'ceco', 'trim|required|numeric|xss_clean');
+			$this->form_validation->set_rules('txt_ceco', 'ceco', 'trim|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|max_length[300]|xss_clean');	
 			$this->form_validation->set_rules('data_solicitante', 'cliente', 'trim');
 		}
