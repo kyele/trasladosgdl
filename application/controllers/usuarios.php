@@ -37,20 +37,18 @@ class Usuarios extends CI_Controller
 			$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
             $data['titulo'] = 'Agregar Usuario';
 			$data['content']  = 'nuevo_usuario';
-			$this->load->view('main_template',$data);
-			
-		
+			$this->load->view('main_template',$data);		
 	}
-        function file_check($file){
-           if($_FILES['userfile']['type'] !== 'image/jpeg'){
-                        $this->form_validation->set_message('file_check','La extension del %s seleccionado no está permitida (solo JPG)');
-                        return FALSE;
-                    }
-            if($_FILES['userfile']['size'] > 200000){
-                $this->form_validation->set_message('file_check','El  %s excede el limite permitido de peso ( hasta 2MB )');
-                return FALSE;
-                    }
+    function file_check($file){
+       if($_FILES['userfile']['type'] !== 'image/jpeg'){
+            $this->form_validation->set_message('file_check','La extension del %s seleccionado no está permitida (solo JPG)');
+            return FALSE;
         }
+        if($_FILES['userfile']['size'] > 200000){
+            $this->form_validation->set_message('file_check','El  %s excede el limite permitido de peso ( hasta 2MB )');
+            return FALSE;
+        }
+    }
 	public function crear(){
 		
 		$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
@@ -94,24 +92,23 @@ class Usuarios extends CI_Controller
 			}
 		}
 	}
-	public function upload(){
-                
-                if(($this->input->post('txt_rfc'))){
-                    $this->name_img = $this->input->post('txt_rfc');
-                }
-                else{
-                    $this->name_img = $this->session_data['usuario_i'];
-                }
-				$nombre_campo = "userfile";
-				$opt['upload_path'] = './img/profiles/';
-				$opt['allowed_types'] = 'jpg';
-				$opt['max_size'] = '2048'; 
-				$opt['max_width'] = '340';
-				$opt['max_height'] = '340';
-				$opt['file_name'] = strtolower($this->name_img);
-				$opt['overwrite']  = TRUE;
-				$this->load->library('upload',$opt);
-				if( ! $this->upload->do_upload($nombre_campo))
+	public function upload(){                
+        if(($this->input->post('txt_rfc'))){
+            $this->name_img = $this->input->post('txt_rfc');
+        }
+        else{
+            $this->name_img = $this->session_data['usuario_i'];
+        }
+		$nombre_campo = "userfile";
+		$opt['upload_path'] = './img/profiles/';
+		$opt['allowed_types'] = 'jpg';
+		$opt['max_size'] = '2048'; 
+		$opt['max_width'] = '340';
+		$opt['max_height'] = '340';
+		$opt['file_name'] = strtolower($this->name_img);
+		$opt['overwrite']  = TRUE;
+		$this->load->library('upload',$opt);
+		if( ! $this->upload->do_upload($nombre_campo))
 		{
 			return array(
 				"errorUpload"=> $this->upload->display_errors($this->char_error_open, $this->char_error_close),
@@ -122,6 +119,7 @@ class Usuarios extends CI_Controller
 		}
 
 	}
+    
 	public function profile(){
 
 		$data['nombre'] = $this->session_data['nombre'];

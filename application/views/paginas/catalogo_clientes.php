@@ -66,7 +66,7 @@
                                             <td><?php echo $item['R_SOCIAL'] ?></td>
                                             <td><?php echo $item['NOMBRE'].' '.$item['APEPAT'].' '.$item['APEMAT']?></td>
                                             <td><?php echo $item['TELEFONO_1']?> </td>
-                                            <td class="text-center"><a title="ver" class="text-success btn-adeudo" data-ref="<?php echo $item['RFC'] ?>"><span class="fa fa-eye fa-2x"></span></a></td>
+                                            <td class="text-center"><a title="ver" class="text-success btn-adeudo" data-ref="<?php echo $item['RFC'] ?>"><span class="fa fa-file-excel-o fa-2x"></span></a></td>
                                             <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $item["RFC"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
                                         </tr>
                                     <?php

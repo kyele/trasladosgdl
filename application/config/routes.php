@@ -54,6 +54,7 @@ $route['catalogo_servicios'] = 'traslados/catalogo_servicio';
 $route['reporte_servicio'] = 'traslados/servicio';
 $route['actualizar_traslado'] = 'traslados/actualizar_traslado';
 $route['detalle_traslado']  = 'traslados/detalle_traslado';
+$route['traslados_hoy']  = 'traslados/trasladosHoy';
 $route['pago_traslado'] = 'pagos/pay_now';
 $route['traslados/comprobante/(:any)'] = 'traslados/pdf/$1';
 $route['gestion_de_pagos'] = 'pagos/listado_pagos';

@@ -67,7 +67,7 @@
                                             <td><?php echo $item['TELEFONO1'] ?></td>
                                             <td><?php echo ($item['DISPONIBILIDAD'] == 1) ? 'SI':'NO' ?></td>
                                             <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $item["IDCHOFER"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
-                                            <td class="text-center"><a title="ver" class="text-success btn-myRides" data-nombrech ="<?php echo $item['NOMBRE'] ?>" data-ref="<?php echo $item['IDCHOFER'] ?>"><span class="fa fa-eye fa-2x"></span></a></td>
+                                            <td class="text-center"><a title="ver" class="text-success btn-myRides" data-nombrech ="<?php echo $item['NOMBRE'] ?>" data-ref="<?php echo $item['IDCHOFER'] ?>"><span class="fa fa-file-excel-o fa-2x"></span></a></td>
                                             <td class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["IDCHOFER"] ?>'  <?php echo ($item["SITUACION"] === "A" ) ? "checked": "";?> ></td>
                                         </tr>
                                     <?php

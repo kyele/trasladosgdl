@@ -75,31 +75,31 @@ class Choferes extends CI_Controller
 	}
 
 	public function upload(){
-                
-               
-                    $this->name_img = $this->input->post('txt_rfc');
-                    $nombre_campo = "userfile";
-               
-				
-				$opt['upload_path'] = './img/choferes/';
-				$opt['allowed_types'] = 'jpg';
-				$opt['max_size'] = '2048'; 
-				$opt['max_width'] = '340';
-				$opt['max_height'] = '340';
-				$opt['file_name'] = strtolower($this->name_img);
-				$opt['overwrite']  = TRUE;
-				$this->load->library('upload',$opt);
-				if( ! $this->upload->do_upload($nombre_campo))
-				{
-					return array(
-						"errorUpload"=> $this->upload->display_errors($this->char_error_open, $this->char_error_close),
-						'status'=>FALSE);
-				}
-				else{
-					return array('status'=>TRUE);
-				}
-
-	}
+        if(($this->input->post('txt_rfc'))){
+            $this->name_img = $this->input->post('txt_rfc');
+        }
+        else{
+            $this->name_img = $this->session_data['usuario_i'];
+        }
+        $nombre_campo = "userfile";                               
+        $opt['upload_path'] = './img/choferes/';
+        $opt['allowed_types'] = 'jpg';
+        $opt['max_size'] = '2048'; 
+        $opt['max_width'] = '340';
+        $opt['max_height'] = '340';
+        $opt['file_name'] = strtolower($this->name_img);
+        $opt['overwrite']  = TRUE;
+        $this->load->library('upload',$opt);
+        if( ! $this->upload->do_upload($nombre_campo))
+        {
+            return array(
+                "errorUpload"=> $this->upload->display_errors($this->char_error_open, $this->char_error_close),
+                'status'=>FALSE);
+        }
+        else{
+            return array('status'=>TRUE);
+        }
+    }
 
 	public function catalogo_choferes(){
 
@@ -202,7 +202,8 @@ class Choferes extends CI_Controller
 			."<thead bgcolor='#CCCCCC'  align ='center'>"
 			."<tr>"
 			."<th>Fecha del Traslado</th>"
-			."<th width='420'>Ruta</th>"
+			."<th width='420'>Origen</th>"
+			."<th width='420'>Destino</th>"
 			."<th>Hora</th>"
 			."<th width='200'>vehiculo</th>"
 			."<th width='200'>Chofer</th>"
@@ -218,7 +219,9 @@ class Choferes extends CI_Controller
 				$nombre = 	($current['CLIENTE'] != "")?$current['CLIENTE']:($current['NOMBRE']);
 				
 				$char.="<td align='center'>".$current['FECHA']."</td>";
-				$char.="<td width='420'>".$current['LUGAR_REF']." <strong> A </strong> ".$current['DOMICILIO']."</td>";
+				/*$char.="<td width='420'>".$current['LUGAR_REF']." <strong> A </strong> ".$current['DOMICILIO']."</td>";*/
+				$char.="<td width='420'>".$current['LUGAR_REF']."</td>";
+				$char.="<td width='420'>".$current['DOMICILIO']."</td>";
 				$char.="<td>".$current['HORA']."</td>";
 				$char.="<td width='200'>".$current['MODELO']." ".$current['COLOR']."</td>";
 				$char.="<td width='200'>".$current['NOMBRECH']."</td>";

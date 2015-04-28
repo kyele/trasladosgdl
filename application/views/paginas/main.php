@@ -130,7 +130,7 @@ text-align: left;
 					<li><a href="<?php echo base_url() ?>servicios.html">Servicios</a></li>
 					<li><a href="<?php echo base_url() ?>vehiculos.html">Vehiculos</a></li>
 					<li><a href="<?php echo base_url() ?>contacto.html">Contacto</a></li>
-					<li><a href="<?php echo base_url() ?>reserva.html">Reserva</a></li>
+					<!--<li><a href="<?php echo base_url() ?>reserva.html">Reserva</a></li>-->
 				</ul>
 			</div>
 			<!--end-top-nav--->
@@ -214,9 +214,9 @@ Todos nuestros servicios son accesibles solo con una sencilla reservaci¨®n.</p>
 <center><p style="font-weight: bold;">Reserve su traslado privado hoy y viaje con seguridad, comodidad y estilo.</p></center><br><br>
 								
 								</div>
-								<div class="clear"> </div>
+								<!--<div class="clear"> </div>
 								<center><a href="<?php echo base_url() ?>reserva.html" class="reserva">RESERVA AHORA</a></center>
-							</div>
+							</div>-->
 								<div class="footer" > 
 									<div class="wrap"> 
 									<div class="footer-left">

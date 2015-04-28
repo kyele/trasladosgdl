@@ -11,11 +11,13 @@ var gdl = {
  			data: {'cliente':gdl.cliente},
  			beforeSend:function(data){
 
+
 				$('#contError').empty();
 				$('#myform_traslado').css('display','none');
 				$("#myform_traslado input[type!='submit']").val('');
  			},
  			success:function(data){
+ 				console.log(data);
  				if(data.status){
  					$('#myform_traslado').css('display','block');
  				$.each(data.cliente,function(key,value){

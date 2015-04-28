@@ -96,7 +96,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<li class="active"><a href="<?php echo base_url() ?>servicios.html">Servicios</a></li>
 					<li><a href="<?php echo base_url() ?>vehiculos.html">Vehiculos</a></li>
 					<li><a href="<?php echo base_url() ?>contacto.html">Contacto</a></li>
-					<li><a href="<?php echo base_url() ?>reserva.html">Reserva</a></li>
+					<!--<li><a href="<?php echo base_url() ?>reserva.html">Reserva</a></li>-->
 				</ul>
 			</div>
 			<!--end-top-nav-->
@@ -153,7 +153,7 @@ Todos nuestros servicios son accesibles solo con una sencilla reservación.</p><
 <div style="padding: 15px; background-color: #F0F0F0; border-radius: 10px; " > Permítenos llevarte a cualquier parte de la república con nuestro excelente servicio ejecutivo y personal.</span></div><br><br>
 
 <center><span style="font-weight: bold; color: red;">"Necesita un traslado especial o alguna amenidad, por favor no dude en preguntar al coordinador especializado"</span></center><br>
-<center><a href="reservation.html" class="reserva">RESERVA AHORA</a></center>
+<!--<center><a href="reservation.html" class="reserva">RESERVA AHORA</a></center>-->
 
 </div>
 						

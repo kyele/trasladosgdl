@@ -58,7 +58,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<li ><a href="<?php echo base_url() ?>servicios.html">Servicios</a></li>
 					<li><a href="<?php echo base_url() ?>vehiculos.html">Vehiculos</a></li>
 					<li><a href="<?php echo base_url() ?>contacto.html">Contacto</a></li>
-					<li class="active"><a href="<?php echo base_url() ?>reserva.html">Reserva</a></li>
+					<!--<li class="active"><a href="<?php echo base_url() ?>reserva.html">Reserva</a></li>-->
 				</ul>
 			</div>
 			<!--end-top-nav-->
@@ -71,7 +71,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<div class="contact-top-pagination"> 
 									<ul>
 										<li><a href="index.html">Inicio\</a></li>
-										<li><a href="reservation.html"><span>Reserva</span></a></li>
+										<!--<li><a href="reservation.html"><span>Reserva</span></a></li>-->
 									</ul>
 							</div>
 									<div class="section group">				

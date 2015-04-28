@@ -99,12 +99,10 @@
                                         <th>Chofer</th>
                                         <th>Fecha</th>
                                         <th>Hora</th>
-                                        <th>Estado</th>
                                     </tr>
                                 </thead>
-                                      <tbody>
-                                        
-                                      </tbody>      
+                                <tbody>
+                                </tbody>      
                             </table>      
                             </div>
                         

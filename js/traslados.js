@@ -98,28 +98,32 @@ var rides = {
  			data: {'mytraslado':id_tmp},
  			success:function(data){
 
-					if(data.status){
+					if(data.status) {
 						$('#modal_detalle_traslado').modal({ 
 				            backdrop:'static',
 				            keyboard:true 
           				}).on('shown.bs.modal',function(e){
-					var flag = false;
-					if(status != 'EC'){
-						flag = true;
-						$(":submit").attr('disabled','disabled');
-					}
-					else{
-					$(":submit").attr('disabled',false);
-					}	
-			                $.each(data.traslado,function(key,value){
-            	    		$('#'+key).val(value.replace(',',''));	
-				if(flag){
-					$('#'+key).attr('disabled','disabled');		
-				}else{
-					$('#'+key).attr('disabled',false);							
-				}
-                		});
-              
+							var flag = false;
+							var patron = ",";
+							if(status != 'EC') {
+								flag = true;
+								$(":submit").attr('disabled','disabled');
+							}else {
+								$(":submit").attr('disabled',false);
+							}	
+			                $.each(data.traslado,function(key,value) {
+			                	if(key == "txt_monto_traslado"){
+			                		value = value.replace(patron,'');
+			                		//console.log(value);
+			                	}
+			                	
+		        	    		$('#'+key).val(value);
+								if(flag){
+									$('#'+key).attr('disabled','disabled');		
+								}else{
+									$('#'+key).attr('disabled',false);							
+								}
+	                		});              
          				}).on('hidden.bs.modal',function(){
          					
          				});
@@ -486,11 +490,13 @@ var rides = {
  		var fecha  = $('#txt_traslado').val();
  		if($.trim(fecha) === ''){alert('No ha seleccionado una fecha para el traslado');return false;}
  		 $.ajax({
- 		 	url:rides.url+'showRidesToday.html',
+ 		 	url:rides.url+'traslados_hoy.html',
  		 	type:'GET',
  		 	dataType:'json',
  		 	data:{'fecha':fecha},
  		 	success:function(data){
+ 		 		console.log(data);
+
  		 		(!data.status)?
  		 		function(){
 					alert(data.mensaje);
@@ -500,14 +506,18 @@ var rides = {
  		 			$.each(data.catalogo,function(index){
  		 				var nombre =  ($(this).attr('CLIENTE') == '') ? $(this).attr('NOMBRE') : $(this).attr('CLIENTE');
  		 				var estado  = ($(this).attr('ESTATUS') == 'EC') ? 'PENDIENTE' : 'REALIZADO';
+ 		 				/*var fecha  = ($(this).attr('FECHA'));
+ 		 				var fecha  = fecha + ' ' + ($(this).attr('HORA'));
+ 		 				console.log(fecha);*/
 							var add_data = [];
 							add_data.push($(this).attr('ID'));
 							add_data.push(nombre);
 							add_data.push($(this).attr('N_PASAJERO'));
 							add_data.push($(this).attr('NOMBRECH'));
+							//add_data.push(fecha);
 							add_data.push($(this).attr('FECHA'));
 							add_data.push($(this).attr('HORA'));
-							add_data.push(estado);
+							//add_data.push(estado);
 							tbl_traslados.fnAddData(add_data);
 						});
  		 		}();
@@ -519,7 +529,7 @@ var rides = {
 };
 $(document).ready(function(){
 	  tbl_traslados =  $('#resumenTraslados').dataTable({
-           "lengthMenu": [[5, 10, 20], [5, 10, 20]],
+           "lengthMenu": [[40], [40]],
             "bLengthChange": false,
             "bFilter":false
         });

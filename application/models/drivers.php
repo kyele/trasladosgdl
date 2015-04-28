@@ -22,16 +22,27 @@ class Drivers extends CI_Model
 		$nac = explode('/', $this->input->post('txt_fecha_nac'));
 		$edad =  ($anio - $nac[0]);
 		$this->data = array(
-				'IDCHOFER' => strtoupper($this->input->post('txt_rfc')),      'NUM_EXT'   => $this->input->post('txt_num_ext'),
-				'NOMBRE' => strtoupper($this->input->post('txt_nombre')),     'NUM_INT'   => $this->input->post('txt_num_int'),
-				'APEPAT' => strtoupper($this->input->post('txt_apepat')),     'CRUCE1'    => strtoupper($this->input->post('txt_cruce_uno')),
-				'APEMAT' => strtoupper($this->input->post('txt_apemat')),     'CRUCE2'    => strtoupper($this->input->post('txt_cruce_dos')),
-				'NSS' => $this->input->post('txt_nss'),                       'TELEFONO1' => $this->input->post('txt_telefono_uno'),
-				'FECHA_NAC' => $this->input->post('txt_fecha_nac'),           'TELEFONO2' => $this->input->post('txt_telefono_dos'),
-				'CURP' => strtoupper($this->input->post('txt_curp')),         'SALARIO'   => $this->input->post('txt_salario'),'EDAD' =>$edad,
-				'ESTADO_CIVIL' => strtoupper($this->input->post('txt_estado_civil')), 'OBSERVACIONES' => strtoupper($this->input->post('txt_observaciones')),
+				'IDCHOFER' => strtoupper($this->input->post('txt_rfc')),
+				'NUM_EXT'   => $this->input->post('txt_num_ext'),
+				'NOMBRE' => strtoupper($this->input->post('txt_nombre')),
+				'NUM_INT'   => $this->input->post('txt_num_int'),
+				'APEPAT' => strtoupper($this->input->post('txt_apepat')),
+				'CRUCE1'    => strtoupper($this->input->post('txt_cruce_uno')),
+				'APEMAT' => strtoupper($this->input->post('txt_apemat')),
+				'CRUCE2'    => strtoupper($this->input->post('txt_cruce_dos')),
+				'NSS' => $this->input->post('txt_nss'),
+				'TELEFONO1' => $this->input->post('txt_telefono_uno'),
+				'FECHA_NAC' => $this->input->post('txt_fecha_nac'),
+				'TELEFONO2' => $this->input->post('txt_telefono_dos'),
+				'CURP' => strtoupper($this->input->post('txt_curp')),
+				'SALARIO'   => $this->input->post('txt_salario'),'EDAD' =>$edad,
+				'ESTADO_CIVIL' => strtoupper($this->input->post('txt_estado_civil')),
+				'OBSERVACIONES' => strtoupper($this->input->post('txt_observaciones')),
 				'COLONIA' => strtoupper($this->input->post('txt_colonia')),
-				'DOMICILIO' => strtoupper($this->input->post('txt_domicilio')),        'CODIGOP'      => $this->input->post('txt_cp'),'FECHA_ING' => $this->input->post('txt_fecha_ing')	
+				'DOMICILIO' => strtoupper($this->input->post('txt_domicilio')),
+				'CODIGOP'      => $this->input->post('txt_cp'),
+				'FECHA_ING' => $this->input->post('txt_fecha_ing'),
+				'URL_IMAGEN'=>'NO'
 			);
 		$params_usuario = array('IDCHOFER'=>$this->data['IDCHOFER']);
 		$this->db->select('IDCHOFER');
@@ -59,14 +70,30 @@ class Drivers extends CI_Model
 		if($this->db->trans_status() === TRUE){
 			
 			if($this->db->affected_rows() === 1){
-			$this->db->trans_commit();
-			return array('status'=>TRUE,'msg'=>'El chofer  '. $this->data['NOMBRE'].' ha sido agregado correctamente.');
+				$this->db->trans_commit();
+				return array('status'=>TRUE,'msg'=>'El chofer  '. $this->data['NOMBRE'].' ha sido agregado correctamente.');
+			}
 		}
-		}
+		else if($param === 'imagen')
+        {
+    		$params = array('IDUSUARIO'=>$this->datos_sess['usuario_i']);
+    		$this->db->trans_begin();
+    		$this->db->update('tbl_usuario',array('URL_IMAGEN'=>'SI'),$params);
+    		if($this->db->trans_status() === FALSE){
+    			$this->db->trans_rollback();
+                return array('status'=>FALSE,'msg'=>'ha ocurrido un eror inesperado, intentelo nuevamente.');
+                
+    		}
+    		else{
+				 $this->db->trans_commit();
+                    return array('status'=>TRUE);
+    		}
+        }
 		else{
 			$this->db->trans_rollback();
 			return array('status'=>FALSE,'msg'=>"Ha ocurrido un error inesperado intentelo mas tarde.");	
 		}
+
 
 	}
 	public function catalogo_chofer(){
@@ -184,7 +211,7 @@ class Drivers extends CI_Model
 		",tbl_traslados.HORA,tbl_traslados.DOMICILIO,tbl_traslados.LUGAR_REF,tbl_traslados.OBSERVACIONES";
 		$this->db->select($query,FALSE);
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
-		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = '$this->id_chofer' AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT ");
+		$this->db->where("tbl_traslados.ESTATUS = 'EC' AND tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = '$this->id_chofer' AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT ");
 		$queryT = $this->db->get();
 		$resultado = $queryT->result_array();
 		if($queryT->num_rows()>0){

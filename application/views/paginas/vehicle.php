@@ -98,7 +98,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<li><a href="<?php echo base_url() ?>servicios.html">Servicios</a></li>
 					<li class="active"><a href="<?php echo base_url() ?>vehiculos.html">Vehiculos</a></li>
 					<li><a href="<?php echo base_url() ?>contacto.html">Contacto</a></li>
-					<li><a href="<?php echo base_url() ?>reserva.html">Reserva</a></li>
+					<!--<li><a href="<?php echo base_url() ?>reserva.html">Reserva</a></li>-->
 				</ul>
 			</div>
 			<!--end-top-nav-->

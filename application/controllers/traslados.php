@@ -49,7 +49,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_ceco', 'ceco', 'trim|numeric|xss_clean');
-			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|max_length[300]|xss_clean');	
+			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|xss_clean');	
 			$this->form_validation->set_rules('data_solicitante', 'cliente', 'trim');
 		}
 		else if($this->input->post("txt_domicilio"))
@@ -72,7 +72,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|decimal|xss_clean');
 			$this->form_validation->set_rules('txt_ceco', 'Ceco', 'trim|required|numeric|xss_clean');
-			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|max_length[300]|xss_clean');
+			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|xss_clean');
 		}
 		
 		$this->form_validation->set_message('required', 'El  %s es requerido');
@@ -190,7 +190,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_monto_traslado', 'Monto', 'decimal|required|trim|xss_clean');
 
 			$this->form_validation->set_rules('txt_num_pasajeros', 'Num Pasajeros', 'required|numeric|trim|xss_clean');
-			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'required|max_length[300]|trim|xss_clean');
+			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|xss_clean');
 			
 			$this->form_validation->set_message('required', 'El  campo  %s es requerido');
 			if($this->form_validation->run() === FALSE){

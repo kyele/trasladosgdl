@@ -332,6 +332,8 @@ img {
           transition: all .2s ease-in-out;
 }
 .img-circle {
+  height: 140px; 
+  width: 140px;
   border-radius: 50%;
 }
 hr {

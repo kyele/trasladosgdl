@@ -64,6 +64,7 @@ var obj = {
         monthI = (monthI < 10) ? '0'+monthI : monthI;
         $('#txt_fecha_ini').datepicker('setValue', dI.getFullYear()+'/'+  monthI+'/01');
 		$('#txt_fecha_fin').datepicker('setValue', dI.getFullYear()+'/'+  monthI+'/'+dayI);
+        $('#txt_traslado').datepicker('setValue', dI.getFullYear()+'/'+  monthI+'/'+dayI);
         
         $('#catalogo').dataTable({
            "lengthMenu": [[20, 30, 40, -1], [20, 30, 40, "Todos"]]
