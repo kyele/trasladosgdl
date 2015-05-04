@@ -207,11 +207,11 @@ class Drivers extends CI_Model
 		$this->id_chofer = $this->input->post('rides');
 		$betweenT = "BETWEEN '$this->fecha_ini' AND '$this->fecha_fin'";
 		$query = "tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,".
-		"CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,tbl_vehiculos.COLOR,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,tbl_traslados.NOMBRE_SOLICITANTE as N_SOLICITANTE,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA".
-		",tbl_traslados.HORA,tbl_traslados.DOMICILIO,tbl_traslados.LUGAR_REF,tbl_traslados.OBSERVACIONES";
+				"CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,tbl_marca.MARCA,tbl_vehiculos.COLOR,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,tbl_traslados.NOMBRE_SOLICITANTE as N_SOLICITANTE,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA".
+				",tbl_traslados.HORA,tbl_traslados.DOMICILIO,tbl_traslados.LUGAR_REF,tbl_traslados.OBSERVACIONES";
 		$this->db->select($query,FALSE);
-		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
-		$this->db->where("tbl_traslados.ESTATUS = 'EC' AND tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = '$this->id_chofer' AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT ");
+		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo,tbl_marca');
+		$this->db->where("tbl_traslados.ESTATUS = 'EC' AND tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_vehiculos.IDMARCA = tbl_marca.IDMARCA AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = '$this->id_chofer' AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT ");
 		$queryT = $this->db->get();
 		$resultado = $queryT->result_array();
 		if($queryT->num_rows()>0){

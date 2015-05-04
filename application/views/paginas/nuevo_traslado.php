@@ -96,6 +96,8 @@
                                         <th>ID</th>
                                         <th>Cliente</th>
                                         <th>Pasajero</th>
+                                        <th>Ruta</th>
+                                        <th>Vehiculo</th>
                                         <th>Chofer</th>
                                         <th>Fecha</th>
                                         <th>Hora</th>

@@ -4,18 +4,18 @@
     });
 </script>
 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="page-title">
-                            <h1>Pagos
-                                <small></small>
-                            </h1>
-                           <ol class="breadcrumb">
-                                <li><i class="fa fa-dashboard"></i>  <a href="<?php echo base_url() ?>home.html">Inicio</a>
-                                </li>
-                                <li class="active">Gestión de Pagos</li>
-                            </ol>
-                        </div>
-                    </div>
+    <div class="col-lg-12">
+        <div class="page-title">
+            <h1>Pagos
+                <small></small>
+            </h1>
+           <ol class="breadcrumb">
+                <li><i class="fa fa-dashboard"></i>  <a href="<?php echo base_url() ?>home.html">Inicio</a>
+                </li>
+                <li class="active">Gestión de Pagos</li>
+            </ol>
+        </div>
+    </div>
                     
 </div>
 <div class="row">
@@ -48,6 +48,8 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Cliente</th>
+                                        <th width="200">Pasajero</th>
+                                        <th>Ruta</th>
                                         <th>Cantidad a Pagar</th>
                                         <th>Fecha de Traslado</th>
                                         <th>Fecha de Pago</th>
@@ -63,6 +65,8 @@
                                         <tr >
                                             <td><?php echo $item['ID'] ?></td>
                                             <td><?php echo $item['CLIENTE'] ?></td>
+                                            <td width="200"><?php echo $item['N_PASAJERO'] ?></td>
+                                            <td><?php echo $item['RUTA'] ?></td>
                                             <td><?php echo "$".$item['MONTO'] ?></td>
                                             <td><?php echo $item['FECHA'] ?></td>
                                             <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
@@ -116,12 +120,8 @@
                      <?php
                         }//llave if
                      ?>
-
-
             </div>
-          
-        </div>    
-
+        </div>
     </div>   
 </div>
 
@@ -132,45 +132,34 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-center" id="title_chofer">Emision de Comprobante </h4>
-               
-                		
-                	
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div id="contError"></div> 
-                        <?php $attributes = array('id' => 'myform_info_comprobante'); echo form_open(base_url().'pago_traslado.html',$attributes); ?>
-                                            <input type="hidden" name="traslado" id="myTraslado">
-                                                <div class="form-group col-sm-6" id="form_group_txt_rfc">
-												<label for="txt_km_init">Tipo Comprobante</label>
-                                                    <select class="form-control input-sm" name="txt_tipo" id="txt_tipo" value="<?php echo set_value('txt_tipo'); ?>">
-													  <option value="NOTA">NOTA DE CREDITO</option>
-													  <option value="FACTURA">FACTURA</option>
-													</select>
-												</div>
-                                               <div class="form-group col-sm-6">
-                                                    <label for="txt_folio">Folio</label>
-                                                          <input type="text" class="form-control input-sm" id="txt_folio"  name="txt_folio" value="<?php echo set_value('txt_folio'); ?>" >
-                                                </div>
-                                               
-                                          		<div class="form-group text-right col-sm-12">
-                                                <br>
-                                               
-                                                    <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
-                                                 <button type="submit" class="btn btn-red">Guardar</button>
-                                                </div>
-                                                
-                                                 </form>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="contError"></div> 
+                    <?php $attributes = array('id' => 'myform_info_comprobante'); echo form_open(base_url().'pago_traslado.html',$attributes); ?>
+                        <input type="hidden" name="traslado" id="myTraslado">
+                            <div class="form-group col-sm-6" id="form_group_txt_rfc">
+    							<label for="txt_km_init">Tipo Comprobante</label>
+                                <select class="form-control input-sm" name="txt_tipo" id="txt_tipo" value="<?php echo set_value('txt_tipo'); ?>">
+    							  <option value="NOTA">NOTA DE CREDITO</option>
+    							  <option value="FACTURA">FACTURA</option>
+    							</select>
+							</div>
+                            <div class="form-group col-sm-6">
+                                <label for="txt_folio">Folio</label>
+                                    <input type="text" class="form-control input-sm" id="txt_folio"  name="txt_folio" value="<?php echo set_value('txt_folio'); ?>" >
+                            </div>                           
+                      		<div class="form-group text-right col-sm-12">
+                                <br>                           
+                                <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-red">Guardar</button>
+                            </div>                                
+                        </form>
                     </div>
-
-                </div>
-                                                
-            </div>
-           
-        </div>
-        
-    </div>
-    
+                </div>                                                
+            </div>           
+        </div>        
+    </div>    
 </div>
 

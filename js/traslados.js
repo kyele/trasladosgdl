@@ -495,7 +495,7 @@ var rides = {
  		 	dataType:'json',
  		 	data:{'fecha':fecha},
  		 	success:function(data){
- 		 		console.log(data);
+ 		 		//console.log(data);
 
  		 		(!data.status)?
  		 		function(){
@@ -513,6 +513,8 @@ var rides = {
 							add_data.push($(this).attr('ID'));
 							add_data.push(nombre);
 							add_data.push($(this).attr('N_PASAJERO'));
+							add_data.push($(this).attr('RUTA'));
+							add_data.push($(this).attr('MODELO'));
 							add_data.push($(this).attr('NOMBRECH'));
 							//add_data.push(fecha);
 							add_data.push($(this).attr('FECHA'));
