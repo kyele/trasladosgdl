@@ -91,7 +91,7 @@ class Customers extends CI_Model
 		$this->fecha_ini = $this->input->post('txt_fecha_ini');
 		$this->fecha_fin = $this->input->post('txt_fecha_fin');
 		$this->id_cliente = $this->input->post('adeudo');
-		$this->db->select("tbl_traslados.IDTRASLADO as ID, tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,CONCAT(tbl_traslados.LUGAR_REF, ' a ' , tbl_traslados.DOMICILIO ) as RUTA,  tbl_cliente.R_SOCIAL as CLIENTE,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as CLIENTE_ALT,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') AS FECHA,CONCAT('$', FORMAT(tbl_traslados.MONTO, 2)) as MONTO",FALSE);
+		$this->db->select("tbl_traslados.IDTRASLADO as ID, tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,CONCAT(tbl_traslados.LUGAR_REF, ' - ' , tbl_traslados.DOMICILIO ) as RUTA,  tbl_cliente.R_SOCIAL as CLIENTE,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as CLIENTE_ALT,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') AS FECHA,CONCAT('$', FORMAT(tbl_traslados.MONTO, 2)) as MONTO",FALSE);
 		$this->db->from("tbl_cliente,tbl_traslados");
 		$this->db->where("tbl_cliente.RFC = tbl_traslados.IDCLIENTE AND tbl_cliente.RFC = tbl_traslados.IDCLIENTE AND tbl_traslados.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin' AND PAGADO ='NO'");
 		$queryT = $this->db->get();
@@ -105,7 +105,7 @@ class Customers extends CI_Model
 		$this->fecha_ini = $this->input->post('txt_fecha_ini');
 		$this->fecha_fin = $this->input->post('txt_fecha_fin');
 		$this->id_cliente = $this->input->post('adeudo');
-		$this->db->select("cli.R_SOCIAL,cli.NOMBRE,cli.APEPAT,cli.APEMAT,tras.FECHA,CONCAT('$', FORMAT(tras.MONTO, 2)) as MONTO,tras.HORA,tras.NOMBRE_PASAJERO,tras.NOMBRE_SOLICITANTE,tras.BAUCHER,tras.CECO,tras.DOMICILIO",FALSE);
+		$this->db->select("cli.R_SOCIAL,cli.NOMBRE,cli.APEPAT,cli.APEMAT,tras.FECHA,CONCAT('$', FORMAT(tras.MONTO, 2)) as MONTO,tras.HORA,CONCAT(tras.LUGAR_REF, ' - ' , tras.DOMICILIO ) as RUTA, tras.NOMBRE_PASAJERO,tras.NOMBRE_SOLICITANTE,tras.BAUCHER,tras.CECO",FALSE);
 		$this->db->from("tbl_cliente as cli,tbl_traslados as tras");
 		$this->db->where("cli.RFC = '$this->id_cliente' AND cli.RFC = tras.IDCLIENTE AND tras.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin' ");
 		$queryT = $this->db->get();

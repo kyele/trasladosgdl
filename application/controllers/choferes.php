@@ -220,8 +220,8 @@ class Choferes extends CI_Controller
 				
 				$char.="<td align='center'>".$current['FECHA']."</td>";
 				/*$char.="<td width='420'>".$current['LUGAR_REF']." <strong> A </strong> ".$current['DOMICILIO']."</td>";*/				
-				$char.="<td width='420'>".$current['DOMICILIO']."</td>";
-				$char.="<td width='420'>".$current['LUGAR_REF']."</td>";
+				$char.="<td width='420'>".strtoupper($current['DOMICILIO'])."</td>";
+				$char.="<td width='420'>".strtoupper($current['LUGAR_REF'])."</td>";
 				$char.="<td>".$current['HORA']."</td>";
 				$char.="<td width='200'>".$current['MODELO']." ".$current['COLOR']."</td>";
 				$char.="<td width='200'>".$current['NOMBRECH']."</td>";

@@ -273,7 +273,7 @@ class Clientes extends CI_Controller
 				$nombre = 	($current['R_SOCIAL'] != "")?$current['R_SOCIAL']:($current['NOMBRE'].$current['APEPAT'].$current['APEMAT']);
 				
 				$char.="<td align='center'>".$current['FECHA']."</td>";
-				$char.="<td>".$current['DOMICILIO']."</td>";
+				$char.="<td>".strtoupper($current['RUTA'])."</td>";
 				$char.="<td>".$current['HORA']."</td>";
 				$char.="<td>".$current['NOMBRE_PASAJERO']."</td>";
 				$char.="<td width='400'>".$nombre."</td>";

@@ -220,7 +220,7 @@ class Rides extends CI_Model
 			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS";
 		}else{
 			$betweenT = '';
-			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.LUGAR_REF, ' a ' , tbl_traslados.DOMICILIO ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.FORMATO_PAGO,tbl_traslados.PAGADO,tbl_traslados.MONTO";
+			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.LUGAR_REF, ' - ' , tbl_traslados.DOMICILIO ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.FORMATO_PAGO,tbl_traslados.PAGADO,tbl_traslados.MONTO";
 		}
 		$this->db->select($queryChar,FALSE); 
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
@@ -538,7 +538,7 @@ class Rides extends CI_Model
 	}
 	public function getRidesToday(){
 		$fecha  = $this->input->get('fecha');
-		$queryChar = "tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH, tbl_modelo.MODELO,CONCAT(tbl_traslados.LUGAR_REF, ' a ' , tbl_traslados.DOMICILIO ) as RUTA, tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS";
+		$queryChar = "tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH, tbl_modelo.MODELO,CONCAT(tbl_traslados.LUGAR_REF, ' - ' , tbl_traslados.DOMICILIO ) as RUTA, tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS";
 		$this->db->select($queryChar,FALSE); 
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
 		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA = '$fecha'");
