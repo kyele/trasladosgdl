@@ -73,10 +73,10 @@ class Customers extends CI_Model
 		$this->fecha_ini = $this->session->userdata('fIAd');
 		$this->fecha_fin = $this->session->userdata('fFAd');
 		//echo $this->fecha_ini.'sdsd';
-		$queryChar = "tbl_traslados.IDTRASLADO , COUNT(tbl_cliente.RFC) as NUMTRASLADOS,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT,FORMAT(SUM(tbl_traslados.MONTO),2) as MONTO";
+		$queryChar = "tbl_modelo.MODELO, tbl_traslados.IDTRASLADO , tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO, COUNT(tbl_cliente.RFC) as NUMTRASLADOS,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT,FORMAT(SUM(tbl_traslados.MONTO),2) as MONTO";
 		$this->db->select($queryChar,FALSE);
-		$this->db->from('tbl_traslados , tbl_cliente');
-		$this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin' AND PAGADO = 'NO'");
+		$this->db->from('tbl_traslados , tbl_cliente, tbl_chofer,tbl_vehiculos,tbl_modelo');
+		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin' AND PAGADO = 'NO'");
 		$this->db->order_by('CLIENTE,MONTO');
 		$this->db->group_by('tbl_cliente.RFC');
 		$queryT = $this->db->get();

@@ -307,14 +307,22 @@ class Clientes extends CI_Controller
 			."<thead bgcolor='#CCCCCC'  align ='center'>"
 			."<tr width='800'>Adeudos del ".$this->session->userdata('fIAd')." al ".$this->session->userdata('fFAd')."</tr>"
 			."<tr>"
+			."<th>ID Traslado</th>"
 			."<th width='500'>Cliente</th>"
+			."<th width='250'>Pasajero</th>"
+			."<th width='250'>Chofer</th>"
+			."<th width='250'>Vehiculo</th>"
 			."<th>N&uacute;mero de Traslados</th>"
 			."<th>Monto</th>"
 			."</tr></thead><tbody>";
-			foreach($resultado as $current){
+			foreach($resultado as $current){				
 				$char.= "<tr width='800'>";
 				$nombre = 	($current['CLIENTE'] != "")?$current['CLIENTE']:($current['CLIENTE_ALT']);
+				$char.="<td class='text-center'>".$current['IDTRASLADO']."</td>";
 				$char.="<td width='500'>".$nombre."</td>";
+				$char.="<td>".$current['N_PASAJERO']."</td>";
+				$char.="<td>".$current['NOMBRECH']."</td>";
+				$char.="<td>".$current['MODELO']."</td>";
 				$char.="<td>".$current['NUMTRASLADOS']."</td>";
 				$char.="<td>$".$current['MONTO']."</td>";
 				$char.="</tr>";
