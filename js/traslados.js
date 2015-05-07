@@ -309,12 +309,15 @@ var rides = {
 	modal_comprobante:function(id){
 		id_tmp = id.split('_');
 		this.id_traslado = id_tmp[1];
+        var comprobante = $('#comprobante_'+this.id_traslado).text();
+        var fecha  = $('#fecha_pago_'+this.id_traslado).text();
 		$('#myTraslado').val(this.id_traslado);
 		$('#modal_comprobante').modal({ 
 			backdrop:'static',
 			keyboard:true 
 			}).on('shown.bs.modal',function(e){
-				
+				$('#txt_folio').val(comprobante);
+                $('#txt_fecha_pago').val(fecha);
 			}).on('hidden.bs.modal',function(){
 				$('#txt_folio').val('');
 			});
@@ -357,7 +360,8 @@ var rides = {
 								$("#modal_comprobante").modal('hide');
 							},1000);
  				$('#fecha_pago_'+id_tmp[1]).html(data.fecha);
- 				$('#field_payment_'+id_tmp[1]).addClass('text-success').html('<strong>Realizado</strong> <span class="fa fa-check"></span>');
+                $('#comprobante_'+id_tmp[1]).html(data.folio);
+ 				$('#payment_'+id_tmp[1]).removeClass('btn-primary').addClass('btn-success').html('<strong>Realizado</strong> <span class="fa fa-check"></span>');
  					$.bootstrapGrowl(
  					data.msg,
 	 					{

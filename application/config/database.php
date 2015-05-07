@@ -42,7 +42,7 @@
 | make active.  By default there is only one group (the 'default' group).
 |
 | The $active_record variables lets you determine whether or not to load
-| the active record class
+| the active record classw
 */
 
 $active_group = 'default';

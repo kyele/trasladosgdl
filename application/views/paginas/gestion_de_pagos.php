@@ -1,6 +1,7 @@
 <script>
     $(document).ready(function() {
     	rides.url = '<?php echo base_url() ?>';
+        $('#txt_fecha_pago').datepicker();
     });
 </script>
 <div class="row">
@@ -47,6 +48,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Folio</th>
                                         <th>Cliente</th>
                                         <th width="200">Pasajero</th>
                                         <th>Ruta</th>
@@ -64,6 +66,7 @@
                                     ?>
                                         <tr >
                                             <td><?php echo $item['ID'] ?></td>
+                                            <td id="comprobante_<?php echo $item['ID'] ?>"><?php echo (empty($item['IDCOMPROBANTE'])?'N/D':$item['IDCOMPROBANTE']) ?></td>
                                             <td><?php echo $item['CLIENTE'] ?></td>
                                             <td width="200"><?php echo $item['N_PASAJERO'] ?></td>
                                             <td><?php echo $item['RUTA'] ?></td>
@@ -97,12 +100,13 @@
                                                 ?>
                                                 
                                            
-                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-primary btn-xs">PAGAR</a> </td>
+                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-primary btn-xs">Pagar</a> </td>
                                             <?php 
                                             // } 
                                             }
                                             else{ ?>
-                                                <th id='field_payment_ <?php echo $item['ID'] ?>' class="text-success text-center">Realizado <span class="fa fa-check"></span></th>
+                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-success btn-xs">Realizado <span class="fa fa-check"></span></a> </td>
+                                                <!--<th id='field_payment_ <?php //echo $item['ID'] ?>' class="text-success text-center">Realizado <span class="fa fa-check"></span></th>-->
                                             <?php } ?>
                                         </tr>
                                     <?php
@@ -149,7 +153,24 @@
                             <div class="form-group col-sm-6">
                                 <label for="txt_folio">Folio</label>
                                     <input type="text" class="form-control input-sm" id="txt_folio"  name="txt_folio" value="<?php echo set_value('txt_folio'); ?>" >
-                            </div>                           
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <?php
+                                $fecha_actual = localtime(time(), 1);
+                                $anyo_actual  = $fecha_actual["tm_year"] + 1900;
+                                $mes_actual   = ( ($mes_actual = $fecha_actual["tm_mon"] + 1 ) < 10)  ? '0'.$mes_actual : $mes_actual;
+                                $dia_actual   = ( ($dia_actual = $fecha_actual["tm_mday"]) <10 ) ? '0'.$dia_actual: $dia_actual;
+
+                                $fechaInicio = $anyo_actual.'/'.$mes_actual.'/'.$dia_actual;
+
+                                ?>
+
+                                <label for="txt_fecha_pago" >Fecha</label>
+                                <div class="input-group date" id="fecha_pago_container" >
+                                    <input class="form-control input-sm" size="16" type="text" id="txt_fecha_pago" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_pago" value="<?php echo $fechaInicio; ?>"  readonly style="cursor:pointer !important">
+                                    <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                                </div>
+                            </div>
                       		<div class="form-group text-right col-sm-12">
                                 <br>                           
                                 <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
