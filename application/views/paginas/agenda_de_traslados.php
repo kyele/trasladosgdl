@@ -79,7 +79,6 @@
                                     <tr>
                                         <th>Color</th>
                                         <th>ID</th>
-
                                         <th>Cliente</th>
                                         <th>Pasajero</th>
                                         <th>Chofer</th>
@@ -92,7 +91,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="table_traslados" style="font-size:12px;">
-                                    <?php
+                                    <?php 
                                         foreach ($traslados as $item) {
                                     ?>
                                         <tr class='<?php echo ($item["ESTATUS"] ==="EC") ? " ".$item['RFC']: "success ".$item['RFC']; ?>'>
@@ -103,9 +102,9 @@
                                             <td><?php echo $item['NOMBRECH'] ?></td>
                                             <td><?php echo $item['MODELO'] ?></td>
                                             <td class="text-center"><?php echo $item['FECHA'] ?><strong><?php echo '&nbsp'.'&nbsp'.$item['HORA'] ?></strong></td>
-
+                                            
                                             <td id='estado_t_<?php echo $item["ID"] ?>' class="text-success"><?php echo ($item['ESTATUS'] === "EC") ? 'PENDIENTE':'REALIZADO' ?></td>
-
+                                            
                                             <?php //if ($item['ESTATUS'] == 'EC'): ?>
                                             	<td class="text-center"><a  class="btn btn-link btn-xs ver_detalle_traslado" id='<?php echo $item["ID"] ?>' data-status="<?php echo $item['ESTATUS'] ?>">Ver</a></td>
                                             <?php //else: ?>
@@ -113,7 +112,7 @@
                                             <?php //endif ?>
 
                                             <td class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["ID"] ?>'  <?php echo ($item["ESTATUS"] === "T" ) ? "checked disabled": "";?> ></td>
-
+                                            
                                             <?php if ($item['ESTATUS'] == 'EC'): ?>
                                                 <td class="text-center"><a class="text-danger" href="<?php echo base_url().'traslados/comprobante/'.$item['ID'] ?>"><span class="fa fa-file-pdf-o fa-2x"></span></a></td>
                                             <?php else: ?>
@@ -129,18 +128,18 @@
                         </div>
                         <div class="row">
                            <div class="col-sm-2">
-                               <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>
+                               <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>   
                            </div>
                         </div>
 
                      <?php
                         }//llave if
                      ?>
-            </div>
-        </div>
-    </div>
+            </div>          
+        </div>    
+    </div>   
 </div>
-
+    
 <div class="modal modal-flex fade" id="modal_servicio" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -155,7 +154,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div id="contError"></div>
+                        <div id="contError"></div> 
                         <?php $attributes = array('id' => 'myform_info_servicio'); echo form_open(base_url().'reporte_servicio.html',$attributes); ?>
                                             <input type="hidden" name="traslado" id="myTraslado">
                                                 <div class="form-group col-sm-6" id="form_group_txt_rfc">
@@ -163,7 +162,7 @@
                                                     <div class="input-group">
                                                         <input type="number" class="form-control input-sm" id="txt_km_init"  name="txt_km_init" value="<?php echo set_value('txt_km_init'); ?>" >
                                                         <span class="input-group-addon">km.</span>
-                                                    </div>
+                                                    </div>                                                    
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_km_fin">kilometraje Final:</label>

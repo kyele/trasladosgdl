@@ -312,12 +312,9 @@ class Clientes extends CI_Controller
 			."<th width='250'>Pasajero</th>"
 			."<th width='250'>Chofer</th>"
 			."<th width='250'>Vehiculo</th>"
-			//."<th>N&uacute;mero de Traslados</th>"
+			."<th>N&uacute;mero de Traslados</th>"
 			."<th>Monto</th>"
 			."</tr></thead><tbody>";
-            /*echo "<pre>";
-            print_r($resultado);
-            echo "</pre>";*/
 			foreach($resultado as $current){				
 				$char.= "<tr width='800'>";
 				$nombre = 	($current['CLIENTE'] != "")?$current['CLIENTE']:($current['CLIENTE_ALT']);
@@ -326,16 +323,12 @@ class Clientes extends CI_Controller
 				$char.="<td>".$current['N_PASAJERO']."</td>";
 				$char.="<td>".$current['NOMBRECH']."</td>";
 				$char.="<td>".$current['MODELO']."</td>";
-				//$char.="<td>".$current['NUMTRASLADOS']."</td>";
+				$char.="<td>".$current['NUMTRASLADOS']."</td>";
 				$char.="<td>$".$current['MONTO']."</td>";
-
 				$char.="</tr>";
 				$monto = str_replace(',','',$current['MONTO']);
 				$total+= $monto;
-
-
 			}
-
 			$char.="<tr><td></td><td>TOTAL DE ADEUDOS</td><td>$".number_format($total,2)."</td></tr>";
 			$char.="</tbody></table>";
 			echo $char;

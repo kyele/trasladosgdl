@@ -187,12 +187,11 @@ class Pagos extends CI_Controller
 			$this->form_validation->set_rules('txt_tipo', 'Tipo de Comprobante', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('traslado', 'Traslado', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_folio', 'Folio', 'trim|required|xss_clean');
-            $this->form_validation->set_rules('txt_fecha_pago','Fecha','trim|required|xss_clean');
 			$this->form_validation->set_message('required', 'El  %s es requerido');
 			if($this->form_validation->run() === TRUE)
 			{
 				$result = $this->payments->payment_confirm();
-			    $data= array('status'=>$result['status'],'msg'=>$result['msg'],'fecha'=>$result['fecha'],'folio'=>$result['folio']);
+			    $data= array('status'=>$result['status'],'msg'=>$result['msg'],'fecha'=>$result['fecha']);
 			    echo json_encode($data);
 			}
 			else{
