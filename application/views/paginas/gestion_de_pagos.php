@@ -66,7 +66,7 @@
                                     ?>
                                         <tr >
                                             <td><?php echo $item['ID'] ?></td>
-                                            <td id="comprobante_<?php echo $item['ID'] ?>"><?php echo (empty($item['IDCOMPROBANTE'])?'N/D':$item['IDCOMPROBANTE']) ?></td>
+                                            <td id="comprobante_<?php echo $item['ID'] ?>"><?php echo (($item['IDCOMPROBANTE'] =='')?'N/D':$item['IDCOMPROBANTE']) ?></td>
                                             <td><?php echo $item['CLIENTE'] ?></td>
                                             <td width="200"><?php echo $item['N_PASAJERO'] ?></td>
                                             <td><?php echo $item['RUTA'] ?></td>

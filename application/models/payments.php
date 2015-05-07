@@ -42,15 +42,16 @@ class Payments extends CI_Model
 		$this->id_traslado = $this->input->post('traslado');
 		$this->folio = $this->input->post('txt_folio');
 		$this->tipo_comprobante = $this->input->post('txt_tipo');
-		$fecha =date('Y-m-d');
+        $fecha = $this->input->post('txt_fecha_pago');
+		//$fecha =date('Y-m-d');
 		
-		// $this->db->select('IDCOMPROBANTE');
-		// $this->db->from('tbl_traslados');
-		//$this->db->where("IDCOMPROBANTE = '$this->folio'");
-		// $res = $this->db->get();
-		/*if($res->num_rows()>0){
-        	return array('status' => FALSE,'msg'=>'El folio ingresado ya existe, intentelo nuevamente');	
-        }*/
+		 $this->db->select('IDCOMPROBANTE');
+		$this->db->from('tbl_traslados');
+		$this->db->where("IDCOMPROBANTE = '$this->folio'");
+		$res = $this->db->get();
+		if($res->num_rows()>0){
+        	return array('status' => FALSE,'msg'=>'El folio ingresado ya existe, intentelo nuevamente','fecha'=>null,'folio'=>null);
+        }
 		
 		$this->db->trans_begin();
 		$param = array('IDTRASLADO'=>$this->id_traslado);
@@ -59,7 +60,7 @@ class Payments extends CI_Model
 
 		if($this->db->trans_status() === TRUE){
 			$this->db->trans_commit();
-			return array('status' => TRUE,'msg'=>'<b>El pago ha sido realizado correctamente.</b>','fecha'=>$fecha);
+			return array('status' => TRUE,'msg'=>'<b>El pago ha sido realizado correctamente.</b>','fecha'=>$fecha,'folio'=>$this->folio);
 		}
 		else{
 			$this->db->trans_rollback();
