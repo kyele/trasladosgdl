@@ -254,6 +254,7 @@ class Clientes extends CI_Controller
 			$char = "<table  border='1'  bordercolor='#3B5389'>"
 			."<thead bgcolor='#CCCCCC'  align ='center'>"
 			."<tr>"
+            ."<th>ID Traslado</th>"
 			."<th>Fecha del Traslado</th>"
 			."<th>Ruta</th>"
 			."<th>Hora</th>"
@@ -271,7 +272,7 @@ class Clientes extends CI_Controller
 				$total+= $tmp;
 				$char.= "<tr>";
 				$nombre = 	($current['R_SOCIAL'] != "")?$current['R_SOCIAL']:($current['NOMBRE'].$current['APEPAT'].$current['APEMAT']);
-				
+                $char.="<td align='center'>".$current['IDTRASLADO']."</td>";
 				$char.="<td align='center'>".$current['FECHA']."</td>";
 				$char.="<td>".strtoupper($current['RUTA'])."</td>";
 				$char.="<td>".$current['HORA']."</td>";
@@ -283,9 +284,10 @@ class Clientes extends CI_Controller
 				$char.="<td>".$current['CECO']."</td>";
 				$char.="</tr>";
 			}
-			setlocale(LC_MONETARY, "es_MX");
-
-			$char.='<tr><td colspan="6"><b>Total:</b></td><td><b>'.money_format('%(#10n',$total).'</b></td></tr>';
+			setlocale(LC_MONETARY, "en_US");
+        $total = money_format('%(#10n',$total);
+            echo $total;
+			$char.='<tr><td colspan="7"><b>Total:</b></td><td><b>'.($total).'</b></td></tr>';
 			$char.="</tbody></table>";
 		}
 
@@ -307,7 +309,7 @@ class Clientes extends CI_Controller
 			."<thead bgcolor='#CCCCCC'  align ='center'>"
 			."<tr width='800'>Adeudos del ".$this->session->userdata('fIAd')." al ".$this->session->userdata('fFAd')."</tr>"
 			."<tr>"
-			."<th>ID Traslado</th>"
+			."<th align='center'>ID Traslado</th>"
 			."<th width='500'>Cliente</th>"
 			."<th width='250'>Pasajero</th>"
 			."<th width='250'>Chofer</th>"
@@ -321,7 +323,7 @@ class Clientes extends CI_Controller
 			foreach($resultado as $current){				
 				$char.= "<tr width='800'>";
 				$nombre = 	($current['CLIENTE'] != "")?$current['CLIENTE']:($current['CLIENTE_ALT']);
-				$char.="<td class='text-center'>".$current['IDTRASLADO']."</td>";
+				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
 				$char.="<td width='500'>".$nombre."</td>";
 				$char.="<td>".$current['N_PASAJERO']."</td>";
 				$char.="<td>".$current['NOMBRECH']."</td>";
@@ -336,7 +338,7 @@ class Clientes extends CI_Controller
 
 			}
 
-			$char.="<tr><td></td><td>TOTAL DE ADEUDOS</td><td>$".number_format($total,2)."</td></tr>";
+			$char.="<tr><td colspan='5'>TOTAL DE ADEUDOS</td><td>$".number_format($total,2)."</td></tr>";
 			$char.="</tbody></table>";
 			echo $char;
 		}

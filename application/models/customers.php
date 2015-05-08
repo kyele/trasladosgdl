@@ -77,12 +77,12 @@ class Customers extends CI_Model
 		$queryChar = "tbl_modelo.MODELO, tbl_traslados.IDTRASLADO , tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT,FORMAT((tbl_traslados.MONTO),2) as MONTO";
 		$this->db->select($queryChar,FALSE);
 		$this->db->from('tbl_traslados , tbl_cliente, tbl_chofer,tbl_vehiculos,tbl_modelo');
-		$this->db->where("tbl_cliente.RFC = tbl_traslados.IDCLIENTE  AND tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin' AND tbl_traslados.PAGADO = 'NO'");
+		$this->db->where("tbl_cliente.RFC = tbl_traslados.IDCLIENTE  AND tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_chofer.IDCHOFER = tbl_traslados.IDCHOFER AND tbl_traslados.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin' AND tbl_traslados.PAGADO = 'NO'");
 		$this->db->order_by('CLIENTE,MONTO');
 		$this->db->group_by('tbl_traslados.IDTRASLADO');
 		$queryT = $this->db->get();
 		 $res = $queryT->result_array();
-       /* echo "<pre>";
+      /*echo "<pre>";
 		print_r($res);
         echo "</pre>";
         return false;*/
@@ -90,12 +90,13 @@ class Customers extends CI_Model
 			return $queryT->result_array();
 		}
 		return FALSE;
+
 	}	
 	public function adeudosXCliente(){
 		$this->fecha_ini = $this->input->post('txt_fecha_ini');
 		$this->fecha_fin = $this->input->post('txt_fecha_fin');
 		$this->id_cliente = $this->input->post('adeudo');
-		$this->db->select("tbl_traslados.IDTRASLADO as ID, tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,CONCAT(tbl_traslados.LUGAR_REF, ' - ' , tbl_traslados.DOMICILIO ) as RUTA,  tbl_cliente.R_SOCIAL as CLIENTE,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as CLIENTE_ALT,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') AS FECHA,CONCAT('$', FORMAT(tbl_traslados.MONTO, 2)) as MONTO",FALSE);
+		$this->db->select("tbl_traslados.IDTRASLADO as ID, tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,  tbl_cliente.R_SOCIAL as CLIENTE,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as CLIENTE_ALT,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') AS FECHA,CONCAT('$', FORMAT(tbl_traslados.MONTO, 2)) as MONTO",FALSE);
 		$this->db->from("tbl_cliente,tbl_traslados");
 		$this->db->where("tbl_cliente.RFC = tbl_traslados.IDCLIENTE  AND tbl_traslados.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin' AND tbl_traslados.PAGADO ='NO'");
 		$queryT = $this->db->get();
@@ -109,9 +110,10 @@ class Customers extends CI_Model
 		$this->fecha_ini = $this->input->post('txt_fecha_ini');
 		$this->fecha_fin = $this->input->post('txt_fecha_fin');
 		$this->id_cliente = $this->input->post('adeudo');
-		$this->db->select("cli.R_SOCIAL,cli.NOMBRE,cli.APEPAT,cli.APEMAT,tras.FECHA,CONCAT('$', FORMAT(tras.MONTO, 2)) as MONTO,tras.HORA,CONCAT(tras.LUGAR_REF, ' - ' , tras.DOMICILIO ) as RUTA, tras.NOMBRE_PASAJERO,tras.NOMBRE_SOLICITANTE,tras.BAUCHER,tras.CECO,tras.IDCOMPROBANTE",FALSE);
+		$this->db->select("tras.IDTRASLADO,cli.R_SOCIAL,cli.NOMBRE,cli.APEPAT,cli.APEMAT,tras.FECHA,CONCAT('$', FORMAT(tras.MONTO, 2)) as MONTO,tras.HORA,CONCAT(tras.DOMICILIO, ' - ' , tras.LUGAR_REF ) as RUTA, tras.NOMBRE_PASAJERO,tras.NOMBRE_SOLICITANTE,tras.BAUCHER,tras.CECO,tras.IDCOMPROBANTE",FALSE);
 		$this->db->from("tbl_cliente as cli,tbl_traslados as tras");
 		$this->db->where("cli.RFC = '$this->id_cliente' AND cli.RFC = tras.IDCLIENTE AND tras.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin'  ");
+        $this->db->order_by('tras.FECHA');
 		$queryT = $this->db->get();
 		$resultado = $queryT->result_array();
 		if($queryT->num_rows()>0){
