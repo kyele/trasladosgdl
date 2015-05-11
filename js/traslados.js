@@ -7,6 +7,7 @@ var rides = {
     cerrar:false,
     url:'',
     solicintantes:Array(),
+    checkPay :[],
     load_info:function(id){
         this.id_chk = id;
         this.pos = $('#txt_cliente').prop('selectedIndex');
@@ -425,6 +426,32 @@ var rides = {
             }
         })
     },
+    addSelection:function(input){
+        var id = input.data('id');
+        var checked = (input.is(':checked'));
+        (rides.checkPay.length == 0) ?function(){
+            rides.checkPay[0]  = {'id':id}
+        }():
+        function(){
+            var ban  = false;
+            if(checked){
+                var data = {'id':id};
+                for(var x = rides.checkPay; x< rides.checkPay.length;x++){
+                    if(rides.checkPay[x].id == id){
+                        ban = true;
+                    }
+                }
+                if(!ban){
+                    rides.checkPay.push(data);
+                }
+            }    
+        }();
+        
+               
+        
+        console.log(rides.checkPay);
+        //rides.checkPay
+    },
     init_components:function(){
 
 
@@ -450,6 +477,16 @@ var rides = {
             rides.changeColor(id,color);
 
         });
+        $('#btnPaySelection').on('click',function(){
+            inputs  = $('#table_traslados_pagos').find(":checkbox");
+            alert(inputs.length);
+        });
+        $('#table_traslados_pagos').on('click',":checkbox",function(){
+            rides.addSelection($(this));
+
+        });
+
+
         $('#table_traslados_pagos').on('click','a',function(e){
             e.preventDefault();
             //abrir un modal

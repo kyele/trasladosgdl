@@ -1,7 +1,8 @@
 <script>
     $(document).ready(function() {
     	rides.url = '<?php echo base_url() ?>';
-        $('#txt_fecha_pago').datepicker();
+        $('#txt_fecha_pago,#txt_fecha_i,txt_fecha_f').datepicker();
+        $('#txt_cliente').select2();
     });
 </script>
 <div class="row">
@@ -25,22 +26,90 @@
             <div class="portlet-heading">
                 <div class="portlet-title">
                 
-                    <h4>Listado</h4>
+                    <h4>Búsqueda</h4>
                 </div>
                 <div class="clearfix"></div>
             </div>
             <div class="portlet-body">
-           <!--  <?php 
-            //if(isset($_POST) && count($_POST) !== 0){
-               // $CI =& get_instance();
-               // $CI->load->model('payments');
-              //  $CI->payments->confirmTransaction();
-            //}
+                <?php echo validation_errors();
+                date_default_timezone_set("America/Mexico_City");
+                ?>
+                
+                 <?php $attributes = array('id' => 'myform_ver_notas'); echo form_open(base_url().'gestion_de_pagos.html',$attributes); ?>
+                    <div class="row">
+                     <div class="form-group col-sm-12 col-md-12 col-lg-4">
+                         <label for="txt_cliente">Cliente</label>
+                         <select name="txt_cliente" class="form-control input-sm"  id="txt_cliente">
+                         <option value="---">Seleccionar cliente</option>
+                          <?php
+                            if(!empty($clientes)){
+                                foreach($clientes as $current){
+                                    $nombre = ($current['R_SOCIAL'] == '') ? $current['NOMBRE'].' '.$current['APEPAT'].' '.$current['APEMAT'] : $current['R_SOCIAL'];
+                                    echo '<option value="'.$current['RFC'].'" '.set_select("txt_cliente",$current['RFC']).'>'.$nombre.'</option>';
+                                }
+                            }
+                         ?>
+                         </select>
+                     </div>
+                        <div class="form-group col-sm-6 col-md-6 col-lg-2">
+                      <label for="txt_fecha_i" >Fecha inicial</label>
+                            <div class="input-group date" id="fecha_ini_container" >
 
-            ?> -->
+                                <?php
+                                    
+                                    $fecha_a = localtime(time(), 1);
+                                    $anyo_a  = $fecha_a["tm_year"] + 1900;
+                                    $mes_a   = $fecha_a["tm_mon"] + 1;
+                                    $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
+                                    $dia_a   = 1;
+
+
+                                    $fechaI = '0'.$dia_a.'/'.$mes_a.'/'.$anyo_a;
+
+                                ?>
+                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_i" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_i" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
+                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                            </div>
+
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6 col-lg-2">
+                          <label for="txt_fecha_f" >Fecha Final</label>
+                            <div class="input-group date" id="fecha_fin_container" >
+
+                                <?php
+                                    $fecha_a = localtime(time(), 1);
+                                    $anyo_a  = $fecha_a["tm_year"] + 1900;
+                                    $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
+                                    $dia_a   = ( ($dia_a = $fecha_a["tm_mday"]) <10 ) ? '0'.$dia_a: $dia_a;
+
+                                    $fechaI = $dia_a.'/'.$mes_a.'/'.$anyo_a;
+                                ?>
+                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_f" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_f" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
+                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                            </div>
+                    </div>
+                     <div class="form-group col-sm-12 col-md-12 col-lg-2">
+                        <br>
+                           <button type="submit" class="btn btn-red pull-right">Buscar</button>
+                    </div>
+                    </div>
+                    <hr>
+
+                </form>
+                <div class="row">
+                    <div class="col-sm-12"> 
+                        <button class="btn btn-success btn-lg" id="btnPaySelection">Pagar Seleccionados</button>
+                    </div>
+
+                </div>
+
+
+ <hr>
+
+
                 <?php echo $error; echo $success; ?>
                     <?php 
-                        if(!empty($pagos)){
+                        if(!empty($pagos) && is_array($pagos)){
 
                     ?>
                         <div class="table-responsive">
@@ -55,8 +124,8 @@
                                         <th>Cantidad a Pagar</th>
                                         <th>Fecha de Traslado</th>
                                         <th>Fecha de Pago</th>
-                                        <th>Tipo de Pago</th>
-                                        <th>Situación del Pago</th>
+                                        <th>Pagar</th>
+                                        <th>Ver</th>
                                         
                                     </tr>
                                 </thead>
@@ -73,42 +142,22 @@
                                             <td><?php echo "$".$item['MONTO'] ?></td>
                                             <td><?php echo $item['FECHA'] ?></td>
                                             <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
-                                            <td><?php echo $item['FORMATO_PAGO'] ?></td>
-                                            <?php if($item['PAGADO'] === 'NO'){ 
-                                                    // if($item['FORMATO_PAGO'] === 'PAYPAL'){
-                                                ?>
-                                                <!-- 
-                                                <td class="text-center">
-                                                    <form action="https://www.sandbox.paypal.com/mx/cgi-bin/webscr" method="post">
-                                                <input type="hidden" name="cmd" value="_xclick">
-                                                <input type="hidden" name="business" value="spanishbombs8-facilitator@gmail.com">
-                                                <input type="hidden" name="item_name" value="<?php echo 'TRASLADO PARA EL CLIENTE '.$item['CLIENTE'] ?>">
-                                                <input type="hidden" name="invoice" value="<?php echo $item['ID'] ?>">
-                                                <input type="hidden" name="currency_code" value="MXN">
-                                                <input type="hidden" name="amount" value="<?php echo $item['MONTO'] ?>">
-                                                <input type="hidden" name="return" value="http://localhost/trasladosgdl/gestion_de_pagos.html">
-                                                <input type="hidden" name="cancel_return" value="http://localhost/trasladosgdl/gestion_de_pagos.html">
-                                                <input type="hidden" name="cbt" value = "Volver a Traslados GDL" >
-                                                 <input type="hidden" name="rm" value="2">
-                                                
-                                                        <input type="image" class="btn btn-xs" src="http://runasvikingas.files.wordpress.com/2013/07/x-click-but6.gif" style="width:67px" name="submit" alt="Pago de Forma Segura con Paypal">
-                                                  
-                                                </form>
-                                                </td> -->
-
-                                                  <?php //}else{
-                                                ?>
-                                                
-                                           
-                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-primary btn-xs">Pagar</a> </td>
-                                            <?php 
-                                            // } 
-                                            }
-                                            else{ ?>
-                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-success btn-xs">Realizado <span class="fa fa-check"></span></a> </td>
-                                                <!--<th id='field_payment_ <?php //echo $item['ID'] ?>' class="text-success text-center">Realizado <span class="fa fa-check"></span></th>-->
-                                            <?php } ?>
-                                        </tr>
+                                            <td class="text-center">
+                                                <input type="checkbox" class="chk_payment" data-id="<?php echo $item['ID'] ?>" id="chk_payment_<?php echo $item['ID'] ?>">
+                                            </td>
+                                            <?php if ($item['PAGADO'] == 'NO' &&  $item['ESTATUS'] != 'CANCELADO'): ?>
+                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> 
+                                                    <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-primary btn-xs">Detalle</a> 
+                                                    
+                                                    </td> 
+                                            <?php elseif($item['PAGADO'] == 'NO' && $item['ESTATUS'] == 'CANCELADO'): ?>
+                                                <td class="text-center text-danger" >CANCELADO</td>
+                                            <?php else: ?>
+                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> 
+                                                    <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-success btn-xs">Detalle <span class="fa fa-check"></span></a> 
+                                                </td>
+                                            <?php endif ?>
+                                         </tr>
                                     <?php
                                         } //llave foreach
                                     ?>

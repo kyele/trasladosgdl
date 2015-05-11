@@ -11,6 +11,7 @@ class Pagos extends CI_Controller
 		parent::__construct();
 		$this->load->model('rides','',TRUE);
 		$this->load->model('payments','',TRUE);
+		$this->load->model('customers','',TRUE);
 		$this->char_error_open = '<span class="btn btn-danger btn-xs" style="margin:3px;"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true"> &nbsp;×</button>';
 		$this->char_error_close = '</span>';
         $this->success = '';
@@ -161,14 +162,33 @@ class Pagos extends CI_Controller
 			$this->load->view('main_template',$data);
 
 	}
+	public function user_client($client){
+		if($client ==='---'){
+			$this->form_validation->set_message('user_client', 'Seleccione un Cliente');
+			return FALSE;
+		}
+		return TRUE;
+	}
+
 	public function listado_pagos(){
+			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
+			$this->form_validation->set_rules('txt_cliente','Cliente','trim|required|xss_clean|callback_user_client');
+			$this->form_validation->set_rules('txt_fecha_i', 'Fecha Inicial', 'trim|required|exact_length[10]|xss_clean');
+			$this->form_validation->set_rules('txt_fecha_f', 'Fecha Final', 'trim|required|exact_length[10]|xss_clean');
+			if($this->form_validation->run() === TRUE)
+			{
+				
+				$resultado  = $this->rides->catalogo_traslados('pagos');
+				if(($resultado) === FALSE){
+					$this->error_msg = '<div class="alert  text-danger">No hay traslados agendados para este cliente con las fechas especificadas. agendo uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_traslado.html">Aquí</a></div>';
+				}else{
+					$data['pagos'] = $resultado;
+				}
 
 
-			$data['pagos']  = $this->rides->catalogo_traslados('pagos');
-			
-			if(($data['pagos']) === FALSE){
-				$this->error_msg = '<div class="alert  text-danger">No hay traslados agendados en el sistema. agendo uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_traslado.html">Aquí</a></div>';
 			}
+
+			$data['clientes'] = $this->customers->catalogo_cliente();
 			$data['nombre'] = $this->session_data['nombre'];
 			$data['apellido'] = $this->session_data['apellido'];
 			$data['usuario_i'] = $this->session_data['usuario_i'];
@@ -179,11 +199,10 @@ class Pagos extends CI_Controller
 			$data['content']  = 'gestion_de_pagos';
 			$this->load->view('main_template',$data);
 	}
-	
 	public function pay_now(){
 		if($this->input->is_ajax_request() ){
 		
-		$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
+			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
 			$this->form_validation->set_rules('txt_tipo', 'Tipo de Comprobante', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('traslado', 'Traslado', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_folio', 'Folio', 'trim|required|xss_clean');

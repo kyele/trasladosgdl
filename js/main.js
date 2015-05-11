@@ -67,7 +67,9 @@ var obj = {
         $('#txt_traslado').datepicker('setValue', dI.getFullYear()+'/'+  monthI+'/'+dayI);
         
         $('#catalogo').dataTable({
-           "lengthMenu": [[20, 30, 40, -1], [20, 30, 40, "Todos"]]
+           "lengthMenu": [[20, 30, 40, -1], [20, 30, 40, "Todos"]],
+           "bDeferRender": true
+
         });
         $('#myform_info_chofer').submit(function(e){
 			e.preventDefault();

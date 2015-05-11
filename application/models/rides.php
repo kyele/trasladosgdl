@@ -217,17 +217,31 @@ class Rides extends CI_Model
 	public function catalogo_traslados($from = 'traslados'){
 		$fecha_ini = $this->input->post('txt_fecha_ini');
 		$fecha_fin = $this->input->post('txt_fecha_fin');
+		$cliente = $this->input->post('txt_cliente');
 		$betweenT = '';
+		$where = '';
 		if($from ==='traslados'){
 			$betweenT = "BETWEEN '$fecha_ini' AND '$fecha_fin'";
 			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS,tbl_traslados.IDCOMPROBANTE,tbl_cliente.COLOR";
 		}else{
+
+			$ini = DateTime::createFromFormat('d/m/Y', $this->input->post('txt_fecha_i'));
+			$this->fecha_ini = $ini->format('Y-m-d');
+
+			$fin = DateTime::createFromFormat('d/m/Y', $this->input->post('txt_fecha_f'));
+			$this->fecha_fin = $fin->format('Y-m-d');
+
+			$this->cliente   = $this->input->post('txt_cliente');
 			$betweenT = '';
-			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.LUGAR_REF, ' - ' , tbl_traslados.DOMICILIO ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.FORMATO_PAGO,tbl_traslados.PAGADO,tbl_traslados.MONTO,IDCOMPROBANTE,tbl_cliente.COLOR";
+
+			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.LUGAR_REF, ' - ' , tbl_traslados.DOMICILIO ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.PAGADO,tbl_traslados.MONTO,IDCOMPROBANTE,tbl_cliente.COLOR,tbl_traslados.ESTATUS";
+			$betweenT = "BETWEEN '$this->fecha_ini' AND '$this->fecha_fin'";
+			$where = " tbl_cliente.RFC = '$cliente' AND ";
+
 		}
 		$this->db->select($queryChar,FALSE); 
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
-		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT");
+		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND $where tbl_traslados.FECHA $betweenT");
 		$queryT = $this->db->get();
 		if($queryT->num_rows()>0){
 			return $queryT->result_array();
