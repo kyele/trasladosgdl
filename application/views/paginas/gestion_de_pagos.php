@@ -129,11 +129,11 @@
                                         
                                     </tr>
                                 </thead>
-                                <tbody id="table_traslados_pagos">
+                                <tbody id="table_traslados_pagos" class="text-center">
                                     <?php 
                                         foreach ($pagos as $item) {
                                     ?>
-                                        <tr >
+                                        <tr class="text-center">
                                             <td><?php echo $item['ID'] ?></td>
                                             <td id="comprobante_<?php echo $item['ID'] ?>"><?php echo (($item['IDCOMPROBANTE'] =='')?'N/D':$item['IDCOMPROBANTE']) ?></td>
                                             <td><?php echo $item['CLIENTE'] ?></td>
@@ -142,8 +142,8 @@
                                             <td><?php echo "$".$item['MONTO'] ?></td>
                                             <td><?php echo $item['FECHA'] ?></td>
                                             <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
-                                            <td class="text-center">
-                                                <input type="checkbox" class="chk_payment" data-id="<?php echo $item['ID'] ?>" id="chk_payment_<?php echo $item['ID'] ?>">
+                                            <td >
+                                                <input  type="checkbox" class="chk_payment" data-id="<?php echo $item['ID'] ?>" id="chk_payment_<?php echo $item['ID'] ?>">
                                             </td>
                                             <?php if ($item['PAGADO'] == 'NO' &&  $item['ESTATUS'] != 'CANCELADO'): ?>
                                                 <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> 
