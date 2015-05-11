@@ -10,11 +10,11 @@
             showMeridian: false,
             showInputs: false
         });
-        $('#table_traslados').on('change',":input[type='color']",function(){
+        /*$('#table_traslados').on('change',":input[type='color']",function(){
             var setColor = $(this).data('id');
             $('.'+setColor+' > td').css('background',$(this).val());
             $('[data-id="'+setColor+'"]').val($(this).val());
-        });
+        });*/
     });
 </script>
 <div class="row">
@@ -96,32 +96,32 @@
                                         foreach ($traslados as $item) {
                                     ?>
                                     <?php  if($item["ESTATUS"] ==="EC") { $class  = " ".$item['RFC']; } else if($item["ESTATUS"]=="CANCELADO"){ $class  = "danger ".$item['RFC']; }else{$class  =  "success ".$item['RFC'];} ?>
-                                        <tr  id="field_ride_<?php echo $item['ID'] ?>" class='<?php echo $class ?>'>
-                                            <td><input type="color" data-id="<?php echo $item['RFC'] ?>"></td>
-                                            <td><?php echo $item['ID'] ?></td>
-                                            <td><?php echo ($item['CLIENTE']=='')?$item['NOMBRE']:$item['CLIENTE'] ?></td>
-                                            <td><?php echo $item['N_PASAJERO'] ?></td>
-                                            <td><?php echo $item['NOMBRECH'] ?></td>
-                                            <td><?php echo $item['MODELO'] ?></td>
-                                            <td class="text-center"><?php echo $item['FECHA'] ?><strong><?php echo '&nbsp'.'&nbsp'.$item['HORA'] ?></strong></td>
+                                        <tr  id="field_ride_<?php echo $item['ID'] ?>" class='<?php echo $class ?>' style="background:<?php echo $item['COLOR'];?> " >
+                                            <td style="background:<?php echo $item['COLOR'];?> "><input type="color" data-id="<?php echo $item['RFC'] ?>" value="<?php echo $item['COLOR'] ?>"></td>
+                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['ID'] ?></td>
+                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo ($item['CLIENTE']=='')?$item['NOMBRE']:$item['CLIENTE'] ?></td>
+                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['N_PASAJERO'] ?></td>
+                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['NOMBRECH'] ?></td>
+                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['MODELO'] ?></td>
+                                            <td style="background:<?php echo $item['COLOR'];?> " class="text-center"><?php echo $item['FECHA'] ?><strong><?php echo '&nbsp'.'&nbsp'.$item['HORA'] ?></strong></td>
                                             <?php 
                                                 if($item['ESTATUS'] === "EC") {$estado =  'PENDIENTE';}else if($item['ESTATUS'] == 'CANCELADO'){$estado = 'CANCELADO';}else{$estado = 'REALIZADO';}
                                              ?>
 
-                                            <td id='estado_t_<?php echo $item["ID"] ?>' class="text-<?php echo $class ?>"><?php echo $estado ?></td>
+                                            <td style="background:<?php echo $item['COLOR'];?> " id='estado_t_<?php echo $item["ID"] ?>' class="text-<?php echo $class ?>"><?php echo $estado ?></td>
                                             
                                             <?php //if ($item['ESTATUS'] == 'EC'): ?>
-                                            	<td class="text-center"><a  class="btn btn-link btn-xs ver_detalle_traslado" id='<?php echo $item["ID"] ?>' data-status="<?php echo $item['ESTATUS'] ?>">Ver</a></td>
+                                            	<td style="background:<?php echo $item['COLOR'];?> " class="text-center"><a  class="btn btn-link btn-xs ver_detalle_traslado" id='<?php echo $item["ID"] ?>' data-status="<?php echo $item['ESTATUS'] ?>">Ver</a></td>
                                             <?php //else: ?>
                                             	<!--<td class="text-center">N/A</td>-->
                                             <?php //endif ?>
 
-                                            <td class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["ID"] ?>'  <?php echo ($item["ESTATUS"] === "T" ) ? "checked disabled": "";?> ></td>
+                                            <td style="background:<?php echo $item['COLOR'];?> " class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["ID"] ?>'  <?php echo ($item["ESTATUS"] === "T" ) ? "checked disabled": "";?> ></td>
                                             
                                             <?php if ($item['ESTATUS'] == 'EC'): ?>
-                                                <td class="text-center" id="cancel_<?php echo $item['ID'] ?>"><a class="text-danger cancelar_traslado" data-traslado = "<?php echo $item['ID'] ?>" href="#">Cancelar</a></td>
+                                                <td style="background:<?php echo $item['COLOR'];?> " class="text-center" id="cancel_<?php echo $item['ID'] ?>"><a class="text-danger cancelar_traslado" data-traslado = "<?php echo $item['ID'] ?>" href="#">Cancelar</a></td>
                                             <?php else: ?>
-                                                <td class="text-center">N/A</td>
+                                                <td style="background:<?php echo $item['COLOR'];?>  " class="text-center">N/A</td>
                                             <?php endif ?>
 
                                         </tr>

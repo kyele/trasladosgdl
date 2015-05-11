@@ -280,6 +280,16 @@ class Traslados extends CI_Controller
 			show_404();
 		}	
 	}
+    public function color(){
+        if($this->input->is_ajax_request() && $this->input->post('color') && $this->input->post('id') ){
+            $result = $this->rides->color_ride();
+            $data= array('status'=>$result['status'],'msg'=>$result['msg']);
+            echo json_encode($data);
+        }
+        else{
+            show_404();
+        }
+    }
 	public function catalogo_servicio()
 	{	
 		$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);

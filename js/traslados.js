@@ -359,10 +359,6 @@ var rides = {
                         }
                     );
                 }();
-
-
-
-
             },
             error:function(){
                 $.bootstrapGrowl(
@@ -378,6 +374,56 @@ var rides = {
             }
 
         });
+    },
+    changeColor:function(id,color){
+        $.ajax({
+            url:rides.url+'color.html',
+            type:'POST',
+            dataType:'json',
+            data:{'id':id,'color':color},
+            success:function(data){
+
+                (data.status)?function(){
+
+                    $('.'+id+' > td').css('background',color);
+                    $('[data-id="'+id+'"]').val(color);
+                    $.bootstrapGrowl(
+                        data.msg,
+                        {
+                            type:'success',
+                            align:'center',
+                            width:'auto',
+                            delay:2000,
+                            allow_dismiss:false
+                        }
+                    );
+                }()
+                    :function(){
+                    $.bootstrapGrowl(
+                        data.msg,
+                        {
+                            type:'error',
+                            align:'center',
+                            width:'auto',
+                            delay:2000,
+                            allow_dismiss:false
+                        }
+                    );
+                }();
+            },
+            error:function(){
+                $.bootstrapGrowl(
+                    "Parece que su conexión a internet no va bien!!!",
+                    {
+                        type:'danger',
+                        align:'center',
+                        width:'auto',
+                        delay:3000,
+                        allow_dismiss:false
+                    }
+                );
+            }
+        })
     },
     init_components:function(){
 
@@ -398,7 +444,12 @@ var rides = {
 
             rides.cancellation($(this).data('traslado'));
         });
+        $('#table_traslados').on('change',":input[type='color']",function(){
+            var id = $(this).data('id');
+            var color = $(this).val();
+            rides.changeColor(id,color);
 
+        });
         $('#table_traslados_pagos').on('click','a',function(e){
             e.preventDefault();
             //abrir un modal
