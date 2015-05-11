@@ -53,8 +53,8 @@ var rides = {
                     }
                     else
                     {
-                        $('#'+id).parent().parent().addClass('success');
-                        $('#estado_t_'+id_tmp[1]).text('REALIZADO');
+                        $('#field_ride_'+id_tmp[1]).removeClass('danger').addClass('success');
+                        $('#estado_t_'+id_tmp[1]).text('REALIZADO').removeClass('text-danger').addClass('text-success');
                         $('#chk_'+id_tmp[1]).attr('disabled','disabled');
                         $('#chk_'+id_tmp[1]).prop( "checked", true );
                         //$('#'+id_tmp[1]+' .ver_detalle_traslado').parent().html('N/A');
@@ -321,7 +321,64 @@ var rides = {
             $('#txt_folio').val('');
         });
     },
+    cancellation:function(id){
+        var id = id;
+        
+        $.ajax({
+            url:rides.url+'cancel.html',
+            type:'POST',
+            dataType:'json',
+            data:{'id':id},
+            success:function(data){
 
+                (data.status)?function(){
+                
+                    $('#field_ride_'+id).removeClass('success').addClass('danger')
+                    $('#estado_t_'+id).addClass('text-danger').html('CANCELADO');
+                    $('#cancel_'+id).html('N/A');
+                    $.bootstrapGrowl(
+                        data.msg,
+                        {
+                            type:'success',
+                            align:'center',
+                            width:'auto',
+                            delay:2000,
+                            allow_dismiss:false
+                        }
+                    );
+                }()
+                    :function(){
+                    $.bootstrapGrowl(
+                        data.msg,
+                        {
+                            type:'error',
+                            align:'center',
+                            width:'auto',
+                            delay:2000,
+                            allow_dismiss:false
+                        }
+                    );
+                }();
+
+
+
+
+            },
+            error:function(){
+                $.bootstrapGrowl(
+                    "Parece que su conexión a internet no va bien!!!",
+                    {
+                        type:'danger',
+                        align:'center',
+                        width:'auto',
+                        delay:3000,
+                        allow_dismiss:false
+                    }
+                );
+            }
+
+        });
+    },
     init_components:function(){
 
 
@@ -334,6 +391,12 @@ var rides = {
         $('#table_traslados').on('click','a.ver_detalle_traslado',function(e){
             e.preventDefault();
             rides.payments($(this).attr('id'),$(this).data('status'));
+        });
+
+        $('#table_traslados').on('click','a.cancelar_traslado',function(e){
+            e.preventDefault();
+
+            rides.cancellation($(this).data('traslado'));
         });
 
         $('#table_traslados_pagos').on('click','a',function(e){

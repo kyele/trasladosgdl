@@ -37,13 +37,14 @@ class Traslados extends CI_Controller
 		}
 		if($this->input->post("txt_Direccion_sol"))
 		{
+			
 			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_num_pasajeros', 'Número de Pasajeros', 'trim|required|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_nombre_sol','Nombre del Solicitante','trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_Direccion_sol','Direccion del Solicitante','trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_traslado', 'Fecha de Traslado	', 'trim|required|exact_length[10]|xss_clean');
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
+			// $this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|required|xss_clean');
 			// $this->form_validation->set_rules('txt_comprobante', 'Comprobante', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
@@ -54,6 +55,7 @@ class Traslados extends CI_Controller
 		}
 		else if($this->input->post("txt_domicilio"))
 		{
+			echo $this->input->post('txt_domicilio');
 			$this->form_validation->set_rules('txt_cliente', 'Cliente', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_domicilio', 'Domicilio', 'trim|required|xss_clean');
@@ -66,7 +68,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_num_pasajeros', 'Número de Pasajeros', 'trim|required|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_traslado', 'Fecha de Traslado	', 'trim|required|exact_length[10]|xss_clean');
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
+			// $this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|required|xss_clean');
 			// $this->form_validation->set_rules('txt_comprobante', 'Comprobante', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
@@ -267,6 +269,16 @@ class Traslados extends CI_Controller
 		else{
 			show_404();
 		}
+	}
+	public function cancelar_traslado(){
+		if($this->input->is_ajax_request() && $this->input->post('id') ){
+			$result = $this->rides->cancel_ride();
+			$data= array('status'=>$result['status'],'msg'=>$result['msg']);
+			echo json_encode($data);
+		}
+		else{
+			show_404();
+		}	
 	}
 	public function catalogo_servicio()
 	{	

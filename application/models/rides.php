@@ -106,18 +106,20 @@ class Rides extends CI_Model
 
 		if($this->input->post("txt_Direccion_sol"))
 		{
+			//'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
 			$this->data = array(
 				'IDTRASLADO'=>$last_id,
 				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),     
 				'DOMICILIO'   => $this->input->post('txt_Direccion_sol'),'NOMBRE_PASAJERO'   => $this->input->post('txt_nombre_solicitante'),
 				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
-				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
+				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),
 				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>strtoupper($this->input->post('txt_comprobante')),'CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
 				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
  			);
 		}
 		else
 		{
+			//'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
 			$this->data = array(
 				'IDTRASLADO'=>$last_id,
 				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),     
@@ -125,7 +127,7 @@ class Rides extends CI_Model
 				'COLONIA' => strtoupper($this->input->post('txt_colonia')),'CRUCE1'=>strtoupper($this->input->post('txt_cruce_uno')),
 				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos')),'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre')),
 				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
-				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
+				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),
 				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>'','CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
 				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
  			);
@@ -470,6 +472,24 @@ class Rides extends CI_Model
 			$this->db->trans_rollback();
 			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');	
 		}
+	}
+	public function cancel_ride(){
+		$this->id_traslado = $this->input->post('id');
+		$this->db->trans_begin();
+		$this->status = 'CANCELADO';
+		$param = array('IDTRASLADO'=>$this->id_traslado);
+		$param1 = array('ESTATUS'=>$this->status);
+		$this->db->update('tbl_traslados',$param1,$param);
+
+		if($this->db->trans_status() === TRUE){
+			$this->db->trans_commit();
+			return array('status' => TRUE,'msg'=>'<b>El traslado ha sido cancelado.</b>');
+		}
+		else{
+			$this->db->trans_rollback();
+			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');	
+		}
+
 	}
 	public function pdf_traslado($param)
 	{

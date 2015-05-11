@@ -219,14 +219,14 @@
                             <span class="input-group-addon input-sm"><i class="fa fa-clock-o"></i></span>
                         </div>
                     </div>
-                     <div class="form-group col-sm-12">
+                     <!-- <div class="form-group col-sm-12">
                         <label for="txt_forma_pago">Forma de Pago:</label>
                         <select  class="form-control input-sm" id="txt_forma_pago" style="text-transform:uppercase" name="txt_forma_pago">
-                            <option value="efectivo" <?php echo set_select('txt_forma_pago','efectivo'); ?>>EFECTIVO</option>
-                            <option value="tarjeta" <?php echo set_select('txt_forma_pago','tarjeta'); ?>>TARJETA</option>
+                            <option value="efectivo" <?php //echo set_select('txt_forma_pago','efectivo'); ?>>EFECTIVO</option>
+                            <option value="tarjeta" <?php //echo set_select('txt_forma_pago','tarjeta'); ?>>TARJETA</option>
                             
                         </select>
-                    </div>
+                    </div> -->
                    <!--  <div class="form-group col-sm-12">
                             <label for="txt_comprobante"> Núm. Comprobante </label>
                             <input type="text" class="form-control input-sm" id="txt_comprobante"  name="txt_comprobante" value="<?php echo set_value('txt_comprobante'); ?>" >
