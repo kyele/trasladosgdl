@@ -492,6 +492,12 @@ var rides = {
             rides.payments($(this).attr('id'),$(this).data('status'));
         });
 
+        $('#table_nvo_traslado').on('click','a.ver_detalle_traslado',function(e){
+            e.preventDefault();
+            alert('asd');
+            rides.payments($(this).attr('id'),$(this).data('status'));
+        });
+
         $('#table_traslados').on('click','a.cancelar_traslado',function(e){
             e.preventDefault();
 
@@ -753,6 +759,7 @@ var rides = {
                         //add_data.push(fecha);
                         add_data.push($(this).attr('FECHA'));
                         add_data.push($(this).attr('HORA'));
+                        add_data.push('<a href="#" class="btn btn-link btn-xs ver_detalle_traslado" id="'+$(this).attr('ID')+'" data-status="'+$(this).attr('ESTATUS')+'">Ver</a>');
                         //add_data.push(estado);
                         tbl_traslados.fnAddData(add_data);
                     });

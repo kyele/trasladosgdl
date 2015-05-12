@@ -322,14 +322,14 @@
                                                         </select>
                                                 </div>
 
-                                                 <div class="form-group col-sm-6">
+                                               <!--   <div class="form-group col-sm-6">
                                                     <label for="txt_formato">Formato de Pago:</label>
                                                     
                                                     <select name="txt_formato"  class="form-control input-sm" id="txt_formato" style="text-transform:uppercase" name="txt_formato" value="<?php echo set_value('txt_formato'); ?>" >
                                                         <option value="EFECTIVO">EFECTIVO</option>
                                                         <option value="TARJETA">TARJETA</option>
                                                     </select>
-                                                </div>
+                                                </div> -->
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_monto_traslado">Monto:</label>
                                                     <div class="input-group">

@@ -29,11 +29,11 @@ class Traslados extends CI_Controller
 
 		$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
 		if($this->input->post("txt_Direccion_sol")){
-			echo 'solicitante';
+			//echo 'solicitante';
 
 		}
 		else if($this->input->post("txt_Direccion_sol")){
-			echo 'cliente';
+			//echo 'cliente';
 		}
 		if($this->input->post("txt_Direccion_sol"))
 		{
@@ -46,7 +46,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
 			// $this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|required|xss_clean');
-			// $this->form_validation->set_rules('txt_comprobante', 'Comprobante', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('txt_comprobante', 'Baucher', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_ceco', 'ceco', 'trim|numeric|xss_clean');
@@ -55,7 +55,6 @@ class Traslados extends CI_Controller
 		}
 		else if($this->input->post("txt_domicilio"))
 		{
-			echo $this->input->post('txt_domicilio');
 			$this->form_validation->set_rules('txt_cliente', 'Cliente', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_domicilio', 'Domicilio', 'trim|required|xss_clean');
@@ -70,7 +69,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
 			// $this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|required|xss_clean');
-			// $this->form_validation->set_rules('txt_comprobante', 'Comprobante', 'trim|required|xss_clean');
+			 $this->form_validation->set_rules('txt_comprobante', 'Baucher', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|decimal|xss_clean');
 			$this->form_validation->set_rules('txt_ceco', 'Ceco', 'trim|required|numeric|xss_clean');
@@ -188,7 +187,8 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_nombre_pasajero', 'Nombre Pasajero', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_nombre_solicitante', 'Nombre Solicitante', 'required|trim|xss_clean');
 
-			$this->form_validation->set_rules('txt_formato', 'Formato Pago', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_baucher', 'Baucher', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_ceco', 'CECO', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_monto_traslado', 'Monto', 'decimal|required|trim|xss_clean');
 
 			$this->form_validation->set_rules('txt_num_pasajeros', 'Num Pasajeros', 'required|numeric|trim|xss_clean');

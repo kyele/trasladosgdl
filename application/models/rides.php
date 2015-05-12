@@ -114,7 +114,7 @@ class Rides extends CI_Model
 				'DOMICILIO'   => $this->input->post('txt_Direccion_sol'),'NOMBRE_PASAJERO'   => $this->input->post('txt_nombre_solicitante'),
 				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
 				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),
-				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>strtoupper($this->input->post('txt_comprobante')),'CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
+				'IDCHOFER'=>$this->input->post('txt_conductor'),'BAUCHER'=>($this->input->post('txt_comprobante')),'CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
 				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
  			);
 		}
@@ -129,7 +129,7 @@ class Rides extends CI_Model
 				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos')),'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre')),
 				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
 				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),
-				'IDCHOFER'=>$this->input->post('txt_conductor'),'IDCOMPROBANTE'=>'','CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
+				'IDCHOFER'=>$this->input->post('txt_conductor'),'BAUCHER'=>($this->input->post('txt_comprobante')),'CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
 				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
  			);
 		}
@@ -344,7 +344,8 @@ class Rides extends CI_Model
 				'HORA'=>$this->input->post('txt_hora'),
 				'IDCHOFER'=>$this->input->post('txt_conductor'),
 				'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
-				'FORMATO_PAGO'=>strtoupper($this->input->post('txt_formato')),
+				'BAUCHER'=>strtoupper($this->input->post('txt_baucher')),
+				'CECO'=>strtoupper($this->input->post('txt_ceco')),
 				'MONTO'=>$this->input->post('txt_monto_traslado'),
 				'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
 			);
