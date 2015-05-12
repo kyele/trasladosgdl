@@ -436,7 +436,7 @@ var rides = {
             var ban  = false;
             if(checked){
                 var data = {'id':id};
-                for(var x = rides.checkPay; x< rides.checkPay.length;x++){
+                for(var x = 0; x< rides.checkPay.length;x++){
                     if(rides.checkPay[x].id == id){
                         ban = true;
                     }
@@ -444,13 +444,39 @@ var rides = {
                 if(!ban){
                     rides.checkPay.push(data);
                 }
-            }    
+            } 
+             else{
+                for(var x = 0; x< rides.checkPay.length;x++){
+                    if(rides.checkPay[x].id == id){
+                        rides.checkPay.splice(x,1);
+                    }
+                }
+            }   
+
         }();
-        
-               
-        
-        console.log(rides.checkPay);
-        //rides.checkPay
+    },
+    payInPackage:function(){
+         //alert(rides.checkPay.length)
+         var size = rides.checkPay.length;
+        if(size== 0){
+            $.bootstrapGrowl("No ha seleccionado traslados para pagar!",
+                            {
+                                type:'warning',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            });
+        }else{
+              $('#modal_comprobante_lote').modal({
+                backdrop:'static',
+                keyboard:true
+            }).on('shown.bs.modal',function(e){
+                $('#contTraslados').html('Ha seleccionado '+size+' traslados para pagar!')
+            }).on('hidden.bs.modal',function(){
+                $('#contTraslados').empty();
+            });
+        }
     },
     init_components:function(){
 
@@ -478,8 +504,7 @@ var rides = {
 
         });
         $('#btnPaySelection').on('click',function(){
-            inputs  = $('#table_traslados_pagos').find(":checkbox");
-            alert(inputs.length);
+            rides.payInPackage();
         });
         $('#table_traslados_pagos').on('click',":checkbox",function(){
             rides.addSelection($(this));
@@ -494,7 +519,66 @@ var rides = {
             //rides.pay_ride($(this).attr('id'));
         });
 
+        $('#myform_info_comprobante_lote').submit(function(e){
+            e.preventDefault();
+            var tipo = $('#txt_tipo_lote').val();
+            var folio =  $('#txt_folio_lote').val();
+            var  fecha =$('#txt_fecha_pago_lote').val();
+            $.ajax({
+                url:$(this).attr('action'),
+                type:'POST',
+                dataType:'json',
+                data:{
+                    'datos':rides.checkPay,
+                    'tipo':tipo,
+                    'folio':folio,
+                    'fecha':fecha
+                },
+                success:function(data){
 
+                    (data.status)?function(){
+                        setTimeout(function(){
+                           location.reload()
+                        },3000);
+                        $.bootstrapGrowl(
+                            data.msg,
+                            {
+                                type:'success',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            }
+                        );
+                    }()
+                        :function(){
+                        $.bootstrapGrowl(
+                            data.msg,
+                            {
+                                type:'error',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            }
+                        );
+                    }();
+                },
+                error:function(){
+                    $.bootstrapGrowl(
+                        "Parece que su conexión a internet no va bien!!!",
+                        {
+                            type:'danger',
+                            align:'center',
+                            width:'auto',
+                            delay:3000,
+                            allow_dismiss:false
+                        }
+                    );
+                }
+            });
+
+        });
 
         $('#myform_info_comprobante').submit(function(e){
             e.preventDefault();
@@ -535,10 +619,6 @@ var rides = {
                             }
                         );
                     }();
-
-
-
-
                 },
                 error:function(){
                     $.bootstrapGrowl(

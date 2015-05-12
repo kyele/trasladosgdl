@@ -68,5 +68,37 @@ class Payments extends CI_Model
 		}
 
 	}
+	public function payment_confirm_lote(){
+		
+		$this->folio = $this->input->post('folio');
+		$this->tipo_comprobante = $this->input->post('tipo');
+        $fecha = $this->input->post('fecha');
+		//$fecha =date('Y-m-d');
+		$arrTras = array();
+		$traslados = $this->input->post('datos');
+		$len  = count($traslados);
+		for($x=0;$x<$len;$x++){
+			$arrTras[] = array(
+				'IDTRASLADO'=>$traslados[$x]['id'],
+				'PAGADO'=>'SI',
+				'FECHA_PAGO'=>$fecha,
+				'IDCOMPROBANTE'=>$this->folio,
+				'TIPO_COMPROBANTE'=>$this->tipo_comprobante); 
+		}
+		
+		$this->db->trans_begin();
+		$this->db->update_batch('tbl_traslados',$arrTras,'IDTRASLADO');
+
+		if($this->db->trans_status() === TRUE){
+			$this->db->trans_commit();
+			return array('status' => TRUE,'msg'=>'<b>El pago ha sido realizado correctamente.</b>','fecha'=>$fecha,'folio'=>$this->folio);
+		}
+		else{
+			$this->db->trans_rollback();
+			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');	
+		}
+
+	}
+
 
 }

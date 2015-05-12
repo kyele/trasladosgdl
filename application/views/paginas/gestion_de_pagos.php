@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
     	rides.url = '<?php echo base_url() ?>';
-        $('#txt_fecha_pago,#txt_fecha_i,txt_fecha_f').datepicker();
+        $('#txt_fecha_pago,#txt_fecha_i,txt_fecha_f,#txt_fecha_pago_lote').datepicker();
         $('#txt_cliente').select2();
     });
 </script>
@@ -98,7 +98,7 @@
                 </form>
                 <div class="row">
                     <div class="col-sm-12"> 
-                        <button class="btn btn-success btn-lg" id="btnPaySelection">Pagar Seleccionados</button>
+                        <button class="btn btn-success btn-lg pull-right" id="btnPaySelection">Pagar Seleccionados $</button>
                     </div>
 
                 </div>
@@ -135,7 +135,7 @@
                                     ?>
                                         <tr class="text-center">
                                             <td><?php echo $item['ID'] ?></td>
-                                            <td id="comprobante_<?php echo $item['ID'] ?>"><?php echo (($item['IDCOMPROBANTE'] =='')?'N/D':$item['IDCOMPROBANTE']) ?></td>
+                                            <td  id="comprobante_<?php echo $item['ID'] ?>"><?php echo (($item['IDCOMPROBANTE'] =='')?'N/D':$item['IDCOMPROBANTE']) ?></td>
                                             <td><?php echo $item['CLIENTE'] ?></td>
                                             <td width="200"><?php echo $item['N_PASAJERO'] ?></td>
                                             <td><?php echo $item['RUTA'] ?></td>
@@ -143,7 +143,13 @@
                                             <td><?php echo $item['FECHA'] ?></td>
                                             <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
                                             <td >
+                                            <?php if ($item['PAGADO'] == 'NO' && $item['ESTATUS'] !='CANCELADO'): ?>
                                                 <input  type="checkbox" class="chk_payment" data-id="<?php echo $item['ID'] ?>" id="chk_payment_<?php echo $item['ID'] ?>">
+                                            <?php else: ?>
+                                                N/A
+                                            <?php endif ?>
+
+                                                
                                             </td>
                                             <?php if ($item['PAGADO'] == 'NO' &&  $item['ESTATUS'] != 'CANCELADO'): ?>
                                                 <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> 
@@ -233,3 +239,61 @@
     </div>    
 </div>
 
+<!-- comprobante en lote -->
+<div class="modal modal-flex fade" id="modal_comprobante_lote" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-center" id="title_chofer">Emision de Comprobante por Lote </h4>
+            </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="contError"></div> 
+                    <?php $attributes = array('id' => 'myform_info_comprobante_lote'); echo form_open(base_url().'pago_traslado_lote.html',$attributes); ?>
+                        <input type="hidden" name="traslado" id="myTraslado">
+                            <div class="form-group col-sm-6" id="form_group_txt_rfc">
+                                <label for="txt_km_init">Tipo Comprobante</label>
+                                <select class="form-control input-sm" name="txt_tipo_lote" id="txt_tipo_lote" value="<?php echo set_value('txt_tipo_lote'); ?>">
+                                  <option value="NOTA">NOTA DE CREDITO</option>
+                                  <option value="FACTURA">FACTURA</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="txt_folio">Folio</label>
+                                    <input type="text" class="form-control input-sm" id="txt_folio_lote"  name="txt_folio_lote" value="<?php echo set_value('txt_folio_lote'); ?>" >
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <?php
+                                $fecha_actual = localtime(time(), 1);
+                                $anyo_actual  = $fecha_actual["tm_year"] + 1900;
+                                $mes_actual   = ( ($mes_actual = $fecha_actual["tm_mon"] + 1 ) < 10)  ? '0'.$mes_actual : $mes_actual;
+                                $dia_actual   = ( ($dia_actual = $fecha_actual["tm_mday"]) <10 ) ? '0'.$dia_actual: $dia_actual;
+
+                                $fechaInicio = $anyo_actual.'/'.$mes_actual.'/'.$dia_actual;
+
+                                ?>
+
+                                <label for="txt_fecha_pago" >Fecha</label>
+                                <div class="input-group date" id="fecha_pago_container_l" >
+                                    <input class="form-control input-sm" size="16" type="text" id="txt_fecha_pago_lote" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_pago_lote" value="<?php echo $fechaInicio; ?>"  readonly style="cursor:pointer !important">
+                                    <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <br>
+                                <label id="contTraslados" class="label label-danger"></label>
+                            </div>
+                            <div class="form-group text-right col-sm-12">
+                                <br>                           
+                                <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-red">Guardar</button>
+                            </div>                                
+                        </form>
+                    </div>
+                </div>                                                
+            </div>           
+        </div>        
+    </div>    
+</div>
