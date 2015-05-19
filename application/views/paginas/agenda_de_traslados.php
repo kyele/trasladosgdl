@@ -36,24 +36,24 @@
     <div class="col-md-12">
         <div class="portlet portlet-default">
             <div class="portlet-heading">
-                <div class="portlet-title">                
+                <div class="portlet-title">
                     <h4>Listado</h4>
                 </div>
                 <div class="clearfix"></div>
             </div>
             <div class="portlet-body">
                 <?php echo $error; echo $success; ?>
-                <?php echo validation_errors();?> 
+                <?php echo validation_errors();?>
                  <?php $attributes = array('id' => 'myform_agendafecha_traslados'); echo form_open(base_url().'agenda_de_traslados.html',$attributes); ?>
                     <div class="row">
                         <div class="form-group col-sm-12 col-md-6 col-lg-2">
                                 <label for="txt_fecha_ini" >Fecha inicial</label>
-                                   
+
                                 <div class="input-group date" id="fecha_ini_container" >
                                     <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly style="cursor:pointer !important">
                                     <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
-                                </div> 
-                            
+                                </div>
+
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-lg-2">
                             <label for="txt_fecha_fin" >Fecha Final</label>
@@ -64,12 +64,12 @@
                         </div>
                          <div class="form-group col-sm-12 col-md-12 col-lg-2">
                             <br>
-                               <button type="submit" class="btn btn-red pull-right">Buscar</button>   
+                               <button type="submit" class="btn btn-red pull-right">Buscar</button>
                         </div>
                     </div>
                     <hr>
                     </form>
-                    <?php 
+                    <?php
                         if(!empty($traslados)){
 
                     ?>
@@ -89,13 +89,14 @@
                                         <th>Actualizar Traslado</th>
                                         <th>Traslado</th>
                                     </tr>
+
                                 </thead>
                                 <?php $class = '';$estado='';?>
                                 <tbody id="table_traslados" style="font-size:12px;">
-                                    <?php 
+                                    <?php
                                         foreach ($traslados as $item) {
                                     ?>
-                                    <?php  if($item["ESTATUS"] ==="EC") { $class  = " ".$item['RFC']; } else if($item["ESTATUS"]=="CANCELADO"){ $class  = "danger ".$item['RFC']; }else{$class  =  "success ".$item['RFC'];} ?>
+                                    <?php  if($item["ESTATUS"] ==="EC") { $class  = "warning ".$item['RFC']; } else if($item["ESTATUS"]=="C"){ $class  = "danger ".$item['RFC']; }else{$class  =  "success ".$item['RFC'];} ?>
                                         <tr  id="field_ride_<?php echo $item['ID'] ?>" class='<?php echo $class ?>' style="background:<?php echo $item['COLOR'];?> " >
                                             <td style="background:<?php echo $item['COLOR'];?> "><input type="color" data-id="<?php echo $item['RFC'] ?>" value="<?php echo $item['COLOR'] ?>"></td>
                                             <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['ID'] ?></td>
@@ -104,12 +105,12 @@
                                             <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['NOMBRECH'] ?></td>
                                             <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['MODELO'] ?></td>
                                             <td style="background:<?php echo $item['COLOR'];?> " class="text-center"><?php echo $item['FECHA'] ?><strong><?php echo '&nbsp'.'&nbsp'.$item['HORA'] ?></strong></td>
-                                            <?php 
-                                                if($item['ESTATUS'] === "EC") {$estado =  'PENDIENTE';}else if($item['ESTATUS'] == 'CANCELADO'){$estado = 'CANCELADO';}else{$estado = 'REALIZADO';}
+                                            <?php
+                                                if($item['ESTATUS'] === "EC") {$estado =  'PENDIENTE';}else if($item['ESTATUS'] == 'C'){$estado = 'CANCELADO';}else{$estado = 'REALIZADO';}
                                              ?>
 
-                                            <td style="background:<?php echo $item['COLOR'];?> " id='estado_t_<?php echo $item["ID"] ?>' class="text-<?php echo $class ?>"><?php echo $estado ?></td>
-                                            
+                                            <td style="background:<?php echo $item['COLOR'];?>;font-weight:bold; " id='estado_t_<?php echo $item["ID"] ?>' class="text-<?php echo $class ?>"><?php echo $estado ?></td>
+
                                             <?php //if ($item['ESTATUS'] == 'EC'): ?>
                                             	<td style="background:<?php echo $item['COLOR'];?> " class="text-center"><a  class="btn btn-link btn-xs ver_detalle_traslado" id='<?php echo $item["ID"] ?>' data-status="<?php echo $item['ESTATUS'] ?>">Ver</a></td>
                                             <?php //else: ?>
@@ -117,11 +118,11 @@
                                             <?php //endif ?>
 
                                             <td style="background:<?php echo $item['COLOR'];?> " class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["ID"] ?>'  <?php echo ($item["ESTATUS"] === "T" ) ? "checked disabled": "";?> ></td>
-                                            
+
                                             <?php if ($item['ESTATUS'] == 'EC'): ?>
-                                                <td style="background:<?php echo $item['COLOR'];?> " class="text-center" id="cancel_<?php echo $item['ID'] ?>"><a class="text-danger cancelar_traslado" data-traslado = "<?php echo $item['ID'] ?>" href="#">Cancelar</a></td>
+                                                <td style="background:<?php echo $item['COLOR'];?> " class="text-center" id="updTras_<?php echo $item['ID'] ?>"><a class="text-danger cancelar_traslado" data-traslado = "<?php echo $item['ID'] ?>" data-status="C" href="#" id="linkstatus_<?php echo $item['ID'] ?>">Cancelar</a></td>
                                             <?php else: ?>
-                                                <td style="background:<?php echo $item['COLOR'];?>  " class="text-center">N/A</td>
+                                                <td style="background:<?php echo $item['COLOR'];?>  " class="text-center" id="updTras_<?php echo $item['ID'] ?>"> <a href="#" class="text-warning cancelar_traslado" data-traslado="<?php echo $item['ID'] ?>" data-status="EC" id="linkstatus_<?php echo $item['ID'] ?>">Restaurar</a> </td>
                                             <?php endif ?>
 
                                         </tr>
@@ -133,18 +134,18 @@
                         </div>
                         <div class="row">
                            <div class="col-sm-2">
-                               <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>   
+                               <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>
                            </div>
                         </div>
 
                      <?php
                         }//llave if
                      ?>
-            </div>          
-        </div>    
-    </div>   
+            </div>
+        </div>
+    </div>
 </div>
-    
+
 <div class="modal modal-flex fade" id="modal_servicio" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -159,7 +160,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div id="contError"></div> 
+                        <div id="contError"></div>
                         <?php $attributes = array('id' => 'myform_info_servicio'); echo form_open(base_url().'reporte_servicio.html',$attributes); ?>
                                             <input type="hidden" name="traslado" id="myTraslado">
                                                 <div class="form-group col-sm-6" id="form_group_txt_rfc">
@@ -167,7 +168,7 @@
                                                     <div class="input-group">
                                                         <input type="number" class="form-control input-sm" id="txt_km_init"  name="txt_km_init" value="<?php echo set_value('txt_km_init'); ?>" >
                                                         <span class="input-group-addon">km.</span>
-                                                    </div>                                                    
+                                                    </div>
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_km_fin">kilometraje Final:</label>
@@ -181,38 +182,38 @@
 													<div class="input-group">
 													   <span class="input-group-addon">$</span>
                                                        <input type="number" class="form-control input-sm" id="txt_gasolina"  name="txt_gasolina" value="<?php echo set_value('txt_gasolina'); ?>" >
-                                                          
-                                                    </div>                                                    
+
+                                                    </div>
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_monto">Monto Entregado</label>
                                                     <div class="input-group">
 														<span class="input-group-addon">$</span>
-                                                        <input type="number" class="form-control input-sm" id="txt_monto"  name="txt_monto" value="<?php echo set_value('txt_monto'); ?>" >                                                          
+                                                        <input type="number" class="form-control input-sm" id="txt_monto"  name="txt_monto" value="<?php echo set_value('txt_monto'); ?>" >
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_folio">Folio del Traslado</label>
                                                     <input type="text" class="form-control input-sm" id="txt_folio"  name="txt_folio" value="<?php echo set_value('txt_folio'); ?>" >
                                                 </div>
-                                               
+
                                           		<div class="form-group text-right col-sm-6">
-                                                    <br>                                               
+                                                    <br>
                                                     <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
                                                     <button type="submit" class="btn btn-red">Guardar Cambios</button>
-                                                </div> 
+                                                </div>
 
                                                  </form>
                     </div>
 
                 </div>
-                                                
+
             </div>
-           
+
         </div>
-        
+
     </div>
-    
+
 </div>
 
 
@@ -230,13 +231,13 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div id="contErrorDetalle"></div> 
+                        <div id="contErrorDetalle"></div>
                         <?php $attributes = array('id' => 'myform_detalle_traslado'); echo form_open(base_url().'actualizar_traslado.html',$attributes); ?>
-                                            
+
                                                 <div class="form-group col-sm-6" id="form_group_txt_rfc">
                                                 <label for="txt_cliente">Cliente:</label>
                                                     <select  class="form-control input-sm" id="txt_cliente" style="text-transform:uppercase" name="txt_cliente" readonly="readonly" disabled ="disabled"  >
-                                                        <?php 
+                                                        <?php
                                                             if(!empty($info['clientes'])){
                                                                 foreach($info['clientes'] as $clientes){
                                                                     echo '<option value="'.$clientes['RFC'].'" '.set_select("txt_cliente",$clientes['RFC']) .'>'.$clientes['txt_razon'].'</option>';
@@ -299,20 +300,20 @@
                                                 <div class="form-group col-sm-6">
                                                         <label for="txt_conductor">Conductor:</label>
                                                         <select  class="form-control input-sm" id="txt_conductor" style="text-transform:uppercase" name="txt_conductor" >
-                                                            <?php 
+                                                            <?php
                                                             if(!empty($info['choferes'])){
                                                                 foreach($info['choferes'] as $choferes){
                                                                     echo '<option value="'.$choferes['IDCHOFER'].'" '.set_select("txt_conductor",$choferes['IDCHOFER']) .'>'.$choferes['NOMBRE'].' '.$choferes['APEPAT'].'</option>';
                                                                 }
                                                             }
                                                          ?>
-                                                            
+
                                                         </select>
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                         <label for="txt_vehiculo">Vehículo:</label>
                                                         <select  class="form-control input-sm" id="txt_vehiculo" style="text-transform:uppercase" name="txt_vehiculo"  >
-                                                           <?php 
+                                                           <?php
                                                             if(!empty($info['vehiculos'])){
                                                                 foreach($info['vehiculos'] as $vehiculos){
                                                                     echo '<option value="'.$vehiculos['IDVEHICULO'].'" '.set_select("txt_vehiculo",$vehiculos['IDVEHICULO']).'>'.$vehiculos['MODELO'].' ('.$vehiculos['COLOR'].')</option>';
@@ -324,7 +325,7 @@
 
                                                <!--   <div class="form-group col-sm-6">
                                                     <label for="txt_formato">Formato de Pago:</label>
-                                                    
+
                                                     <select name="txt_formato"  class="form-control input-sm" id="txt_formato" style="text-transform:uppercase" name="txt_formato" value="<?php echo set_value('txt_formato'); ?>" >
                                                         <option value="EFECTIVO">EFECTIVO</option>
                                                         <option value="TARJETA">TARJETA</option>
@@ -334,7 +335,7 @@
                                                     <label for="txt_monto_traslado">Monto:</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
-                                                        <input type="number"  step="0.01" min="0" class="form-control input-sm" id="txt_monto_traslado" style="text-transform:uppercase" name="txt_monto_traslado" value="<?php echo set_value('txt_monto_traslado'); ?>" >                                                          
+                                                        <input type="number"  step="0.01" min="0" class="form-control input-sm" id="txt_monto_traslado" style="text-transform:uppercase" name="txt_monto_traslado" value="<?php echo set_value('txt_monto_traslado'); ?>" >
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-sm-6">
@@ -344,26 +345,26 @@
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_baucher">Baucher del Traslado</label>
                                                     <input type="text" class="form-control input-sm" id="txt_baucher" style="text-transform:uppercase" name="txt_baucher" value="<?php echo set_value('txt_baucher'); ?>" >
-                                                </div>                                                
+                                                </div>
                                                 <div class="form-group col-sm-12">
                                                     <label for="txt_observaciones"> Observaciones:</label>
                                                     <textarea name="txt_observaciones" id="txt_observaciones" style="resize:none;" class="form-control input-sm" cols="10" rows="13" value="<?php echo set_value('txt_observaciones'); ?>"></textarea>
-                                                    
-                                                </div> 
+
+                                                </div>
                                                 <div class="form-group text-right">
                                                     <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
                                                  <button type="submit" class="btn btn-red">Guardar Cambios</button>
                                                 </div>
-                                                
+
                                                  </form>
                     </div>
 
                 </div>
-                                                
+
             </div>
-           
+
         </div>
-        
+
     </div>
-    
+
 </div>

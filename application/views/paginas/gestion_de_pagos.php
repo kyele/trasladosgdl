@@ -18,14 +18,14 @@
             </ol>
         </div>
     </div>
-                    
+
 </div>
 <div class="row">
     <div class="col-md-12">
         <div class="portlet portlet-default">
             <div class="portlet-heading">
                 <div class="portlet-title">
-                
+
                     <h4>Búsqueda</h4>
                 </div>
                 <div class="clearfix"></div>
@@ -34,7 +34,7 @@
                 <?php echo validation_errors();
                 date_default_timezone_set("America/Mexico_City");
                 ?>
-                
+
                  <?php $attributes = array('id' => 'myform_ver_notas'); echo form_open(base_url().'gestion_de_pagos.html',$attributes); ?>
                     <div class="row">
                      <div class="form-group col-sm-12 col-md-12 col-lg-4">
@@ -56,7 +56,7 @@
                             <div class="input-group date" id="fecha_ini_container" >
 
                                 <?php
-                                    
+
                                     $fecha_a = localtime(time(), 1);
                                     $anyo_a  = $fecha_a["tm_year"] + 1900;
                                     $mes_a   = $fecha_a["tm_mon"] + 1;
@@ -97,7 +97,7 @@
 
                 </form>
                 <div class="row">
-                    <div class="col-sm-12"> 
+                    <div class="col-sm-12">
                         <button class="btn btn-success btn-lg pull-right" id="btnPaySelection">Pagar Seleccionados $</button>
                     </div>
 
@@ -108,7 +108,7 @@
 
 
                 <?php echo $error; echo $success; ?>
-                    <?php 
+                    <?php
                         if(!empty($pagos) && is_array($pagos)){
 
                     ?>
@@ -120,47 +120,51 @@
                                         <th>Folio</th>
                                         <th>Cliente</th>
                                         <th width="200">Pasajero</th>
+                                        <th>Chofer</th>
+                                        <th>Vehiculo</th>
                                         <th>Ruta</th>
                                         <th>Cantidad a Pagar</th>
                                         <th>Fecha de Traslado</th>
                                         <th>Fecha de Pago</th>
                                         <th>Pagar</th>
                                         <th>Ver</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody id="table_traslados_pagos" class="text-center">
-                                    <?php 
+                                    <?php
                                         foreach ($pagos as $item) {
                                     ?>
                                         <tr class="text-center">
                                             <td><?php echo $item['ID'] ?></td>
                                             <td  id="comprobante_<?php echo $item['ID'] ?>"><?php echo (($item['IDCOMPROBANTE'] =='')?'N/D':$item['IDCOMPROBANTE']) ?></td>
-                                            <td><?php echo $item['CLIENTE'] ?></td>
+                                            <td><?php if($item['CLIENTE'] == ''){ echo $item['NOMBRE'];}else{echo $item['CLIENTE'];} ?></td>
                                             <td width="200"><?php echo $item['N_PASAJERO'] ?></td>
+                                            <td><?php echo $item['NOMBRECH'] ?></td>
+                                            <td><?php echo $item['MODELO'] ?></td>
                                             <td><?php echo $item['RUTA'] ?></td>
                                             <td><?php echo "$".$item['MONTO'] ?></td>
                                             <td><?php echo $item['FECHA'] ?></td>
                                             <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
                                             <td >
-                                            <?php if ($item['PAGADO'] == 'NO' && $item['ESTATUS'] !='CANCELADO'): ?>
+                                            <?php if ($item['PAGADO'] == 'NO' && $item['ESTATUS'] !='C'): ?>
                                                 <input  type="checkbox" class="chk_payment" data-id="<?php echo $item['ID'] ?>" id="chk_payment_<?php echo $item['ID'] ?>">
                                             <?php else: ?>
                                                 N/A
                                             <?php endif ?>
 
-                                                
+
                                             </td>
-                                            <?php if ($item['PAGADO'] == 'NO' &&  $item['ESTATUS'] != 'CANCELADO'): ?>
-                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> 
-                                                    <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-primary btn-xs">Detalle</a> 
-                                                    
-                                                    </td> 
-                                            <?php elseif($item['PAGADO'] == 'NO' && $item['ESTATUS'] == 'CANCELADO'): ?>
+                                            <?php if ($item['PAGADO'] == 'NO' &&  $item['ESTATUS'] != 'C'): ?>
+                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'>
+                                                    <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-primary btn-xs">Detalle</a>
+
+                                                    </td>
+                                            <?php elseif($item['PAGADO'] == 'NO' && $item['ESTATUS'] == 'C'): ?>
                                                 <td class="text-center text-danger" >CANCELADO</td>
                                             <?php else: ?>
-                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'> 
-                                                    <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-success btn-xs">Detalle <span class="fa fa-check"></span></a> 
+                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'>
+                                                    <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-success btn-xs">Detalle <span class="fa fa-check"></span></a>
                                                 </td>
                                             <?php endif ?>
                                          </tr>
@@ -172,7 +176,7 @@
                         </div>
                     <div class="row">
                        <div class="col-sm-2">
-                           <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>   
+                           <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>
                        </div>
                     </div>
 
@@ -181,7 +185,7 @@
                      ?>
             </div>
         </div>
-    </div>   
+    </div>
 </div>
 
     <!-- Comienza modal de comprobante de traslado-->
@@ -195,7 +199,7 @@
         <div class="modal-body">
             <div class="row">
                 <div class="col-sm-12">
-                    <div id="contError"></div> 
+                    <div id="contError"></div>
                     <?php $attributes = array('id' => 'myform_info_comprobante'); echo form_open(base_url().'pago_traslado.html',$attributes); ?>
                         <input type="hidden" name="traslado" id="myTraslado">
                             <div class="form-group col-sm-6" id="form_group_txt_rfc">
@@ -227,16 +231,16 @@
                                 </div>
                             </div>
                       		<div class="form-group text-right col-sm-12">
-                                <br>                           
+                                <br>
                                 <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
                                 <button type="submit" class="btn btn-red">Guardar</button>
-                            </div>                                
+                            </div>
                         </form>
                     </div>
-                </div>                                                
-            </div>           
-        </div>        
-    </div>    
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- comprobante en lote -->
@@ -250,7 +254,7 @@
         <div class="modal-body">
             <div class="row">
                 <div class="col-sm-12">
-                    <div id="contError"></div> 
+                    <div id="contError"></div>
                     <?php $attributes = array('id' => 'myform_info_comprobante_lote'); echo form_open(base_url().'pago_traslado_lote.html',$attributes); ?>
                         <input type="hidden" name="traslado" id="myTraslado">
                             <div class="form-group col-sm-6" id="form_group_txt_rfc">
@@ -286,14 +290,14 @@
                                 <label id="contTraslados" class="label label-danger"></label>
                             </div>
                             <div class="form-group text-right col-sm-12">
-                                <br>                           
+                                <br>
                                 <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
                                 <button type="submit" class="btn btn-red">Guardar</button>
-                            </div>                                
+                            </div>
                         </form>
                     </div>
-                </div>                                                
-            </div>           
-        </div>        
-    </div>    
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

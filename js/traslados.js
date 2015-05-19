@@ -56,9 +56,11 @@ var rides = {
                     else
                     {
                         $('#field_ride_'+id_tmp[1]).removeClass('danger').addClass('success');
-                        $('#estado_t_'+id_tmp[1]).text('REALIZADO').removeClass('text-danger').addClass('text-success');
+                        $('#estado_t_'+id_tmp[1]).text('REALIZADO').removeClass('text-danger text-warning').addClass('text-success');
                         $('#chk_'+id_tmp[1]).attr('disabled','disabled');
                         $('#chk_'+id_tmp[1]).prop( "checked", true );
+                        $('#linkstatus_'+id_tmp[1]).removeClass('text-danger').addClass('text-warning').text('Restaurar');
+                        $('#linkstatus_'+id_tmp[1]).data('status','EC');
                         //$('#'+id_tmp[1]+' .ver_detalle_traslado').parent().html('N/A');
                         //$('#'+id_tmp[1]).parent().html('N/A');
                         rides.cerrar=true;
@@ -167,17 +169,17 @@ var rides = {
                     }).on('shown.bs.modal',function(e){
                         var flag = false;
                         var patron = ",";
-                        
+
                         $.each(data.traslado,function(key,value) {
                             if(key == "txt_monto_traslado"){
                                 value = value.replace(patron,'');
-                                    
+
                             }
                             if(key == 'txt_cliente'){
                                 valor = value;
                             }
                             $('#'+key+'_mod').val(value);
-                          
+
                         });
                        $('#txt_cliente_mod').attr('readonly',true);
                     }).on('hidden.bs.modal',function(){
@@ -376,21 +378,39 @@ var rides = {
             $('#txt_folio').val('');
         });
     },
-    cancellation:function(id){
+    cancellation:function(id,status){
         var id = id;
-        
+        var status = status;
         $.ajax({
             url:rides.url+'cancel.html',
             type:'POST',
             dataType:'json',
-            data:{'id':id},
+            data:{'id':id,'status':status},
             success:function(data){
 
                 (data.status)?function(){
-                
-                    $('#field_ride_'+id).removeClass('success').addClass('danger')
-                    $('#estado_t_'+id).addClass('text-danger').html('CANCELADO');
-                    $('#cancel_'+id).html('N/A');
+                  var clase;var removeClase;
+                  var texto,texto1;
+                  if(status =='EC'){
+                    clase  = 'text-warning';
+                    removeClase ='text-danger';
+                    texto = 'PENDIENTE';
+                    texto1='Cancelar';
+                    status = 'C';
+
+                  }else{
+                    removeClase="text-warning";
+                    clase = 'text-danger';
+                    texto = 'CANCELADO';
+                    texto1='Restaurar';
+                    status = 'EC';
+                  }
+                    //$('#field_ride_'+id).removeClass('success').addClass('danger')
+                    $('#estado_t_'+id).removeClass(removeClase).addClass(clase).html(texto);
+                    $('#linkstatus_'+id).removeClass(clase).addClass(removeClase).text(texto1);
+                    $('#chk_'+id).removeAttr('disabled');
+                    $('#chk_'+id).prop( "checked", false );
+                    $('#linkstatus_'+id).data('status',status);
                     $.bootstrapGrowl(
                         data.msg,
                         {
@@ -498,14 +518,14 @@ var rides = {
                 if(!ban){
                     rides.checkPay.push(data);
                 }
-            } 
+            }
              else{
                 for(var x = 0; x< rides.checkPay.length;x++){
                     if(rides.checkPay[x].id == id){
                         rides.checkPay.splice(x,1);
                     }
                 }
-            }   
+            }
 
         }();
     },
@@ -546,12 +566,12 @@ var rides = {
             rides.payments($(this).attr('id'),$(this).data('status'));
         });
 
-      
+
 
         $('#table_traslados').on('click','a.cancelar_traslado',function(e){
             e.preventDefault();
 
-            rides.cancellation($(this).data('traslado'));
+            rides.cancellation($(this).data('traslado'),$(this).data('status'));
         });
         $('#table_traslados').on('change',":input[type='color']",function(){
             var id = $(this).data('id');

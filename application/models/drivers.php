@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Drivers extends CI_Model
-{	
+{
 	public $data;
 	public $id_chofer;
 	public $nss_chofer;
@@ -8,7 +8,7 @@ class Drivers extends CI_Model
 	public $status;
 	public $datos_sess;
 	function __construct()
-	{	
+	{
 		parent::__construct();
 		$this->datos_sess = $this->session->userdata('logged_in');
 		$this->data = array();
@@ -68,7 +68,7 @@ class Drivers extends CI_Model
 		$this->db->trans_begin();
 		$this->db->insert('tbl_chofer',$this->data);
 		if($this->db->trans_status() === TRUE){
-			
+
 			if($this->db->affected_rows() === 1){
 				$this->db->trans_commit();
 				return array('status'=>TRUE,'msg'=>'El chofer  '. $this->data['NOMBRE'].' ha sido agregado correctamente.');
@@ -82,7 +82,7 @@ class Drivers extends CI_Model
     		if($this->db->trans_status() === FALSE){
     			$this->db->trans_rollback();
                 return array('status'=>FALSE,'msg'=>'ha ocurrido un eror inesperado, intentelo nuevamente.');
-                
+
     		}
     		else{
 				 $this->db->trans_commit();
@@ -91,7 +91,7 @@ class Drivers extends CI_Model
         }
 		else{
 			$this->db->trans_rollback();
-			return array('status'=>FALSE,'msg'=>"Ha ocurrido un error inesperado intentelo mas tarde.");	
+			return array('status'=>FALSE,'msg'=>"Ha ocurrido un error inesperado intentelo mas tarde.");
 		}
 
 
@@ -136,7 +136,7 @@ class Drivers extends CI_Model
 				'CURP' => strtoupper($this->input->post('txt_curp')),         'SALARIO'   => $this->input->post('txt_salario'),'EDAD' =>$edad,
 				'ESTADO_CIVIL' => strtoupper($this->input->post('txt_estado_civil')), 'OBSERVACIONES' => strtoupper($this->input->post('txt_observaciones')),
 				'COLONIA' => strtoupper($this->input->post('txt_colonia')),
-				'DOMICILIO' => strtoupper($this->input->post('txt_domicilio')),        'CODIGOP'      => $this->input->post('txt_cp'),'FECHA_ING' => $this->input->post('txt_fecha_ing')	
+				'DOMICILIO' => strtoupper($this->input->post('txt_domicilio')),        'CODIGOP'      => $this->input->post('txt_cp'),'FECHA_ING' => $this->input->post('txt_fecha_ing')
 			);
 		if($this->data['IDCHOFER'] !== $this->id_chofer){
 				$params_usuario = array('IDCHOFER'=>$this->data['IDCHOFER']);
@@ -167,30 +167,30 @@ class Drivers extends CI_Model
 		$this->db->trans_begin();
 		$this->db->update('tbl_chofer',$this->data,$param_chofer);
 		if($this->db->trans_status() === TRUE){
-			
+
 			$this->db->trans_commit();
 			return array('status'=>TRUE,'msg'=>'<div class="alert alert-success">La información del chofer <b>'. $this->data['NOMBRE'].'</b> ha sido actualizada.</div>');
-		
+
 		}
 		else{
 			$this->db->trans_rollback();
-			return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");	
+			return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");
 		}
 	}
 	public function status_chofer(){
 		$this->id_chofer = $this->input->post('chofer');
 		$this->status = $this->input->post('stat');
-		
+
 		$this->db->trans_begin();
 		if($this->status === 'false'){
 			$this->status  = 'B';
 		}else{
 			$this->status = 'A';
 		}
-		
+
 		$param = array('IDCHOFER'=>$this->id_chofer);
 		$param1 = array('SITUACION'=>$this->status);
-		
+
 		$this->db->update('tbl_chofer',$param1,$param);
 		if($this->db->trans_status() === TRUE){
 			$this->db->trans_commit();
@@ -198,7 +198,7 @@ class Drivers extends CI_Model
 		}
 		else{
 			$this->db->trans_rollback();
-			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');	
+			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');
 		}
 	}
 	public function myRides(){
@@ -212,6 +212,7 @@ class Drivers extends CI_Model
 		$this->db->select($query,FALSE);
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo,tbl_marca');
 		$this->db->where("tbl_traslados.ESTATUS = 'EC' AND tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_vehiculos.IDMARCA = tbl_marca.IDMARCA AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = '$this->id_chofer' AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT ");
+		$this->db->order_by('tbl_traslados.FECHA','asc');
 		$queryT = $this->db->get();
 		$resultado = $queryT->result_array();
 		if($queryT->num_rows()>0){

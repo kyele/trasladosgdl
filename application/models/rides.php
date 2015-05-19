@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Rides extends CI_Model
-{	
+{
 	public $data;
 	public $datos_sess;
 	public $id_traslado;
@@ -9,7 +9,7 @@ class Rides extends CI_Model
 	public $status_vehiculo;
 	public $folio;
 	function __construct()
-	{	
+	{
 		parent::__construct();
 		$this->datos_sess = $this->session->userdata('logged_in');
 		$this->data = array();
@@ -17,7 +17,7 @@ class Rides extends CI_Model
 		$this->status = 'EC';
 		$this->status_vehiculo = 1;
 		$this->folio = '';
-		
+
 	}
 	public function catalogos(){
 		$this->db->select("RFC,R_SOCIAL as txt_razon,CONCAT(NOMBRE ,' ', APEPAT,' ',APEMAT) as txt_nombre,DOMICILIO as txt_domicilio, NUM_EXT as txt_num_ext, CRUCE_1  as txt_cruce_uno,CRUCE_2 as txt_cruce_dos, COLONIA as txt_colonia",FALSE);
@@ -25,7 +25,7 @@ class Rides extends CI_Model
 		$queryC = $this->db->get();
 		if($queryC->num_rows()>0){
 			$this->data['clientes'] = $queryC->result_array();
-			
+
 		}else{
 			$this->data['msg'] = '<div class="alert alert-danger">No se encontraron Clientes, Registre uno <a href="'.base_url().'nuevo_cliente.html">Aquí</a> </div>';
 			return array('status'=>false,'msg'=>$this->data['msg']);
@@ -46,7 +46,7 @@ class Rides extends CI_Model
         $this->db->select('tbl_vehiculos.IDVEHICULO,tbl_vehiculos.COLOR, tbl_modelo.MODELO');
         $this->db->from('tbl_vehiculos , tbl_modelo ');
 		$this->db->where('tbl_vehiculos.DISPONIBILIDAD <> "B" AND tbl_vehiculos.ESTATUS = "A" AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO ');
-        
+
         $queryCh = $this->db->get();
         if($queryCh->num_rows()>0){
         	$this->data['vehiculos'] = $queryCh->result_array();
@@ -59,7 +59,7 @@ class Rides extends CI_Model
 
         return array('info'=>$this->data,'status'=>true);
 
-		
+
 	}
 	public function catalogos_public(){
 		$this->db->select('IDCHOFER,NOMBRE,APEPAT');
@@ -77,7 +77,7 @@ class Rides extends CI_Model
         $this->db->select('tbl_vehiculos.IDVEHICULO,tbl_vehiculos.COLOR, tbl_modelo.MODELO');
         $this->db->from('tbl_vehiculos , tbl_modelo ');
 		$this->db->where('tbl_vehiculos.DISPONIBILIDAD <> "B" AND tbl_vehiculos.DISPONIBILIDAD = 1 AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO ');
-        
+
         $queryCh = $this->db->get();
         if($queryCh->num_rows()>0){
         	$this->data['vehiculos'] = $queryCh->result_array();
@@ -110,7 +110,7 @@ class Rides extends CI_Model
 			//'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
 			$this->data = array(
 				'IDTRASLADO'=>$last_id,
-				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),     
+				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),
 				'DOMICILIO'   => $this->input->post('txt_Direccion_sol'),'NOMBRE_PASAJERO'   => $this->input->post('txt_nombre_solicitante'),
 				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
 				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),
@@ -123,7 +123,7 @@ class Rides extends CI_Model
 			//'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
 			$this->data = array(
 				'IDTRASLADO'=>$last_id,
-				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),     
+				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),
 				'DOMICILIO'   => $this->input->post('txt_domicilio'),'NUM_EXT'=>$this->input->post('txt_num_ext'),
 				'COLONIA' => strtoupper($this->input->post('txt_colonia')),'CRUCE1'=>strtoupper($this->input->post('txt_cruce_uno')),
 				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos')),'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre')),
@@ -134,7 +134,7 @@ class Rides extends CI_Model
  			);
 		}
 		//strtoupper($this->input->post('txt_comprobante'))
-		
+
 
 		$params_chofer = array('IDCHOFER'=>$this->data['IDCHOFER']);
 		$this->db->select('HORA');
@@ -149,18 +149,18 @@ class Rides extends CI_Model
 			foreach ($validar_chofer->result_array() as $chofer_agenda) {
 
 				$hora_tmp = explode(':', $chofer_agenda['HORA']);
-				
+
 				if(( (int)$hora_tmp[0] <= (int)$hora_validate[0]  ) || (  (   (int)$hora_tmp[0] - (int)$hora_validate[0]  )  < 2 ) ){
-					
+
 					$char_agenda.= 'FECHA : '.$this->data['FECHA'].'  - HORA: '.$chofer_agenda['HORA']."<br>";
 				}
-				
+
 			}
 			if(trim($char_agenda) !== ''){
 				// return array('status'=>FALSE,'msg'=>"El chofer seleccionado tiene pendientes los siguientes traslados: <br><b>".$char_agenda."</b>");
-				$char_agenda = "El chofer seleccionado tiene pendientes los siguientes traslados: <br><b>".$char_agenda."</b>"; 
+				$char_agenda = "El chofer seleccionado tiene pendientes los siguientes traslados: <br><b>".$char_agenda."</b>";
 			}
-			
+
 
 		}
 
@@ -177,21 +177,21 @@ class Rides extends CI_Model
 			foreach ($validar_vehiculo->result_array() as $vehiculo_agenda) {
 
 				$hora_tmpV = explode(':', $vehiculo_agenda['HORA']);
-				
+
 				if(( (int)$hora_tmpV[0] <= (int)$hora_validateV[0]  ) || (  (   (int)$hora_tmpV[0] - (int)$hora_validateV[0]  )  < 2 ) ){
-					
+
 					$char_agendaV.= 'FECHA : '.$this->data['FECHA'].'  - HORA: '.$vehiculo_agenda['HORA']."<br>";
 				}
-				
+
 			}
 			if(trim($char_agendaV) !== ''){
 				// return array('status'=>FALSE,'msg'=>"El chofer seleccionado tiene pendientes los siguientes traslados: <br><b>".$char_agendaV."</b>");
 				$char_agendaV = "El vehiculo seleccionado tiene pendientes los siguientes traslados: <br><b>".$char_agendaV."</b>";
 			}
-			
+
 
 		}
-		
+
 
 		// $param_folio = array('IDCOMPROBANTE'=>$this->data['IDCOMPROBANTE']);
 		// $this->db->select('IDCOMPROBANTE');
@@ -202,7 +202,7 @@ class Rides extends CI_Model
 
 
 
-		//Guardamos el traslado....			
+		//Guardamos el traslado....
 		$this->db->trans_begin();
 		$where_v = array('IDVEHICULO'=>$this->data['IDVEHICULO']);
 		$this->db->insert('tbl_traslados',$this->data);
@@ -211,7 +211,7 @@ class Rides extends CI_Model
 		 	return array('status'=>TRUE,'msg'=>'El traslado para '.$this->data['NOMBRE_PASAJERO'].' ha sido agendado correctamente, imprima el reporte para el chofer <a href="traslados/comprobante/'.$this->data['IDTRASLADO'].'">AQUI</a>','alert-chofer'=>$char_agenda,'alert-vehiculo'=>$char_agendaV);
 		}else{
 			$this->db->trans_rollback();
-		 	return array('status'=>FALSE,'msg'=>"Ha ocurrido un error inesperado intentelo mas tarde.");	
+		 	return array('status'=>FALSE,'msg'=>"Ha ocurrido un error inesperado intentelo mas tarde.");
 		}
 	}
 	public function catalogo_traslados($from = 'traslados'){
@@ -234,12 +234,12 @@ class Rides extends CI_Model
 			$this->cliente   = $this->input->post('txt_cliente');
 			$betweenT = '';
 
-			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.LUGAR_REF, ' - ' , tbl_traslados.DOMICILIO ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.PAGADO,tbl_traslados.MONTO,IDCOMPROBANTE,tbl_cliente.COLOR,tbl_traslados.ESTATUS";
+			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.PAGADO,tbl_traslados.MONTO,IDCOMPROBANTE,tbl_cliente.COLOR,tbl_traslados.ESTATUS";
 			$betweenT = "BETWEEN '$this->fecha_ini' AND '$this->fecha_fin'";
 			$where = " tbl_cliente.RFC = '$cliente' AND ";
 
 		}
-		$this->db->select($queryChar,FALSE); 
+		$this->db->select($queryChar,FALSE);
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
 		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND $where tbl_traslados.FECHA $betweenT");
 		$queryT = $this->db->get();
@@ -249,19 +249,19 @@ class Rides extends CI_Model
 		return FALSE;
 	}
 	public function situacion_pago_traslados()
-	{	
+	{
 		if($this->input->post('txt_fecha_ini') && $this->input->post('txt_fecha_fin'))
 		{
 			$fecha_ini = $this->input->post('txt_fecha_ini');
-			$fecha_fin = $this->input->post('txt_fecha_fin');	
+			$fecha_fin = $this->input->post('txt_fecha_fin');
 		}
 		else
 		{
 			$fecha_ini = $this->session->userdata('fecha_ini');
 			$fecha_fin = $this->session->userdata('fecha_fin');
-			
+
 		}
-		
+
 
 		$queryChar = "tbl_traslados.IDTRASLADO as ID, (tbl_cliente.RFC),tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT, tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO, CONCAT(tbl_traslados.LUGAR_REF, ' a ' , tbl_traslados.DOMICILIO ) as RUTA, DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA_PAGO,tbl_traslados.FORMATO_PAGO,tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,tbl_traslados.PAGADO,(tbl_traslados.MONTO) as MONTO";
 		$this->db->select($queryChar,FALSE);
@@ -294,20 +294,20 @@ class Rides extends CI_Model
 
 				if($current['PAGADO'] == 'SI')
 				{
-					
+
 					 $monto_pagados+=$current['MONTO'];
 					 $tPagados++;
 				}
 				else{
-					
+
 					$monto_no_pagados+=$current['MONTO'];
 					$tNoPagados++;
 				};
-				
+
 				$index++;
-				
+
 			}
-			
+
 
 			return array('estadisticas'=>$myArray,'noPagados'=>number_format($monto_no_pagados,2),'pagados'=>number_format($monto_pagados,2),'traslados_pagados'=>$tPagados,'traslados_no_pagados'=>$tNoPagados,"txc"=>$myArrayConteo);
 		}
@@ -356,14 +356,14 @@ class Rides extends CI_Model
 		$this->db->trans_begin();
 		$this->db->update('tbl_traslados',$this->data,$param);
 		if($this->db->trans_status() === TRUE){
-			
+
 			$this->db->trans_commit();
 			return array('status'=>TRUE,'msg'=>'<div class="alert alert-success">La información del traslado  ha sido actualizada.</div>');
-		
+
 		}
 		else{
 			$this->db->trans_rollback();
-			return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");	
+			return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");
 		}
 
 
@@ -399,7 +399,7 @@ class Rides extends CI_Model
 
 		$paramT = array('IDTRASLADO'=>$this->id_traslado);
 
-		
+
 
 		$paramT = array('IDTRASLADO'=>$this->id_traslado);
 		$paramsT = array('IDCOMPROBANTE'=>$this->folio);
@@ -449,7 +449,7 @@ class Rides extends CI_Model
 		$this->db->group_by("tbl_servicio_chofer.IDREPORTE");
 		$result_servs = $this->db->get();
 		if($result_servs->num_rows() > 0)
-		{	
+		{
 			return $result_servs->result_array();
 		}
 		return FALSE;
@@ -457,7 +457,7 @@ class Rides extends CI_Model
 	public function status_traslado(){
 		$this->id_traslado = $this->input->post('ride');
 		$this->status = $this->input->post('stat');
-		
+
 		$this->db->trans_begin();
 
 		if($this->status === 'false'){
@@ -467,8 +467,8 @@ class Rides extends CI_Model
 			$this->status = 'T';
 			$this->status_vehiculo = 1;
 		}
-		
-		
+
+
 		// $this->db->select('IDVEHICULO');
 		// $this->db->from('tbl_traslados');
 		// $this->db->where("IDTRASLADO ",$this->id_traslado);
@@ -490,24 +490,25 @@ class Rides extends CI_Model
 		}
 		else{
 			$this->db->trans_rollback();
-			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');	
+			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');
 		}
 	}
 	public function cancel_ride(){
 		$this->id_traslado = $this->input->post('id');
 		$this->db->trans_begin();
-		$this->status = 'CANCELADO';
+
+		$this->status = $this->input->post('status');
 		$param = array('IDTRASLADO'=>$this->id_traslado);
 		$param1 = array('ESTATUS'=>$this->status);
 		$this->db->update('tbl_traslados',$param1,$param);
 
 		if($this->db->trans_status() === TRUE){
 			$this->db->trans_commit();
-			return array('status' => TRUE,'msg'=>'<b>El traslado ha sido cancelado.</b>');
+			return array('status' => TRUE,'msg'=>'<b>El estatus del traslados ha sido cambiado correctamente.</b>');
 		}
 		else{
 			$this->db->trans_rollback();
-			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');	
+			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');
 		}
 
 	}
@@ -530,17 +531,17 @@ class Rides extends CI_Model
     }
 	public function pdf_traslado($param)
 	{
-		
+
 		$this->db->select("tbl_traslados.IDTRASLADO,tbl_traslados.IDCOMPROBANTE,tbl_cliente.R_SOCIAL,tbl_cliente.TELEFONO_1,tbl_cliente.TELEFONO_2,tbl_traslados.OBSERVACIONES,tbl_traslados.HORA,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.DOMICILIO,tbl_traslados.LUGAR_REF,tbl_traslados.NUM_EXT,tbl_chofer.NOMBRE,tbl_traslados.NOMBRE_PASAJERO",FALSE);
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer');
 		$this->db->where("tbl_traslados.IDTRASLADO ='$param' AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER");
-		$res = $this->db->get(); 
+		$res = $this->db->get();
 		if($res->num_rows()>0){
 			return $res->row_array();
 		}
 		return FALSE;
 	}
-	
+
 
 	public function get_traslado(){
 		$param = array('RFC'=>strtoupper($this->input->post('cliente')));
@@ -572,7 +573,7 @@ class Rides extends CI_Model
 		$this->db->trans_begin();
 		$this->db->insert('tbl_solicitantes',$this->data);
 		if($this->db->trans_status() === TRUE){
-			
+
 			if($this->db->affected_rows() === 1){
 			$this->db->trans_commit();
 			return array('status'=>TRUE,'msg'=>'<div class="alert alert-success">La solicitante  '. $this->data['NOMBRE'].' ha sido agregado correctamente.</div>');
@@ -580,7 +581,7 @@ class Rides extends CI_Model
 		}
 		else{
 			$this->db->trans_rollback();
-			return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");	
+			return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");
 		}
 
 	}
@@ -595,8 +596,8 @@ class Rides extends CI_Model
 	}
 	public function getRidesToday(){
 		$fecha  = $this->input->get('fecha');
-		$queryChar = "tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH, tbl_modelo.MODELO,CONCAT(tbl_traslados.LUGAR_REF, ' - ' , tbl_traslados.DOMICILIO ) as RUTA, tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS";
-		$this->db->select($queryChar,FALSE); 
+		$queryChar = "tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH, tbl_modelo.MODELO,CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA, tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS";
+		$this->db->select($queryChar,FALSE);
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
 		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA = '$fecha'");
 		$queryT = $this->db->get();
