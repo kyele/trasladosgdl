@@ -239,8 +239,10 @@
                                                     <select  class="form-control input-sm" id="txt_cliente" style="text-transform:uppercase" name="txt_cliente" readonly="readonly" disabled ="disabled"  >
                                                         <?php
                                                             if(!empty($info['clientes'])){
+                                                              $nombre;
                                                                 foreach($info['clientes'] as $clientes){
-                                                                    echo '<option value="'.$clientes['RFC'].'" '.set_select("txt_cliente",$clientes['RFC']) .'>'.$clientes['txt_razon'].'</option>';
+                                                                  if($clientes['txt_razon'] ==''){$nombre =  $clientes['txt_nombre'];}else{$nombre = $clientes['txt_razon'];}
+                                                                    echo '<option value="'.$clientes['RFC'].'" '.set_select("txt_cliente",$clientes['RFC']) .'>'.$nombre.'</option>';
                                                                 }
                                                             }
                                                          ?>
