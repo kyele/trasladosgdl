@@ -69,7 +69,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
 			// $this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|required|xss_clean');
-			 $this->form_validation->set_rules('txt_comprobante', 'Baucher', 'trim|required|xss_clean');
+			 $this->form_validation->set_rules('txt_comprobante', 'Baucher', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|decimal|xss_clean');
 			$this->form_validation->set_rules('txt_ceco', 'Ceco', 'trim|required|numeric|xss_clean');
@@ -168,31 +168,35 @@ class Traslados extends CI_Controller
 	}
 	public function actualizar_traslado(){
 		if($this->input->is_ajax_request()){
+			$prefix = '';
+			if($this->input->post('traslado_mod')){
+				$prefix = '_mod';
+			}
 			
 			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
-			$this->form_validation->set_rules('txt_domicilio', 'Domicilio', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_num_ext', 'Num Exterior', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_colonia', 'Colonia', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_cruce_uno', 'Cruce 1', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_cruce_uno', 'Cruce 2', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_domicilio'.$prefix, 'Domicilio', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_num_ext'.$prefix, 'Num Exterior', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_colonia'.$prefix, 'Colonia', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_cruce_uno'.$prefix, 'Cruce 1', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_cruce_uno'.$prefix, 'Cruce 2', 'required|trim|xss_clean');
 
-			$this->form_validation->set_rules('txt_fecha', 'Fecha', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_hora', 'Hora', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_conductor', 'Conductor', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_vehiculo', 'Vehiculo', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_fecha'.$prefix, 'Fecha', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_hora'.$prefix, 'Hora', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_conductor'.$prefix, 'Conductor', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_vehiculo'.$prefix, 'Vehiculo', 'required|trim|xss_clean');
 			
 			
 
 			
-			$this->form_validation->set_rules('txt_nombre_pasajero', 'Nombre Pasajero', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_nombre_solicitante', 'Nombre Solicitante', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_nombre_pasajero'.$prefix, 'Nombre Pasajero', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_nombre_solicitante'.$prefix, 'Nombre Solicitante', 'required|trim|xss_clean');
 
-			$this->form_validation->set_rules('txt_baucher', 'Baucher', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_ceco', 'CECO', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_monto_traslado', 'Monto', 'decimal|required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_baucher'.$prefix, 'Baucher', 'trim|xss_clean');
+			$this->form_validation->set_rules('txt_ceco'.$prefix, 'CECO', 'trim|xss_clean');
+			$this->form_validation->set_rules('txt_monto_traslado'.$prefix, 'Monto', 'decimal|required|trim|xss_clean');
 
-			$this->form_validation->set_rules('txt_num_pasajeros', 'Num Pasajeros', 'required|numeric|trim|xss_clean');
-			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|xss_clean');
+			$this->form_validation->set_rules('txt_num_pasajeros'.$prefix, 'Num Pasajeros', 'required|numeric|trim|xss_clean');
+			$this->form_validation->set_rules('txt_observaciones'.$prefix, 'Observaciones', 'trim|xss_clean');
 			
 			$this->form_validation->set_message('required', 'El  campo  %s es requerido');
 			if($this->form_validation->run() === FALSE){

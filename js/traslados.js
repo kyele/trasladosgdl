@@ -8,6 +8,7 @@ var rides = {
     url:'',
     solicintantes:Array(),
     checkPay :[],
+    pay_mod :false,
     load_info:function(id){
         this.id_chk = id;
         this.pos = $('#txt_cliente').prop('selectedIndex');
@@ -126,6 +127,59 @@ var rides = {
                                 $('#'+key).attr('disabled',false);
                             //}
                         });
+                    }).on('hidden.bs.modal',function(){
+
+                    });
+                }
+
+
+
+            },
+            error:function(){
+                $.bootstrapGrowl(
+                    "Parece que su conexión a internet no va bien!!!",
+                    {
+                        type:'danger',
+                        align:'center',
+                        width:'auto',
+                        delay:3000,
+                        allow_dismiss:false
+                    }
+                );
+            }
+        });
+    },
+     payments_mod:function(id,status){
+        id_tmp = id;
+
+        $.ajax({
+            url:this.url+'detalle_traslado.html',
+            type:'POST',
+            dataType:'json',
+            data: {'mytraslado':id_tmp},
+            success:function(data){
+                rides.pay_mod = true;
+                var valor  = '';
+                if(data.status) {
+                    $('#modal_detalle_traslado').modal({
+                        backdrop:'static',
+                        keyboard:true
+                    }).on('shown.bs.modal',function(e){
+                        var flag = false;
+                        var patron = ",";
+                        
+                        $.each(data.traslado,function(key,value) {
+                            if(key == "txt_monto_traslado"){
+                                value = value.replace(patron,'');
+                                    
+                            }
+                            if(key == 'txt_cliente'){
+                                valor = value;
+                            }
+                            $('#'+key+'_mod').val(value);
+                          
+                        });
+                       $('#txt_cliente_mod').attr('readonly',true);
                     }).on('hidden.bs.modal',function(){
 
                     });
@@ -492,11 +546,7 @@ var rides = {
             rides.payments($(this).attr('id'),$(this).data('status'));
         });
 
-        $('#table_nvo_traslado').on('click','a.ver_detalle_traslado',function(e){
-            e.preventDefault();
-            alert('asd');
-            rides.payments($(this).attr('id'),$(this).data('status'));
-        });
+      
 
         $('#table_traslados').on('click','a.cancelar_traslado',function(e){
             e.preventDefault();
@@ -706,6 +756,10 @@ var rides = {
                     }else{
 
                         $('#contErrorDetalle').empty().html(data.msg);
+                        if(rides.pay_mod){
+                             rides.showRidesToday();
+                             rides.pay_mod = false;
+                        }
 
                         setTimeout(function(){
                             $("#modal_detalle_traslado").modal('hide');

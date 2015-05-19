@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-         $('select').select2();
+         $('#txt_cliente').select2();
         $("#data_client").popover({
             trigger:'hover',
         });
@@ -45,7 +45,11 @@
              valor=$("#txt_nombre_sol :selected").text();
              $("#txt_nombre_solicitante").val(valor);
 
-        })
+        });
+          $('#table_nvo_traslado').on('click','a.ver_detalle_traslado',function(e){
+            e.preventDefault();
+            rides.payments_mod($(this).attr('id'),$(this).data('status'));
+        });
 
     });
 </script>
@@ -358,14 +362,14 @@
                     <div class="col-sm-12">
                         <div id="contErrorDetalle"></div> 
                         <?php $attributes = array('id' => 'myform_detalle_traslado'); echo form_open(base_url().'actualizar_traslado.html',$attributes); ?>
-                                            
+                                             <input type="hidden" name="traslado_mod" id="traslados_mod" value="ok">
                                                 <div class="form-group col-sm-6" id="form_group_txt_rfc">
-                                                <label for="txt_cliente">Cliente:</label>
-                                                    <select  class="form-control input-sm" id="txt_cliente" style="text-transform:uppercase" name="txt_cliente" readonly="readonly" disabled ="disabled"  >
+                                                <label for="txt_cliente_mod">Cliente:</label>
+                                                    <select  class="form-control input-sm" id="txt_cliente_mod" style="text-transform:uppercase" name="txt_cliente_mod" readonly="readonly" disabled ="disabled"x|>
                                                         <?php 
                                                             if(!empty($info['clientes'])){
                                                                 foreach($info['clientes'] as $clientes){
-                                                                    echo '<option value="'.$clientes['RFC'].'" '.set_select("txt_cliente",$clientes['RFC']) .'>'.$clientes['txt_razon'].'</option>';
+                                                                    echo '<option value="'.$clientes['RFC'].'" '.set_select("txt_cliente_mod",$clientes['RFC']) .'>'.$clientes['txt_razon'].'</option>';
                                                                 }
                                                             }
                                                          ?>
@@ -373,44 +377,44 @@
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_referencial">Destino</label>
-                                                    <input type="text" class="form-control input-sm" id="txt_referencial" style="text-transform:uppercase" name="txt_referencial" value="<?php echo set_value('txt_referencial'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_referencial_mod" style="text-transform:uppercase" name="txt_referencial_mod" value="<?php echo set_value('txt_referencial_mod'); ?>" >
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_domicilio">Domicilio</label>
-                                                    <input type="text" class="form-control input-sm" id="txt_domicilio" style="text-transform:uppercase" name="txt_domicilio" value="<?php echo set_value('txt_domicilio'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_domicilio_mod" style="text-transform:uppercase" name="txt_domicilio_mod" value="<?php echo set_value('txt_domicilio_mod'); ?>" >
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_num_ext">Num Ext</label>
-                                                    <input type="text" class="form-control input-sm" id="txt_num_ext" style="text-transform:uppercase" name="txt_num_ext" value="<?php echo set_value('txt_num_ext'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_num_ext_mod" style="text-transform:uppercase" name="txt_num_ext_mod" va_modlue="<?php echo set_value('txt_num_ext_mod'); ?>" >
                                                 </div>
                                                  <div class="form-group col-sm-6">
                                                     <label for="txt_colonia"> Colonia </label>
-                                                    <input type="text" class="form-control input-sm" id="txt_colonia" style="text-transform:uppercase" name="txt_colonia" value="<?php echo set_value('txt_colonia'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_colonia_mod" style="text-transform:uppercase" name="txt_colonia_mod" value="<?php echo set_value('txt_colonia_mod'); ?>" >
                                                 </div>
                                                   <div class="form-group col-sm-6">
                                                     <label for="txt_cruce_uno"> Cruce 1 </label>
-                                                    <input type="text" class="form-control input-sm" id="txt_cruce_uno" style="text-transform:uppercase" name="txt_cruce_uno" value="<?php echo set_value('txt_cruce_uno'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_cruce_uno_mod" style="text-transform:uppercase" name="txt_cruce_uno_mod" value="<?php echo set_value('txt_cruce_uno_mod'); ?>" >
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_cruce_dos"> Cruce 2 </label>
-                                                    <input type="text" class="form-control input-sm" id="txt_cruce_dos" style="text-transform:uppercase" name="txt_cruce_dos" value="<?php echo set_value('txt_cruce_dos'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_cruce_dos_mod" style="text-transform:uppercase" name="txt_cruce_dos_mod" value="<?php echo set_value('txt_cruce_dos_mod'); ?>" >
                                                 </div>
                                                  <div class="form-group col-sm-6">
                                                     <label for="txt_num_pasajeros">Num Pasajeros</label>
-                                                    <input type="text" class="form-control input-sm" id="txt_num_pasajeros" style="text-transform:uppercase" name="txt_num_pasajeros" value="<?php echo set_value('txt_num_pasajeros'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_num_pasajeros_mod" style="text-transform:uppercase" name="txt_num_pasajeros_mod" value="<?php echo set_value('txt_num_pasajeros_mod'); ?>" >
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_nombre_pasajero">Nombre Pasajero</label>
-                                                    <input type="text" class="form-control input-sm" id="txt_nombre_pasajero" style="text-transform:uppercase" name="txt_nombre_pasajero" value="<?php echo set_value('txt_nombre_pasajero'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_nombre_pasajero_mod" style="text-transform:uppercase" name="txt_nombre_pasajero_mod" value="<?php echo set_value('txt_nombre_pasajero_mod'); ?>" >
                                                 </div>
                                                    <div class="form-group col-sm-6">
                                                     <label for="txt_nombre_solicitante">Nombre Solicitante</label>
-                                                    <input type="text" class="form-control input-sm" id="txt_nombre_solicitante" style="text-transform:uppercase" name="txt_nombre_solicitante" value="<?php echo set_value('txt_nombre_solicitante'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_nombre_solicitante_mod" style="text-transform:uppercase" name="txt_nombre_solicitante_mod" value="<?php echo set_value('txt_nombre_solicitante_mod'); ?>" >
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                   <label for="txt_fecha" >Fecha de Traslado</label>
                                                     <div class="input-group date" id="fecha_container" >
-                                                        <input class="form-control input-sm" size="16" type="text" id="txt_fecha" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha" value="<?php echo set_value('txt_fecha'); ?>"  readonly>
+                                                        <input class="form-control input-sm" size="16" type="text" id="txt_fecha_mod" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_mod" value="<?php echo set_value('txt_fecha_mod'); ?>"  readonly>
                                                         <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                                                     </div>
                                                 </div>
@@ -418,17 +422,17 @@
                                                     <label for="txt_hora" >Hora de Traslado</label>
 
                                                     <div class="input-group bootstrap-timepicker">
-                                                        <input id="txt_hora" type="text" name="txt_hora" class="form-control input-sm" value="<?php echo set_value('txt_hora'); ?>" readonly>
+                                                        <input id="txt_hora_mod" type="text" name="txt_hora_mod" class="form-control input-sm" value="<?php echo set_value('txt_hora_mod'); ?>" readonly>
                                                         <span class="input-group-addon input-sm"><i class="fa fa-clock-o"></i></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-sm-6">
-                                                        <label for="txt_conductor">Conductor:</label>
-                                                        <select  class="form-control input-sm" id="txt_conductor" style="text-transform:uppercase" name="txt_conductor" >
+                                                        <label for="txt_conductor_mod">Conductor:</label>
+                                                        <select  class="form-control input-sm" id="txt_conductor_mod" style="text-transform:uppercase" name="txt_conductor_mod" >
                                                             <?php 
                                                             if(!empty($info['choferes'])){
                                                                 foreach($info['choferes'] as $choferes){
-                                                                    echo '<option value="'.$choferes['IDCHOFER'].'" '.set_select("txt_conductor",$choferes['IDCHOFER']) .'>'.$choferes['NOMBRE'].' '.$choferes['APEPAT'].'</option>';
+                                                                    echo '<option value="'.$choferes['IDCHOFER'].'" '.set_select("txt_conductor_mod",$choferes['IDCHOFER']) .'>'.$choferes['NOMBRE'].' '.$choferes['APEPAT'].'</option>';
                                                                 }
                                                             }
                                                          ?>
@@ -437,43 +441,35 @@
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                         <label for="txt_vehiculo">Vehículo:</label>
-                                                        <select  class="form-control input-sm" id="txt_vehiculo" style="text-transform:uppercase" name="txt_vehiculo"  >
+                                                        <select  class="form-control input-sm" id="txt_vehiculo_mod" style="text-transform:uppercase" name="txt_vehiculo_mod"  >
                                                            <?php 
                                                             if(!empty($info['vehiculos'])){
                                                                 foreach($info['vehiculos'] as $vehiculos){
-                                                                    echo '<option value="'.$vehiculos['IDVEHICULO'].'" '.set_select("txt_vehiculo",$vehiculos['IDVEHICULO']).'>'.$vehiculos['MODELO'].' ('.$vehiculos['COLOR'].')</option>';
+                                                                    echo '<option value="'.$vehiculos['IDVEHICULO'].'" '.set_select("txt_vehiculo_mod",$vehiculos['IDVEHICULO']).'>'.$vehiculos['MODELO'].' ('.$vehiculos['COLOR'].')</option>';
                                                                 }
                                                             }
                                                          ?>
                                                         </select>
                                                 </div>
 
-                                               <!--   <div class="form-group col-sm-6">
-                                                    <label for="txt_formato">Formato de Pago:</label>
-                                                    
-                                                    <select name="txt_formato"  class="form-control input-sm" id="txt_formato" style="text-transform:uppercase" name="txt_formato" value="<?php echo set_value('txt_formato'); ?>" >
-                                                        <option value="EFECTIVO">EFECTIVO</option>
-                                                        <option value="TARJETA">TARJETA</option>
-                                                    </select>
-                                                </div> -->
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_monto_traslado">Monto:</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
-                                                        <input type="number"  step="0.01" min="0" class="form-control input-sm" id="txt_monto_traslado" style="text-transform:uppercase" name="txt_monto_traslado" value="<?php echo set_value('txt_monto_traslado'); ?>" >                                                          
+                                                        <input type="number"  step="0.01" min="0" class="form-control input-sm" id="txt_monto_traslado_mod" style="text-transform:uppercase" name="txt_monto_traslado_mod" value="<?php echo set_value('txt_monto_traslado_mod'); ?>" >                                                          
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_ceco">CECO del Traslado</label>
-                                                    <input type="text" class="form-control input-sm" id="txt_ceco" style="text-transform:uppercase" name="txt_ceco" value="<?php echo set_value('txt_ceco'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_ceco_mod" style="text-transform:uppercase" name="txt_ceco_mod" value="<?php echo set_value('txt_ceco_mod'); ?>" >
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <label for="txt_baucher">Baucher del Traslado</label>
-                                                    <input type="text" class="form-control input-sm" id="txt_baucher" style="text-transform:uppercase" name="txt_baucher" value="<?php echo set_value('txt_baucher'); ?>" >
+                                                    <input type="text" class="form-control input-sm" id="txt_baucher_mod" style="text-transform:uppercase" name="txt_baucher_mod" value="<?php echo set_value('txt_baucher_mod'); ?>" >
                                                 </div>                                                
                                                 <div class="form-group col-sm-12">
                                                     <label for="txt_observaciones"> Observaciones:</label>
-                                                    <textarea name="txt_observaciones" id="txt_observaciones" style="resize:none;" class="form-control input-sm" cols="10" rows="13" value="<?php echo set_value('txt_observaciones'); ?>"></textarea>
+                                                    <textarea name="txt_observaciones_mod" id="txt_observaciones_mod" style="resize:none;" class="form-control input-sm" cols="10" rows="13" value="<?php echo set_value('txt_observaciones_mod'); ?>"></textarea>
                                                     
                                                 </div> 
                                                 <div class="form-group text-right">

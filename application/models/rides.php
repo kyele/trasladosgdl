@@ -330,24 +330,28 @@ class Rides extends CI_Model
 	}
 	public function update_detalle_traslado(){
 		$id_traslado = $this->session->userdata('detalle_traslado');
+		$prefix = '';
+			if($this->input->post('traslado_mod')){
+				$prefix = '_mod';
+			}
 		$param = array('IDTRASLADO'=>$id_traslado);
 		$this->data = array(
-				'DOMICILIO'=>strtoupper($this->input->post('txt_domicilio')),
-				'NUM_EXT'=>$this->input->post('txt_num_ext'),
-				'COLONIA'=>strtoupper($this->input->post('txt_colonia')),
-				'CRUCE1'=>strtoupper($this->input->post('txt_cruce_uno')),
-				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos')),
-				'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre_pasajero')),
-				'NUM_PASAJEROS'=>$this->input->post('txt_num_pasajeros'),
-				'NOMBRE_SOLICITANTE'=>$this->input->post('txt_nombre_solicitante'),
-				'FECHA'=>$this->input->post('txt_fecha'),
-				'HORA'=>$this->input->post('txt_hora'),
-				'IDCHOFER'=>$this->input->post('txt_conductor'),
-				'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
-				'BAUCHER'=>strtoupper($this->input->post('txt_baucher')),
-				'CECO'=>strtoupper($this->input->post('txt_ceco')),
-				'MONTO'=>$this->input->post('txt_monto_traslado'),
-				'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
+				'DOMICILIO'=>strtoupper($this->input->post('txt_domicilio'.$prefix)),
+				'NUM_EXT'=>$this->input->post('txt_num_ext'.$prefix),
+				'COLONIA'=>strtoupper($this->input->post('txt_colonia'.$prefix)),
+				'CRUCE1'=>strtoupper($this->input->post('txt_cruce_uno'.$prefix)),
+				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos'.$prefix)),
+				'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre_pasajero'.$prefix)),
+				'NUM_PASAJEROS'=>$this->input->post('txt_num_pasajeros'.$prefix),
+				'NOMBRE_SOLICITANTE'=>$this->input->post('txt_nombre_solicitante'.$prefix),
+				'FECHA'=>$this->input->post('txt_fecha'.$prefix),
+				'HORA'=>$this->input->post('txt_hora'.$prefix),
+				'IDCHOFER'=>$this->input->post('txt_conductor'.$prefix),
+				'IDVEHICULO'=>$this->input->post('txt_vehiculo'.$prefix),
+				'BAUCHER'=>strtoupper($this->input->post('txt_baucher'.$prefix)),
+				'CECO'=>strtoupper($this->input->post('txt_ceco'.$prefix)),
+				'MONTO'=>$this->input->post('txt_monto_traslado'.$prefix),
+				'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'.$prefix))
 			);
 		$this->db->trans_begin();
 		$this->db->update('tbl_traslados',$this->data,$param);
