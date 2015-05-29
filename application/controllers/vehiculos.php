@@ -161,7 +161,43 @@ class Vehiculos extends CI_Controller
 		
 			
 	}
+	public function user_vehicle($client){
+		if($client ==='---'){
+			$this->form_validation->set_message('user_vehicle', 'Seleccione un Vehiculo');
+			return FALSE;
+		}
+		return TRUE;
+	}
+	public function estadisticas(){
+		$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
+		$this->form_validation->set_rules('txt_vehiculo','Vehiculo','trim|required|xss_clean|callback_user_vehicle');
+		$this->form_validation->set_rules('txt_fecha_i', 'Fecha Inicial', 'trim|required|exact_length[10]|xss_clean');
+		$this->form_validation->set_rules('txt_fecha_f', 'Fecha Final', 'trim|required|exact_length[10]|xss_clean');
+		if($this->form_validation->run() === TRUE)
+		{
+			
+			$resultado  = $this->vehicles->estadisticas();
+			if(($resultado) === FALSE){
+				$this->error_msg = '<div class="alert  text-danger">No hay traslados agendados para este cliente con las fechas especificadas. agendo uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_traslado.html">Aquí</a></div>';
+			}else{
+				$data['estadisticas'] = $resultado;
+			}
 
+
+		}
+
+		$data['vehiculos']  = $this->vehicles->cat_ve();
+
+		$data['nombre'] = $this->session_data['nombre'];
+		$data['apellido'] = $this->session_data['apellido'];
+		$data['usuario_i'] = $this->session_data['usuario_i'];
+		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
+		$data['success'] = $this->success;
+		$data['error'] = $this->error_msg;
+        $data['titulo'] = 'Estadistica de Vehiculos';
+		$data['content']  = 'estadistica_vehiculos';
+		$this->load->view('main_template',$data);
+	}
 	public function update_vehiculo()
 	{
                 $this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);

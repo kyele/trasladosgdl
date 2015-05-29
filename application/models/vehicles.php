@@ -71,6 +71,19 @@ class Vehicles extends CI_Model
 
 	}
 
+public function cat_ve(){
+	$this->db->select('tbl_vehiculos.IDVEHICULO,tbl_vehiculos.COLOR,tbl_modelo.MODELO');
+		$this->db->from('tbl_vehiculos,tbl_modelo');
+		$this->db->where('tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO');
+		$queryC = $this->db->get();
+		if($queryC->num_rows()>0){
+			return $queryC->result_array();
+		}
+		else
+		{
+			return FALSE;
+		}
+}
 	public function catalogo_vehiculos()
 	{
 		$this->db->select('IDVEHICULO,MATRICULA,NUM_MOTOR,TIPO_VEHICULO,IDMARCA,IDMODELO,NUM_PASAJEROS,NUM_PUERTAS,URL_IMG,COLOR,ESTATUS');
@@ -159,7 +172,24 @@ class Vehicles extends CI_Model
         }
         
 	}
+	public function estadisticas(){
+			$ini = DateTime::createFromFormat('d/m/Y', $this->input->post('txt_fecha_i'));
+			$fecha_ini = $ini->format('Y-m-d');
 
+			$fin = DateTime::createFromFormat('d/m/Y', $this->input->post('txt_fecha_f'));
+			$fecha_fin = $fin->format('Y-m-d');
+
+			$idvehiculo = $this->input->post('txt_vehiculo');
+			$query = "COUNT( tbl_vehiculos.IDVEHICULO ) as TOTALTRASLADOS,tbl_vehiculos.MATRICULA,tbl_modelo.MODELO,CONCAT('$',FORMAT( SUM( tbl_traslados.MONTO ) ,2) ) as GANANCIAS";
+			$this->db->select($query,false);
+			$this->db->from("tbl_vehiculos,tbl_traslados,tbl_modelo");
+			$this->db->where("tbl_vehiculos.IDVEHICULO = '$idvehiculo' and tbl_vehiculos.IDVEHICULO = tbl_traslados.IDVEHICULO and tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin'");
+			$resEstadisticas = $this->db->get();
+			if($resEstadisticas->num_rows() >0){
+				return $resEstadisticas->row();
+			}
+			return FALSE;
+	}
 	public function status_vehicles(){
 		$vehiculo = $this->input->post('vehiculo');
 		$status = $this->input->post('stat');

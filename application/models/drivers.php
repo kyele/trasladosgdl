@@ -97,13 +97,38 @@ class Drivers extends CI_Model
 
 	}
 	public function catalogo_chofer(){
-		$this->db->select('IDCHOFER,NOMBRE,TELEFONO1,DISPONIBILIDAD,SITUACION');
+		$this->db->select('IDCHOFER,NOMBRE,APEPAT,APEMAT,TELEFONO1,DISPONIBILIDAD,SITUACION');
 		$this->db->from('tbl_chofer');
 		$queryC = $this->db->get();
 		if($queryC->num_rows()>0){
 			return $queryC->result_array();
 		}
 		return FALSE;
+	}
+	public function estadisticas(){
+			$ini = DateTime::createFromFormat('d/m/Y', $this->input->post('txt_fecha_i'));
+			$fecha_ini = $ini->format('Y-m-d');
+
+			$fin = DateTime::createFromFormat('d/m/Y', $this->input->post('txt_fecha_f'));
+			$fecha_fin = $fin->format('Y-m-d');
+
+			$idchofer = $this->input->post('txt_chofer');
+			$query = "COUNT( tbl_chofer.IDCHOFER ) as TOTALTRASLADOS,tbl_chofer.NOMBRE,tbl_chofer.APEPAT,tbl_chofer.APEMAT, CONCAT('$',FORMAT( SUM( tbl_traslados.MONTO ) ,2) ) as GANANCIAS";
+			$this->db->select($query,false);
+			$this->db->from("tbl_chofer,tbl_traslados ");
+			$this->db->where("tbl_chofer.IDCHOFER = '$idchofer' and tbl_chofer.IDCHOFER = tbl_traslados.IDCHOFER and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin'");
+			$resEstadisticas = $this->db->get();
+			if($resEstadisticas->num_rows() >0){
+				return $resEstadisticas->row();
+			}
+			return FALSE;
+/*		"SELECT COUNT( t.idchofer ) AS numtraslados, c.nombre, c.apepat, c.apemat, SUM( t.monto ) AS totalVendido
+FROM tbl_chofer AS c, tbl_traslados AS t
+WHERE c.idchofer =  'GOAC710606'
+AND c.idchofer = .t.idchofer
+AND fecha
+BETWEEN  '2015-04-21'
+AND  '2015-04-22'"*/
 	}
 	public function get_chofer(){
 		$param = array('IDCHOFER'=>strtoupper($this->input->post('chofer')));

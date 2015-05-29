@@ -142,6 +142,19 @@
                                     <i class="fa fa-file-text-o"></i> Estadisticas de Traslados
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo base_url() ?>estadisticas_chofer.html">
+                                    <i class="fa fa-file-text-o">
+                                        Estadisticas de Choferes
+                                    </i>
+                                </a>
+                            </li>
+                            <li><a href="<?php echo base_url() ?>estadisticas_vehiculo.html">
+                                    <i class="fa fa-file-text-o">
+                                        Estadisticas de Vehiculos
+                                    </i>
+                                </a>
+                            </li>
                              <li>
                                 <a href="<?php echo base_url() ?>catalogo_servicios.html">
                                     <i class="fa fa-bar-chart-o"></i> Reporte de Gasolina

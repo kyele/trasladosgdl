@@ -236,4 +236,40 @@ class Choferes extends CI_Controller
 
 		echo $char;
 	}
+	public function user_driver($client){
+		if($client ==='---'){
+			$this->form_validation->set_message('user_driver', 'Seleccione un Chofer');
+			return FALSE;
+		}
+		return TRUE;
+	}
+	public function estadisticas(){
+		$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
+		$this->form_validation->set_rules('txt_chofer','Chofer','trim|required|xss_clean|callback_user_driver');
+		$this->form_validation->set_rules('txt_fecha_i', 'Fecha Inicial', 'trim|required|exact_length[10]|xss_clean');
+		$this->form_validation->set_rules('txt_fecha_f', 'Fecha Final', 'trim|required|exact_length[10]|xss_clean');
+		if($this->form_validation->run() === TRUE)
+		{
+			
+			$resultado  = $this->drivers->estadisticas();
+			if(($resultado) === FALSE){
+				$this->error_msg = '<div class="alert  text-danger">No hay traslados agendados para este cliente con las fechas especificadas. agendo uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_traslado.html">Aquí</a></div>';
+			}else{
+				$data['estadisticas'] = $resultado;
+			}
+
+
+		}
+
+		$data['choferes']  = $this->drivers->catalogo_chofer();
+		$data['nombre'] = $this->session_data['nombre'];
+		$data['apellido'] = $this->session_data['apellido'];
+		$data['usuario_i'] = $this->session_data['usuario_i'];
+		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
+		$data['success'] = $this->success;
+		$data['error'] = $this->error_msg;
+        $data['titulo'] = 'Estadistica de Choferes';
+		$data['content']  = 'estadistica_choferes';
+		$this->load->view('main_template',$data);
+	}
 }
