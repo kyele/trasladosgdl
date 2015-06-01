@@ -38,6 +38,7 @@
 */
 //$route['usuarios/(:any)'] ='usuarios/update_profile/$1';
 // $route['buscar_reporte'] ='traslados/reporte_gasolina';
+
 $route['color'] = 'traslados/color';
 $route['cancel'] = 'traslados/cancelar_traslado';
 $route['mis_traslados'] = 'choferes/trasladosRealizados';
@@ -45,8 +46,10 @@ $route['reporte_de_adeudos'] = 'clientes/reporteAdeudos';
 $route['gestion_de_adeudos'] = 'clientes/gestion_adeudos'; 
 $route['adeudos']  = 'clientes/adeudos';
 $route['reporte_estadisticas'] = 'pagos/reporte_estadisticas';
-$route['estadisticas_chofer'] = "choferes/estadisticas";
-$route['estadisticas_vehiculo'] = "vehiculos/estadisticas";
+$route['estadisticas_chofer'] = "choferes/estadisticas";//nuevos modulos pendientes
+$route['estadisticas_vehiculo'] = "vehiculos/estadisticas";//nuevos modulos pendientes
+$route['reporte_estadisticas_chofer']  = 'choferes/reporte';//reporte estadisticas para los choferes
+$route['reporte_estadisticas_vehiculo']  = 'vehiculos/reporte';//reporte estadisticas para vehiculos
 $route['estadisticas']  = 'pagos/estatus_pagos';
 $route['informe_solicitante'] = 'traslados/informe_solicitante';
 $route['nuevo_solicitante'] = 'traslados/nuevo_solicitante';

@@ -181,6 +181,8 @@ class Vehiculos extends CI_Controller
 				$this->error_msg = '<div class="alert  text-danger">No hay traslados agendados para este cliente con las fechas especificadas. agendo uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_traslado.html">Aquí</a></div>';
 			}else{
 				$data['estadisticas'] = $resultado;
+				$items = array( 'ini'=>$this->input->post('txt_fecha_i'),'fin'=>$this->input->post('txt_fecha_f'),'vehiculo'=>$this->input->post('txt_vehiculo') );
+				$this->session->set_userdata('datosV',$items);
 			}
 
 
@@ -197,6 +199,45 @@ class Vehiculos extends CI_Controller
         $data['titulo'] = 'Estadistica de Vehiculos';
 		$data['content']  = 'estadistica_vehiculos';
 		$this->load->view('main_template',$data);
+	}
+	public function reporte(){
+		$char = "";
+
+		$this->estadisticas = $this->vehicles->estadisticasXVehiculo();
+		header('Content-type: application/vnd.ms-excel');
+        	header('Content-Disposition: attachment; filename=Estadisticas_'.$this->estadisticas[0]['MATRICULA'].'.xls');
+			$char = "<table  border='1'  bordercolor='#3B5389'>"
+			."<thead bgcolor='#CCCCCC'  align ='center'>"
+			."<tr>"
+			."<th>ID Traslado</th>"
+			."<th>Fecha del Traslado</th>"
+			."<th width='420'>Veh&iacute;culo</th>"
+			."<th width='420'>Matr&iacute;cula</th>"
+			."<th width='420'>Monto</th>"
+			."</tr></thead><tbody>";
+			
+			$remove = array('$',',');
+			$total = 0;
+			foreach($this->estadisticas as $current){
+				$char.= "<tr>";
+				$tmp  = str_replace($remove,'',$current['MONTO']);
+				$total+= $tmp;
+				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
+				$char.="<td align='center'>".$current['FECHA']."</td>";
+				$char.="<td width='420'>".$current['MODELO']."(".$current['COLOR'].")</td>";
+				$char.="<td width='420' align='center'>".$current['MATRICULA']."</td>";
+				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
+				$char.="</tr>";
+
+			}
+				setlocale(LC_MONETARY, "en_US");
+        		$total = money_format('%(#10n',$total);
+			$char.='<tr><td colspan=4><b>Total:</b></td><td><b>'.($total).'</b></td></tr>';
+			$char.="</tbody></table>";
+
+			echo $char;
+		
+		
 	}
 	public function update_vehiculo()
 	{

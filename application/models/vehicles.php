@@ -183,10 +183,31 @@ public function cat_ve(){
 			$query = "COUNT( tbl_vehiculos.IDVEHICULO ) as TOTALTRASLADOS,tbl_vehiculos.MATRICULA,tbl_modelo.MODELO,CONCAT('$',FORMAT( SUM( tbl_traslados.MONTO ) ,2) ) as GANANCIAS";
 			$this->db->select($query,false);
 			$this->db->from("tbl_vehiculos,tbl_traslados,tbl_modelo");
-			$this->db->where("tbl_vehiculos.IDVEHICULO = '$idvehiculo' and tbl_vehiculos.IDVEHICULO = tbl_traslados.IDVEHICULO and tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin'");
+			$this->db->where("tbl_vehiculos.IDVEHICULO = '$idvehiculo' and tbl_vehiculos.IDVEHICULO = tbl_traslados.IDVEHICULO and tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin' and tbl_traslados.ESTATUS <> 'C'");
 			$resEstadisticas = $this->db->get();
 			if($resEstadisticas->num_rows() >0){
 				return $resEstadisticas->row();
+			}
+			return FALSE;
+	}
+	public function estadisticasXVehiculo(){
+			$dataSess =  $this->session->userdata('datosV');
+
+			$ini = DateTime::createFromFormat('d/m/Y', $dataSess['ini']);
+			$fecha_ini = $ini->format('Y-m-d');
+
+			$fin = DateTime::createFromFormat('d/m/Y', $dataSess['fin']);
+			$fecha_fin = $fin->format('Y-m-d');
+
+			$idvehiculo = $dataSess['vehiculo'];
+			$query = "tbl_traslados.IDTRASLADO ,tbl_traslados.FECHA,tbl_vehiculos.MATRICULA,tbl_vehiculos.COLOR,tbl_modelo.MODELO,CONCAT('$',FORMAT(  tbl_traslados.MONTO  ,2) ) as MONTO";
+			$this->db->select($query,false);
+			$this->db->from("tbl_vehiculos,tbl_traslados,tbl_modelo");
+			$this->db->where("tbl_vehiculos.IDVEHICULO = '$idvehiculo' and tbl_vehiculos.IDVEHICULO = tbl_traslados.IDVEHICULO and tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin' and tbl_traslados.ESTATUS <> 'C'");
+			$this->db->order_by('tbl_traslados.FECHA','asc');
+			$resEstadisticas = $this->db->get();
+			if($resEstadisticas->num_rows() >0){
+				return $resEstadisticas->result_array();
 			}
 			return FALSE;
 	}

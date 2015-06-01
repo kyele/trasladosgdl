@@ -67,7 +67,7 @@
                                     $fechaI = '0'.$dia_a.'/'.$mes_a.'/'.$anyo_a;
 
                                 ?>
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_i" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_i" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
+                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_i" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_i" value="<?php echo set_value('txt_fecha_i'); ?>"  readonly style="cursor:pointer !important">
                                 <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                             </div>
 
@@ -99,7 +99,18 @@
               <?php if (!empty($estadisticas)  && $estadisticas->TOTALTRASLADOS >0):?>
                 <div class="row">
                     <div class="col-sm-12">
-                        <button class="btn btn-success btn-lg pull-right" id="btnPaySelection">Exportar a Excel</button>
+                    <?php 
+                        $ini ='';$fin='';$chofer='';
+                        if($this->session->flashdata('datosC')){
+                            $tmp = $this->session->flashdata('datosC');
+                            $ini = $tmp['ini'];$fin = $tmp['fin'];$chofer = $tmp['chofer'];
+                        }
+                     ?>
+                    
+                        <?php $attributes = array('id' => 'myform_reporte_estadisticas'); echo form_open(base_url().'reporte_estadisticas_chofer.html',$attributes); ?>
+                            <button type="submit" class="btn btn-success btn-lg pull-right">Exportar a Excel</button>
+                        </form>
+
                     </div>
 
                 </div>

@@ -99,7 +99,11 @@
               <?php if (!empty($estadisticas)  && $estadisticas->TOTALTRASLADOS >0):?>
                 <div class="row">
                     <div class="col-sm-12">
-                        <button class="btn btn-success btn-lg pull-right" id="btnPaySelection">Exportar a Excel</button>
+
+                        <?php $attributes = array('id' => 'myform_reporte_estadisticas_v'); echo form_open(base_url().'reporte_estadisticas_vehiculo.html',$attributes); ?>
+                            <button type="submit" class="btn btn-success btn-lg pull-right">Exportar a Excel</button>
+                        </form>
+                        
                     </div>
 
                 </div>

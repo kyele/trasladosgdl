@@ -286,7 +286,7 @@ class Clientes extends CI_Controller
 			}
 			setlocale(LC_MONETARY, "en_US");
         $total = money_format('%(#10n',$total);
-            echo $total;
+            
 			$char.='<tr><td colspan="7"><b>Total:</b></td><td><b>'.($total).'</b></td></tr>';
 			$char.="</tbody></table>";
 		}

@@ -116,19 +116,36 @@ class Drivers extends CI_Model
 			$query = "COUNT( tbl_chofer.IDCHOFER ) as TOTALTRASLADOS,tbl_chofer.NOMBRE,tbl_chofer.APEPAT,tbl_chofer.APEMAT, CONCAT('$',FORMAT( SUM( tbl_traslados.MONTO ) ,2) ) as GANANCIAS";
 			$this->db->select($query,false);
 			$this->db->from("tbl_chofer,tbl_traslados ");
-			$this->db->where("tbl_chofer.IDCHOFER = '$idchofer' and tbl_chofer.IDCHOFER = tbl_traslados.IDCHOFER and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin'");
+			$this->db->where("tbl_chofer.IDCHOFER = '$idchofer' and tbl_chofer.IDCHOFER = tbl_traslados.IDCHOFER and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin' and tbl_traslados.ESTATUS <> 'C'");
 			$resEstadisticas = $this->db->get();
 			if($resEstadisticas->num_rows() >0){
 				return $resEstadisticas->row();
 			}
 			return FALSE;
-/*		"SELECT COUNT( t.idchofer ) AS numtraslados, c.nombre, c.apepat, c.apemat, SUM( t.monto ) AS totalVendido
-FROM tbl_chofer AS c, tbl_traslados AS t
-WHERE c.idchofer =  'GOAC710606'
-AND c.idchofer = .t.idchofer
-AND fecha
-BETWEEN  '2015-04-21'
-AND  '2015-04-22'"*/
+	}
+	public function estadisticasXchofer(){
+		$dataSess =  $this->session->userdata('datosC');
+		$ini = DateTime::createFromFormat('d/m/Y', $dataSess['ini']);
+		$fecha_ini = $ini->format('Y-m-d');
+
+		$fin = DateTime::createFromFormat('d/m/Y', $dataSess['fin']);
+		$fecha_fin = $fin->format('Y-m-d');
+
+		$idchofer = $dataSess['chofer'];
+		 
+		$query = "tbl_traslados.IDTRASLADO,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH, CONCAT('$',FORMAT(tbl_traslados.MONTO,2) ) as MONTO,tbl_traslados.FECHA";
+		$this->db->select($query,false);
+		$this->db->from("tbl_chofer,tbl_traslados");
+		$this->db->where("tbl_chofer.IDCHOFER = '$idchofer' and tbl_chofer.IDCHOFER = tbl_traslados.IDCHOFER and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin' and tbl_traslados.ESTATUS <> 'C'");
+		$this->db->order_by('tbl_traslados.FECHA','asc');
+		$resEstadisticas = $this->db->get();
+		
+		if($resEstadisticas->num_rows() >0){
+			
+			return $resEstadisticas->result_array();
+		}
+
+		return FALSE;
 	}
 	public function get_chofer(){
 		$param = array('IDCHOFER'=>strtoupper($this->input->post('chofer')));
@@ -226,6 +243,7 @@ AND  '2015-04-22'"*/
 			return array('status' => FALSE,'msg'=>'ha ocurrido un error inesperado intentelo de nuevo más tarde.');
 		}
 	}
+
 	public function myRides(){
 		$this->fecha_ini = $this->input->post('txt_fecha_ini');
 		$this->fecha_fin = $this->input->post('txt_fecha_fin');

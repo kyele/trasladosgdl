@@ -266,7 +266,7 @@ class Rides extends CI_Model
 		$queryChar = "tbl_traslados.IDTRASLADO as ID, (tbl_cliente.RFC),tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT, tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO, CONCAT(tbl_traslados.LUGAR_REF, ' a ' , tbl_traslados.DOMICILIO ) as RUTA, DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA_PAGO,tbl_traslados.FORMATO_PAGO,tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,tbl_traslados.PAGADO,(tbl_traslados.MONTO) as MONTO";
 		$this->db->select($queryChar,FALSE);
 		$this->db->from('tbl_traslados , tbl_cliente');
-		$this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin'");
+		$this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' ");
 		$this->db->order_by('CLIENTE,MONTO,tbl_traslados.PAGADO');
 		//$this->db->group_by('tbl_cliente.RFC');
 		$queryT = $this->db->get();
