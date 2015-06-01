@@ -211,6 +211,7 @@ class Vehiculos extends CI_Controller
 			."<tr>"
 			."<th>ID Traslado</th>"
 			."<th>Fecha del Traslado</th>"
+			."<th width='420'>Ruta</th>"
 			."<th width='420'>Veh&iacute;culo</th>"
 			."<th width='420'>Matr&iacute;cula</th>"
 			."<th width='420'>Monto</th>"
@@ -224,6 +225,7 @@ class Vehiculos extends CI_Controller
 				$total+= $tmp;
 				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
 				$char.="<td align='center'>".$current['FECHA']."</td>";
+				$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
 				$char.="<td width='420'>".$current['MODELO']."(".$current['COLOR'].")</td>";
 				$char.="<td width='420' align='center'>".$current['MATRICULA']."</td>";
 				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";

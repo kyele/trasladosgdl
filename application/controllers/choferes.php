@@ -202,6 +202,7 @@ class Choferes extends CI_Controller
 			."<tr>"
 			."<th>ID Traslado</th>"
 			."<th>Fecha del Traslado</th>"
+			."<th width='420'>Ruta</th>"
 			."<th width='420'>Chofer</th>"
 			."<th width='420'>Monto</th>"
 			."</tr></thead><tbody>";
@@ -214,6 +215,7 @@ class Choferes extends CI_Controller
 				$total+= $tmp;
 				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
 				$char.="<td align='center'>".$current['FECHA']."</td>";
+				$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
 				$char.="<td width='420'>".$current['NOMBRECH']."</td>";
 				
 				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";

@@ -200,7 +200,7 @@ public function cat_ve(){
 			$fecha_fin = $fin->format('Y-m-d');
 
 			$idvehiculo = $dataSess['vehiculo'];
-			$query = "tbl_traslados.IDTRASLADO ,tbl_traslados.FECHA,tbl_vehiculos.MATRICULA,tbl_vehiculos.COLOR,tbl_modelo.MODELO,CONCAT('$',FORMAT(  tbl_traslados.MONTO  ,2) ) as MONTO";
+			$query = "tbl_traslados.IDTRASLADO ,tbl_traslados.FECHA,CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,tbl_vehiculos.MATRICULA,tbl_vehiculos.COLOR,tbl_modelo.MODELO,CONCAT('$',FORMAT(  tbl_traslados.MONTO  ,2) ) as MONTO";
 			$this->db->select($query,false);
 			$this->db->from("tbl_vehiculos,tbl_traslados,tbl_modelo");
 			$this->db->where("tbl_vehiculos.IDVEHICULO = '$idvehiculo' and tbl_vehiculos.IDVEHICULO = tbl_traslados.IDVEHICULO and tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin' and tbl_traslados.ESTATUS <> 'C'");

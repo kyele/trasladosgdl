@@ -133,7 +133,7 @@ class Drivers extends CI_Model
 
 		$idchofer = $dataSess['chofer'];
 		 
-		$query = "tbl_traslados.IDTRASLADO,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH, CONCAT('$',FORMAT(tbl_traslados.MONTO,2) ) as MONTO,tbl_traslados.FECHA";
+		$query = "tbl_traslados.IDTRASLADO,CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH, CONCAT('$',FORMAT(tbl_traslados.MONTO,2) ) as MONTO,tbl_traslados.FECHA";
 		$this->db->select($query,false);
 		$this->db->from("tbl_chofer,tbl_traslados");
 		$this->db->where("tbl_chofer.IDCHOFER = '$idchofer' and tbl_chofer.IDCHOFER = tbl_traslados.IDCHOFER and tbl_traslados.FECHA BETWEEN '$fecha_ini' and '$fecha_fin' and tbl_traslados.ESTATUS <> 'C'");
