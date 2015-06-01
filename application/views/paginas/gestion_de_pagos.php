@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
     	rides.url = '<?php echo base_url() ?>';
-        $('#txt_fecha_pago,#txt_fecha_i,txt_fecha_f,#txt_fecha_pago_lote').datepicker();
+        $('#txt_fecha_pago,#txt_fecha_i,#txt_fecha_f,#txt_fecha_pago_lote').datepicker();
         $('#txt_cliente').select2();
     });
 </script>
