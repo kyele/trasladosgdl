@@ -254,8 +254,8 @@ class Drivers extends CI_Model
 				",tbl_traslados.HORA,tbl_traslados.DOMICILIO,tbl_traslados.LUGAR_REF,tbl_traslados.OBSERVACIONES";
 		$this->db->select($query,FALSE);
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo,tbl_marca');
-		$this->db->where("tbl_traslados.ESTATUS = 'EC' AND tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_vehiculos.IDMARCA = tbl_marca.IDMARCA AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = '$this->id_chofer' AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT ");
-		$this->db->order_by('tbl_traslados.FECHA','asc');
+		$this->db->where("tbl_traslados.ESTATUS <> 'C' AND tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_vehiculos.IDMARCA = tbl_marca.IDMARCA AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = '$this->id_chofer' AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA $betweenT ");
+		$this->db->order_by('tbl_traslados.FECHA asc,tbl_traslados.HORA asc');
 		$queryT = $this->db->get();
 		$resultado = $queryT->result_array();
 		if($queryT->num_rows()>0){
