@@ -205,6 +205,7 @@ class Choferes extends CI_Controller
 			."<th width='420'>Ruta</th>"
 			."<th width='420'>Chofer</th>"
 			."<th width='420'>Monto</th>"
+			."<th width='420'>Comentarios</th>"
 			."</tr></thead><tbody>";
 			
 			$remove = array('$',',');
@@ -216,9 +217,9 @@ class Choferes extends CI_Controller
 				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
 				$char.="<td align='center'>".$current['FECHA']."</td>";
 				$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
-				$char.="<td width='420'>".$current['NOMBRECH']."</td>";
-				
+				$char.="<td width='420'>".$current['NOMBRECH']."</td>";				
 				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
+				$char.="<td width='420'><b>".$current['OBSERVACIONES']."</b></td>";
 				$char.="</tr>";
 
 			}

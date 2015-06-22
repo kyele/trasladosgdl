@@ -213,8 +213,9 @@ class Vehiculos extends CI_Controller
 			."<th>Fecha del Traslado</th>"
 			."<th width='420'>Ruta</th>"
 			."<th width='420'>Veh&iacute;culo</th>"
-			."<th width='420'>Matr&iacute;cula</th>"
+			."<th width='420'>Matr&iacute;cula</th>"            
 			."<th width='420'>Monto</th>"
+            ."<th width='420'>Comentarios</th>"
 			."</tr></thead><tbody>";
 			
 			$remove = array('$',',');
@@ -229,6 +230,7 @@ class Vehiculos extends CI_Controller
 				$char.="<td width='420'>".$current['MODELO']."(".$current['COLOR'].")</td>";
 				$char.="<td width='420' align='center'>".$current['MATRICULA']."</td>";
 				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
+                $char.="<td width='420' align='center'>".$current['OBSERVACIONES']."</td>";
 				$char.="</tr>";
 
 			}

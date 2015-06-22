@@ -264,6 +264,7 @@ class Clientes extends CI_Controller
 			."<th>Monto</th>"
 			."<th>Folio</th>"
 			."<th>CECO</th>"
+			."<th width='200'>Comentarios</th>"
 			."</tr></thead><tbody>";
 			$remove = array('$',',');
 			$total = 0;
@@ -282,6 +283,7 @@ class Clientes extends CI_Controller
 				$char.="<td><b>".$current['MONTO']."</b></td>";
 				$char.="<td>".$current['BAUCHER']."</td>";
 				$char.="<td>".$current['CECO']."</td>";
+				$char.="<td width='200'><b>".$current['OBSERVACIONES']."</b></td>";
 				$char.="</tr>";
 			}
 			setlocale(LC_MONETARY, "en_US");
@@ -316,6 +318,7 @@ class Clientes extends CI_Controller
 			."<th width='250'>Vehiculo</th>"
 			//."<th>N&uacute;mero de Traslados</th>"
 			."<th>Monto</th>"
+			."<th width='200'>Comentarios</th>"
 			."</tr></thead><tbody>";
             /*echo "<pre>";
             print_r($resultado);
@@ -330,7 +333,7 @@ class Clientes extends CI_Controller
 				$char.="<td>".$current['MODELO']."</td>";
 				//$char.="<td>".$current['NUMTRASLADOS']."</td>";
 				$char.="<td>$".$current['MONTO']."</td>";
-
+				$char.="<td width='200'><b>".$current['OBSERVACIONES']."</b></td>";
 				$char.="</tr>";
 				$monto = str_replace(',','',$current['MONTO']);
 				$total+= $monto;
