@@ -113,7 +113,8 @@ class Customers extends CI_Model
 		$this->db->select("tras.IDTRASLADO,cli.R_SOCIAL,cli.NOMBRE,cli.APEPAT,cli.APEMAT,tras.FECHA,CONCAT('$', FORMAT(tras.MONTO, 2)) as MONTO,tras.HORA,CONCAT(tras.DOMICILIO, ' - ' , tras.LUGAR_REF ) as RUTA, tras.NOMBRE_PASAJERO,tras.NOMBRE_SOLICITANTE,tras.BAUCHER,tras.CECO,tras.IDCOMPROBANTE",FALSE);
 		$this->db->from("tbl_cliente as cli,tbl_traslados as tras");
 		$this->db->where("cli.RFC = '$this->id_cliente' AND cli.RFC = tras.IDCLIENTE AND tras.FECHA BETWEEN '$this->fecha_ini' AND '$this->fecha_fin'  AND tras.ESTATUS <> 'C' AND tras.PAGADO='NO' ");
-        $this->db->order_by('tras.FECHA');
+		$this->db->order_by('tras.FECHA asc,tras.HORA asc');
+        //$this->db->order_by('tras.FECHA');
 		$queryT = $this->db->get();
 		$resultado = $queryT->result_array();
 		if($queryT->num_rows()>0){

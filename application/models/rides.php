@@ -600,6 +600,8 @@ class Rides extends CI_Model
 		$this->db->select($queryChar,FALSE);
 		$this->db->from('tbl_traslados,tbl_cliente,tbl_chofer,tbl_vehiculos,tbl_modelo');
 		$this->db->where("tbl_traslados.IDVEHICULO = tbl_vehiculos.IDVEHICULO AND  tbl_vehiculos.IDMODELO = tbl_modelo.IDMODELO AND tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.IDCHOFER = tbl_chofer.IDCHOFER AND tbl_traslados.FECHA = '$fecha' and tbl_traslados.ESTATUS <> 'C'");
+		/*Agrege order by*/
+		$this->db->order_by('tbl_traslados.FECHA asc,tbl_traslados.HORA asc');
 		$queryT = $this->db->get();
 		if($queryT->num_rows()>0){
 			return $queryT->result_array();
