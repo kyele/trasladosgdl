@@ -179,7 +179,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_colonia'.$prefix, 'Colonia', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_cruce_uno'.$prefix, 'Cruce 1', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_cruce_uno'.$prefix, 'Cruce 2', 'required|trim|xss_clean');
-
+			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_fecha'.$prefix, 'Fecha', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_hora'.$prefix, 'Hora', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_conductor'.$prefix, 'Conductor', 'required|trim|xss_clean');

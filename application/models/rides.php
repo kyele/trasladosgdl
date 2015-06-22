@@ -341,6 +341,7 @@ class Rides extends CI_Model
 				'COLONIA'=>strtoupper($this->input->post('txt_colonia'.$prefix)),
 				'CRUCE1'=>strtoupper($this->input->post('txt_cruce_uno'.$prefix)),
 				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos'.$prefix)),
+				'LUGAR_REF'=>strtoupper($this->input->post('txt_referencial').$prefix),
 				'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre_pasajero'.$prefix)),
 				'NUM_PASAJEROS'=>$this->input->post('txt_num_pasajeros'.$prefix),
 				'NOMBRE_SOLICITANTE'=>$this->input->post('txt_nombre_solicitante'.$prefix),
