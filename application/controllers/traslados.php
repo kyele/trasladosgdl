@@ -45,7 +45,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_traslado', 'Fecha de Traslado	', 'trim|required|exact_length[10]|xss_clean');
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
 			// $this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_comprobante', 'Baucher', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|numeric|xss_clean');
@@ -68,7 +68,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_traslado', 'Fecha de Traslado	', 'trim|required|exact_length[10]|xss_clean');
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
 			// $this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|xss_clean');
 			 $this->form_validation->set_rules('txt_comprobante', 'Baucher', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|decimal|xss_clean');
@@ -182,7 +182,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_fecha'.$prefix, 'Fecha', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_hora'.$prefix, 'Hora', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_conductor'.$prefix, 'Conductor', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_conductor'.$prefix, 'Conductor', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo'.$prefix, 'Vehiculo', 'required|trim|xss_clean');
 
 
