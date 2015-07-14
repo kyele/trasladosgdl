@@ -226,9 +226,9 @@ class Pagos extends CI_Controller
 	public function pay_now_lote(){
 		if($this->input->is_ajax_request()){
 			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
-			$this->form_validation->set_rules('tipo', 'Tipo de Comprobante', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('folio', 'Folio', 'trim|required|xss_clean');
-            $this->form_validation->set_rules('fecha','Fecha','trim|required|xss_clean');
+			$this->form_validation->set_rules('tipo', 'Tipo de Comprobante', 'trim||xss_clean');
+			$this->form_validation->set_rules('folio', 'Folio', 'trim||xss_clean');
+            $this->form_validation->set_rules('fecha','Fecha','trim||xss_clean');
 			$this->form_validation->set_message('required', 'El  %s es requerido');
 			if($this->form_validation->run() === TRUE)
 			{
@@ -249,6 +249,53 @@ class Pagos extends CI_Controller
 		
 		
 	}
-	
+	public function pay_lote(){
+		if($this->input->is_ajax_request()){
+			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
+            $this->form_validation->set_rules('fecha','Fecha','trim|required|xss_clean');
+			$this->form_validation->set_message('required', 'El  %s es requerido');
+			if($this->form_validation->run() === TRUE)
+			{
+				$result = $this->payments->payment_confirm_lote_pay();
+			    $data= array('status'=>$result['status'],'msg'=>$result['msg'],'fecha'=>$result['fecha']);
+			    echo json_encode($data);
+			}
+			else{
+				$data = array('msg'=>validation_errors(),'status'=>FALSE);
+				echo json_encode($data);
+			}
+
+		}else{
+			show_404();
+		}
+		//$ids = $this->input->post('datos');
+		//echo $ids[0]['id'];
+		
+		
+	}public function fact_lote(){
+		if($this->input->is_ajax_request()){
+			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
+			$this->form_validation->set_rules('tipo', 'Tipo de Comprobante', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('folio', 'Folio', 'trim|required|xss_clean');
+			$this->form_validation->set_message('required', 'El  %s es requerido');
+			if($this->form_validation->run() === TRUE)
+			{
+				$result = $this->payments->payment_confirm_lote_fact();
+			    $data= array('status'=>$result['status'],'msg'=>$result['msg'],'folio'=>$result['folio']);
+			    echo json_encode($data);
+			}
+			else{
+				$data = array('msg'=>validation_errors(),'status'=>FALSE);
+				echo json_encode($data);
+			}
+
+		}else{
+			show_404();
+		}
+		//$ids = $this->input->post('datos');
+		//echo $ids[0]['id'];
+		
+		
+	}
 	
 }

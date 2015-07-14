@@ -38,7 +38,7 @@ class Traslados extends CI_Controller
 		if($this->input->post("txt_Direccion_sol"))
 		{
 
-			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_num_pasajeros', 'Número de Pasajeros', 'trim|required|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_nombre_sol','Nombre del Solicitante','trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_Direccion_sol','Direccion del Solicitante','trim|required|xss_clean');
@@ -56,7 +56,7 @@ class Traslados extends CI_Controller
 		else if($this->input->post("txt_domicilio"))
 		{
 			$this->form_validation->set_rules('txt_cliente', 'Cliente', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_domicilio', 'Domicilio', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_colonia', 'Colonia', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_num_ext', 'Número Exterior', 'trim|required|xss_clean');
@@ -179,7 +179,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_colonia'.$prefix, 'Colonia', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_cruce_uno'.$prefix, 'Cruce 1', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_cruce_uno'.$prefix, 'Cruce 2', 'required|trim|xss_clean');
-			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_fecha'.$prefix, 'Fecha', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_hora'.$prefix, 'Hora', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_conductor'.$prefix, 'Conductor', 'trim|xss_clean');

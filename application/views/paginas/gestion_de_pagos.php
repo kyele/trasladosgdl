@@ -73,20 +73,20 @@
 
                     </div>
                     <div class="form-group col-sm-6 col-md-6 col-lg-2">
-                          <label for="txt_fecha_f" >Fecha Final</label>
-                            <div class="input-group date" id="fecha_fin_container" >
+                      <label for="txt_fecha_f" >Fecha Final</label>
+                        <div class="input-group date" id="fecha_fin_container" >
 
-                                <?php
-                                    $fecha_a = localtime(time(), 1);
-                                    $anyo_a  = $fecha_a["tm_year"] + 1900;
-                                    $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
-                                    $dia_a   = ( ($dia_a = $fecha_a["tm_mday"]) <10 ) ? '0'.$dia_a: $dia_a;
+                            <?php
+                                $fecha_a = localtime(time(), 1);
+                                $anyo_a  = $fecha_a["tm_year"] + 1900;
+                                $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
+                                $dia_a   = ( ($dia_a = $fecha_a["tm_mday"]) <10 ) ? '0'.$dia_a: $dia_a;
 
-                                    $fechaI = $dia_a.'/'.$mes_a.'/'.$anyo_a;
-                                ?>
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_f" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_f" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
-                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
-                            </div>
+                                $fechaI = $dia_a.'/'.$mes_a.'/'.$anyo_a;
+                            ?>
+                            <input class="form-control input-sm" size="16" type="text" id="txt_fecha_f" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_f" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
+                            <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                        </div>
                     </div>
                      <div class="form-group col-sm-12 col-md-12 col-lg-2">
                         <br>
@@ -97,10 +97,18 @@
 
                 </form>
                 <div class="row">
-                    <div class="col-sm-12">
-                        <button class="btn btn-success btn-lg pull-right" id="btnPaySelection">Pagar Seleccionados $</button>
+                    <div class="col-xs-12">
+                        <p class="text-info">Seleccione una acción para los traslados que ha seleccionado</p>
                     </div>
-
+                    <div class="col-xs-12 col-sm-3 center-block">
+                        <button class="btn btn-success btn-lg center-block" id="btnPayFactSelection">Pagar y Facturar $</button>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 center-block">
+                        <button class="btn btn-success btn-lg center-block" id="btnPaySelection">Pagar $</button>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 center-block">
+                        <button class="btn btn-success btn-lg center-block" id="btnFactSelection">Facturar $</button>
+                    </div>
                 </div>
 
 
@@ -127,7 +135,7 @@
                                         <th>Fecha de Traslado</th>
                                         <th>Fecha de Pago</th>
                                         <th>Pagar</th>
-                                        <th>Ver</th>
+                                        <th>Status</th>
 
                                     </tr>
                                 </thead>
@@ -147,27 +155,29 @@
                                             <td><?php echo $item['FECHA'] ?></td>
                                             <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
                                             <td >
-                                            <?php if ($item['PAGADO'] == 'NO' && $item['ESTATUS'] !='C'): ?>
                                                 <input  type="checkbox" class="chk_payment" data-id="<?php echo $item['ID'] ?>" id="chk_payment_<?php echo $item['ID'] ?>">
-                                            <?php else: ?>
-                                                N/A
-                                            <?php endif ?>
-
 
                                             </td>
-                                            <?php if ($item['PAGADO'] == 'NO' &&  $item['ESTATUS'] != 'C'): ?>
-                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'>
-                                                    <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-primary btn-xs">Detalle</a>
-
-                                                    </td>
-                                            <?php elseif($item['PAGADO'] == 'NO' && $item['ESTATUS'] == 'C'): ?>
-                                                <td class="text-center text-danger" >CANCELADO</td>
-                                            <?php else: ?>
-                                                <td class="text-center" id='field_payment_<?php echo $item['ID'] ?>'>
-                                                    <a href="#" id='payment_<?php echo $item['ID'] ?>' class="btn btn-success btn-xs">Detalle <span class="fa fa-check"></span></a>
-                                                </td>
-                                            <?php endif ?>
-                                         </tr>
+                                        <?php  if ($item['PAGADO'] == 'NO' && $item['IDCOMPROBANTE'] == ''): ?>
+                                            <td class="text-center text-danger" >
+                                                <strong>PENDIENTE</strong>
+                                            </td>
+                                        <?php  elseif ($item['PAGADO'] == 'SI' && $item['IDCOMPROBANTE'] == ''): ?>
+                                            <td class="text-center text-warning" >
+                                                <strong>PAGADO</strong>
+                                            </td>
+                                        <?php  elseif ($item['PAGADO'] == 'NO' && $item['IDCOMPROBANTE'] != ''): ?>
+                                            <td class="text-center text-warning" >
+                                                <strong>FACTURADO</strong>
+                                            </td>
+                                        <?php else:?>
+                                            <td class="text-center text-success" >
+                                                <strong>PAGADO / FACTURADO</strong>
+                                            </td>
+                                        <?php endif ?>
+                                                
+                                        </tr>
+                                            
                                     <?php
                                         } //llave foreach
                                     ?>
@@ -188,7 +198,7 @@
     </div>
 </div>
 
-    <!-- Comienza modal de comprobante de traslado-->
+     <!-- Comienza modal de comprobante de traslado-->
 <div class="modal modal-flex fade" id="modal_comprobante" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -203,12 +213,12 @@
                     <?php $attributes = array('id' => 'myform_info_comprobante'); echo form_open(base_url().'pago_traslado.html',$attributes); ?>
                         <input type="hidden" name="traslado" id="myTraslado">
                             <div class="form-group col-sm-6" id="form_group_txt_rfc">
-    							<label for="txt_km_init">Tipo Comprobante</label>
+                                <label for="txt_km_init">Tipo Comprobante</label>
                                 <select class="form-control input-sm" name="txt_tipo" id="txt_tipo" value="<?php echo set_value('txt_tipo'); ?>">
-    							  <option value="NOTA">NOTA DE CREDITO</option>
-    							  <option value="FACTURA">FACTURA</option>
-    							</select>
-							</div>
+                                  <option value="NOTA">NOTA DE CREDITO</option>
+                                  <option value="FACTURA">FACTURA</option>
+                                </select>
+                            </div>
                             <div class="form-group col-sm-6">
                                 <label for="txt_folio">Folio</label>
                                     <input type="text" class="form-control input-sm" id="txt_folio"  name="txt_folio" value="<?php echo set_value('txt_folio'); ?>" >
@@ -230,7 +240,7 @@
                                     <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                                 </div>
                             </div>
-                      		<div class="form-group text-right col-sm-12">
+                            <div class="form-group text-right col-sm-12">
                                 <br>
                                 <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
                                 <button type="submit" class="btn btn-red">Guardar</button>

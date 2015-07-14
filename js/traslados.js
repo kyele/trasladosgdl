@@ -579,8 +579,14 @@ var rides = {
             rides.changeColor(id,color);
 
         });
-        $('#btnPaySelection').on('click',function(){
+        $('#btnPayFactSelection').on('click',function(){
             rides.payInPackage();
+        });
+        $('#btnPaySelection').on('click',function(){
+            //rides.payInPackage();
+        });
+        $('#btnFactSelection').on('click',function(){
+            //rides.factInPackage();
         });
         $('#table_traslados_pagos').on('click',":checkbox",function(){
             rides.addSelection($(this));
