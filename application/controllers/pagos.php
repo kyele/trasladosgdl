@@ -249,6 +249,7 @@ class Pagos extends CI_Controller
 		
 		
 	}
+	
 	public function pay_lote(){
 		if($this->input->is_ajax_request()){
 			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
@@ -266,13 +267,16 @@ class Pagos extends CI_Controller
 			}
 
 		}else{
+			var_dump($this->input->is_ajax_request());
 			show_404();
 		}
 		//$ids = $this->input->post('datos');
 		//echo $ids[0]['id'];
 		
 		
-	}public function fact_lote(){
+	}
+
+	public function fact_lote(){
 		if($this->input->is_ajax_request()){
 			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
 			$this->form_validation->set_rules('tipo', 'Tipo de Comprobante', 'trim|required|xss_clean');

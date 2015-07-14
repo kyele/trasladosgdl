@@ -198,61 +198,6 @@
     </div>
 </div>
 
-     <!-- Comienza modal de comprobante de traslado-->
-<div class="modal modal-flex fade" id="modal_comprobante" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-center" id="title_chofer">Emision de Comprobante </h4>
-            </div>
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div id="contError"></div>
-                    <?php $attributes = array('id' => 'myform_info_comprobante'); echo form_open(base_url().'pago_traslado.html',$attributes); ?>
-                        <input type="hidden" name="traslado" id="myTraslado">
-                            <div class="form-group col-sm-6" id="form_group_txt_rfc">
-                                <label for="txt_km_init">Tipo Comprobante</label>
-                                <select class="form-control input-sm" name="txt_tipo" id="txt_tipo" value="<?php echo set_value('txt_tipo'); ?>">
-                                  <option value="NOTA">NOTA DE CREDITO</option>
-                                  <option value="FACTURA">FACTURA</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label for="txt_folio">Folio</label>
-                                    <input type="text" class="form-control input-sm" id="txt_folio"  name="txt_folio" value="<?php echo set_value('txt_folio'); ?>" >
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <?php
-                                $fecha_actual = localtime(time(), 1);
-                                $anyo_actual  = $fecha_actual["tm_year"] + 1900;
-                                $mes_actual   = ( ($mes_actual = $fecha_actual["tm_mon"] + 1 ) < 10)  ? '0'.$mes_actual : $mes_actual;
-                                $dia_actual   = ( ($dia_actual = $fecha_actual["tm_mday"]) <10 ) ? '0'.$dia_actual: $dia_actual;
-
-                                $fechaInicio = $anyo_actual.'/'.$mes_actual.'/'.$dia_actual;
-
-                                ?>
-
-                                <label for="txt_fecha_pago" >Fecha</label>
-                                <div class="input-group date" id="fecha_pago_container" >
-                                    <input class="form-control input-sm" size="16" type="text" id="txt_fecha_pago" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_pago" value="<?php echo $fechaInicio; ?>"  readonly style="cursor:pointer !important">
-                                    <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
-                                </div>
-                            </div>
-                            <div class="form-group text-right col-sm-12">
-                                <br>
-                                <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-red">Guardar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- comprobante en lote -->
 <div class="modal modal-flex fade" id="modal_comprobante_lote" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
@@ -278,6 +223,54 @@
                                 <label for="txt_folio">Folio</label>
                                     <input type="text" class="form-control input-sm" id="txt_folio_lote"  name="txt_folio_lote" value="<?php echo set_value('txt_folio_lote'); ?>" >
                             </div>
+                            <div class="form-group col-sm-6">
+                                <?php
+                                $fecha_actual = localtime(time(), 1);
+                                $anyo_actual  = $fecha_actual["tm_year"] + 1900;
+                                $mes_actual   = ( ($mes_actual = $fecha_actual["tm_mon"] + 1 ) < 10)  ? '0'.$mes_actual : $mes_actual;
+                                $dia_actual   = ( ($dia_actual = $fecha_actual["tm_mday"]) <10 ) ? '0'.$dia_actual: $dia_actual;
+
+                                $fechaInicio = $anyo_actual.'/'.$mes_actual.'/'.$dia_actual;
+
+                                ?>
+
+                                <label for="txt_fecha_pago" >Fecha</label>
+                                <div class="input-group date" id="fecha_pago_container_l" >
+                                    <input class="form-control input-sm" size="16" type="text" id="txt_fecha_pago_lote" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_pago_lote" value="<?php echo $fechaInicio; ?>"  readonly style="cursor:pointer !important">
+                                    <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <br>
+                                <label id="contTraslados" class="label label-danger"></label>
+                            </div>
+                            <div class="form-group text-right col-sm-12">
+                                <br>
+                                <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-red">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- comprobante en lote -->
+<div class="modal modal-flex fade" id="modal_paga_lote" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-center" id="title_chofer">Emision de Comprobante por Lote </h4>
+            </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="contError"></div>
+                    <?php $attributes = array('id' => 'myform_info_pay_lote'); echo form_open(base_url().'paga_lote.html',$attributes); ?>
+                        <input type="hidden" name="traslado" id="myTraslado">
                             <div class="form-group col-sm-6">
                                 <?php
                                 $fecha_actual = localtime(time(), 1);

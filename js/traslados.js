@@ -529,7 +529,7 @@ var rides = {
 
         }();
     },
-    payInPackage:function(){
+    payFacInPackage:function(){
          //alert(rides.checkPay.length)
          var size = rides.checkPay.length;
         if(size== 0){
@@ -543,6 +543,29 @@ var rides = {
                             });
         }else{
               $('#modal_comprobante_lote').modal({
+                backdrop:'static',
+                keyboard:true
+            }).on('shown.bs.modal',function(e){
+                $('#contTraslados').html('Ha seleccionado '+size+' traslados para pagar!')
+            }).on('hidden.bs.modal',function(){
+                $('#contTraslados').empty();
+            });
+        }
+    },
+     payInPackage:function(){
+         //alert(rides.checkPay.length)
+         var size = rides.checkPay.length;
+        if(size== 0){
+            $.bootstrapGrowl("No ha seleccionado traslados para pagar!",
+                            {
+                                type:'warning',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            });
+        }else{
+              $('#modal_paga_lote').modal({
                 backdrop:'static',
                 keyboard:true
             }).on('shown.bs.modal',function(e){
@@ -580,10 +603,10 @@ var rides = {
 
         });
         $('#btnPayFactSelection').on('click',function(){
-            rides.payInPackage();
+            rides.payFacInPackage();
         });
         $('#btnPaySelection').on('click',function(){
-            //rides.payInPackage();
+            rides.payInPackage();
         });
         $('#btnFactSelection').on('click',function(){
             //rides.factInPackage();
@@ -599,6 +622,62 @@ var rides = {
             //abrir un modal
             rides.modal_comprobante($(this).attr('id'));
             //rides.pay_ride($(this).attr('id'));
+        });
+        $('#myform_info_pay_lote').submit(function(e){
+            e.preventDefault();
+            var  fecha =$('#txt_fecha_pago_lote').val();
+            $.ajax({
+                url:$(this).attr('action'),
+                type:'POST',
+                dataType:'json',
+                data:{
+                    'datos':rides.checkPay,                    
+                    'fecha':fecha
+                },
+                success:function(data){
+
+                    (data.status)?function(){
+                        setTimeout(function(){
+                           location.reload()
+                        },3000);
+                        $.bootstrapGrowl(
+                            data.msg,
+                            {
+                                type:'success',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            }
+                        );
+                    }()
+                        :function(){
+                        $.bootstrapGrowl(
+                            data.msg,
+                            {
+                                type:'error',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            }
+                        );
+                    }();
+                },
+                error:function(){
+                    $.bootstrapGrowl(
+                        "Parece que su conexión a internet no va bien!!!",
+                        {
+                            type:'danger',
+                            align:'center',
+                            width:'auto',
+                            delay:3000,
+                            allow_dismiss:false
+                        }
+                    );
+                }
+            });
+
         });
 
         $('#myform_info_comprobante_lote').submit(function(e){
