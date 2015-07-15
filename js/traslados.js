@@ -552,7 +552,7 @@ var rides = {
             });
         }
     },
-     payInPackage:function(){
+    payInPackage:function(){
          //alert(rides.checkPay.length)
          var size = rides.checkPay.length;
         if(size== 0){
@@ -566,6 +566,29 @@ var rides = {
                             });
         }else{
               $('#modal_paga_lote').modal({
+                backdrop:'static',
+                keyboard:true
+            }).on('shown.bs.modal',function(e){
+                $('#contTraslados').html('Ha seleccionado '+size+' traslados para pagar!')
+            }).on('hidden.bs.modal',function(){
+                $('#contTraslados').empty();
+            });
+        }
+    },
+    factInPackage:function(){
+         //alert(rides.checkPay.length)
+         var size = rides.checkPay.length;
+        if(size== 0){
+            $.bootstrapGrowl("No ha seleccionado traslados para pagar!",
+                            {
+                                type:'warning',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            });
+        }else{
+              $('#modal_fact_lote').modal({
                 backdrop:'static',
                 keyboard:true
             }).on('shown.bs.modal',function(e){
@@ -609,7 +632,7 @@ var rides = {
             rides.payInPackage();
         });
         $('#btnFactSelection').on('click',function(){
-            //rides.factInPackage();
+            rides.factInPackage();
         });
         $('#table_traslados_pagos').on('click',":checkbox",function(){
             rides.addSelection($(this));
@@ -623,6 +646,7 @@ var rides = {
             rides.modal_comprobante($(this).attr('id'));
             //rides.pay_ride($(this).attr('id'));
         });
+
         $('#myform_info_pay_lote').submit(function(e){
             e.preventDefault();
             var  fecha =$('#txt_fecha_pago_lote').val();
@@ -633,6 +657,65 @@ var rides = {
                 data:{
                     'datos':rides.checkPay,                    
                     'fecha':fecha
+                },
+                success:function(data){
+
+                    (data.status)?function(){
+                        setTimeout(function(){
+                           location.reload()
+                        },3000);
+                        $.bootstrapGrowl(
+                            data.msg,
+                            {
+                                type:'success',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            }
+                        );
+                    }()
+                        :function(){
+                        $.bootstrapGrowl(
+                            data.msg,
+                            {
+                                type:'error',
+                                align:'center',
+                                width:'auto',
+                                delay:2000,
+                                allow_dismiss:false
+                            }
+                        );
+                    }();
+                },
+                error:function(){
+                    $.bootstrapGrowl(
+                        "Parece que su conexión a internet no va bien!!!",
+                        {
+                            type:'danger',
+                            align:'center',
+                            width:'auto',
+                            delay:3000,
+                            allow_dismiss:false
+                        }
+                    );
+                }
+            });
+
+        });
+
+        $('#myform_info_fact_lote').submit(function(e){
+            e.preventDefault();
+            var tipo = $('#txt_tipo_lote').val();
+            var folio =  $('#txt_folios_lote').val();
+            $.ajax({
+                url:$(this).attr('action'),
+                type:'POST',
+                dataType:'json',
+                data:{
+                    'datos':rides.checkPay,
+                    'tipo':tipo,
+                    'folio':folio
                 },
                 success:function(data){
 
