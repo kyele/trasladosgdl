@@ -1024,11 +1024,61 @@ $(document).ready(function(){
         rides.showRidesToday();
     })
     $("#myform_traslado").on('submit',function(e){
-        ( !$('#data_client').is(':checked') && !$('#data_client').is(':checked'))?function(){
+
+        var nombre          = $('#txt_nombre').val();
+        var num_pasajeros   = $('#txt_num_pasajeros').val();
+        var ceco            = $('#txt_ceco').val();
+        var monto           = $('#txt_monto').val();
+
+        if ( nombre == '' ) {
+            $('#msj_nombre').text('Este campo es obligatorio');
+        } else {
+            $('#msj_nombre').text('');
+        }
+
+        if ( num_pasajeros == '' ) {
+            $('#msj_numero_pasajeros').text('Este campo es obligatorio');
+        } else {
+            $('#msj_numero_pasajeros').text('');
+        }
+
+        if ( ceco == '' ) {
+            $('#msj_ceco').text('Este campo es obligatorio');
+        } else {
+            $('#msj_ceco').text('');
+        }
+
+        if ( monto == '' ) {
+            $('#msj_monto').text('Este campo es obligatorio');
+        } else {
+            $('#msj_monto').text('');
+        }
+
+        console.log(nombre.length);
+        if( ( nombre.length * num_pasajeros.length * ceco.length * monto.length ) > 0 ) {
+
+            ( !$('#data_client').is(':checked') && !$('#data_client').is(':checked'))?function(){
+                $.bootstrapGrowl(
+                    "Debe seleccionar el checkbox de cliente o el de solicitante",
+                    {
+                        type:'danger',
+                        align:'center',
+                        width:'auto',
+                        delay:3000,
+                        allow_dismiss:false
+                    }
+                );
+                e.preventDefault();
+
+            }()
+                :function(){
+                return true;
+            }();
+        } else {
             $.bootstrapGrowl(
-                "Debe seleccionar el checkbox de cliente o el de solicitante",
+                "Uno o mas campos obligatorios estan vacios!.",
                 {
-                    type:'danger',
+                    type:'warning',
                     align:'center',
                     width:'auto',
                     delay:3000,
@@ -1036,11 +1086,7 @@ $(document).ready(function(){
                 }
             );
             e.preventDefault();
-
-        }()
-            :function(){
-            return true;
-        }();
+        }
     });
 
 

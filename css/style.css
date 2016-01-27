@@ -2070,3 +2070,6 @@ input[type="checkbox"]:checked::after,
         margin-left: 0;
     }
 }
+.msj_obligatorio {
+    color: red;
+}

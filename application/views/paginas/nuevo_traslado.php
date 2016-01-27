@@ -168,12 +168,13 @@
                     <div class="form-group col-sm-12">
                             <label for="txt_nombre">Nombre:</label>
                             <input type="text" class="form-control input-smk" id="txt_nombre" style="text-transform:uppercase" name="txt_nombre" value="<?php echo set_value('txt_nombre'); ?>" >
+                            <p id="msj_nombre" class="msj_obligatorio"></p>
                     </div>
                     <div class="form-group col-sm-12">
                         
                             <label for="txt_num_pasajeros"> Número de  Pasajeros </label>
                             <input type="number" class="form-control input-sm" id="txt_num_pasajeros" min="1" name="txt_num_pasajeros" value="<?php echo set_value('txt_num_pasajeros'); ?>" >
-                        
+                            <p id="msj_numero_pasajeros" class="msj_obligatorio"></p>
                     </div>
                     
                     <div class="form-group col-sm-8">
@@ -197,6 +198,7 @@
                     <div class="form-group col-sm-12">
                         <label for="txt_ceco">CECO del Traslado</label>
                         <input type="text" class="form-control input-sm" id="txt_ceco" style="text-transform:uppercase" name="txt_ceco"  value="<?php echo set_value('txt_ceco'); ?>" maxlength="20" autofocus>
+                        <p id="msj_ceco" class="msj_obligatorio"></p>
                     </div>
                </div>
                 <div class="col-sm-6">
@@ -268,6 +270,7 @@
                           <input type="text" class="form-control input-sm" id="txt_monto"  name="txt_monto" value="<?php echo set_value('txt_monto'); ?>" >
                           <span class="input-group-addon">.00</span>
                         </div>
+                        <p id="msj_monto" class="msj_obligatorio"></p>
                     </div>
                     <div class="form-group col-sm-12">
                         <label for="txt_observaciones"> Observaciones</label>
