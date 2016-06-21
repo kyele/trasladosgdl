@@ -16,8 +16,8 @@
     <link rel="stylesheet" href="<?php echo base_url() ?>css/select2-bootstrap.css">
 	<link rel="stylesheet" href="<?php echo base_url() ?>css/style.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>css/dataTables.css">
-	<link href="http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,500italic,700italic" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+	<!--<link href="http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,500italic,700italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">-->
     <link href="<?php echo base_url() ?>icons/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<script  src="<?php echo base_url() ?>js/jquery.js"></script>
     <script  src="<?php echo base_url() ?>js/bootstrap-datepicker.js"></script>

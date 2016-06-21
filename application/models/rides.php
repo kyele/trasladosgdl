@@ -8,6 +8,7 @@ class Rides extends CI_Model
 	public $status;
 	public $status_vehiculo;
 	public $folio;
+	public $id_vendedor;
 	function __construct()
 	{
 		parent::__construct();
@@ -40,6 +41,17 @@ class Rides extends CI_Model
         }else{
         	$this->data = array();
         	$this->data['msg'] = '<div class="alert alert-danger">No se encontraron Choferes Disponible, Registre uno <a href="'.base_url().'nuevo_chofer.html">Aquí</a> o actualize la disponiblidad</div>';
+			return array('status'=>false,'msg'=>$this->data['msg']);
+        }
+
+        $this->db->select('IDVENDEDOR,NOMBRE,APEPAT,APEMAT');
+        $this->db->from('tbl_vendedores');
+        $queryCh = $this->db->get();
+        if($queryCh->num_rows()>0){
+        	$this->data['vendedores'] = $queryCh->result_array();
+        }else{
+        	$this->data = array();
+        	$this->data['msg'] = '<div class="alert alert-danger">No se encontraron Vendedores Registrados, Registre uno <a href="'.base_url().'form_vendedor.html">Aquí</a></div>';
 			return array('status'=>false,'msg'=>$this->data['msg']);
         }
 
@@ -101,41 +113,59 @@ class Rides extends CI_Model
 			$resultSet = $resTraslado->row();
 			$last_id  = $resultSet->IDTRASLADO + 1;
 		}
-
-
-
-
-		if($this->input->post("txt_Direccion_sol"))
-		{
-			//'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
-			$this->data = array(
-				'IDTRASLADO'=>$last_id,
-				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),
-				'DOMICILIO'   => $this->input->post('txt_Direccion_sol'),'NOMBRE_PASAJERO'   => $this->input->post('txt_nombre_solicitante'),
-				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
-				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),
-				'IDCHOFER'=>$this->input->post('txt_conductor'),'BAUCHER'=>($this->input->post('txt_comprobante')),'CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
-				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
- 			);
+		if( $this->input->post("txt_vendedores") == "0" ) {
+			$id_vendedor = NULL;	
+		} else {
+			$id_vendedor = $this->input->post("txt_vendedores");
 		}
-		else
-		{
+		if($this->input->post("txt_Direccion_sol")) {
 			//'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
 			$this->data = array(
-				'IDTRASLADO'=>$last_id,
-				'IDCLIENTE' => strtoupper($this->input->post('txt_cliente')),     'LUGAR_REF' => strtoupper($this->input->post('txt_referencial')),
-				'DOMICILIO'   => $this->input->post('txt_domicilio'),'NUM_EXT'=>$this->input->post('txt_num_ext'),
-				'COLONIA' => strtoupper($this->input->post('txt_colonia')),'CRUCE1'=>strtoupper($this->input->post('txt_cruce_uno')),
-				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos')),'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre')),
-				'NUM_PASAJEROS'=>($this->input->post('txt_num_pasajeros')),'NOMBRE_SOLICITANTE'=>($this->input->post('txt_nombre_solicitante')),
-				'FECHA'=>$this->input->post('txt_traslado'),'HORA'=>$this->input->post('txt_hora'),
-				'IDCHOFER'=>$this->input->post('txt_conductor'),'BAUCHER'=>($this->input->post('txt_comprobante')),'CECO'=>$this->input->post('txt_ceco'),'IDVEHICULO'=>$this->input->post('txt_vehiculo'),
-				'MONTO'=>$this->input->post('txt_monto'),'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'))
+				'IDTRASLADO'		=> $last_id,
+				'IDCLIENTE' 		=> strtoupper($this->input->post('txt_cliente')),
+				'ID_USUARIO' 		=> $this->session->userdata('logged_in')["usuario_i"],
+				'ID_VENDEDOR'		=> $id_vendedor,
+				'LUGAR_REF' 		=> strtoupper($this->input->post('txt_referencial')),
+				'DOMICILIO'   		=> $this->input->post('txt_Direccion_sol'),
+				'NOMBRE_PASAJERO'   => $this->input->post('txt_nombre_solicitante'),
+				'NUM_PASAJEROS'		=> ($this->input->post('txt_num_pasajeros')),
+				'NOMBRE_SOLICITANTE'=> ($this->input->post('txt_nombre_solicitante')),
+				'FECHA'				=> $this->input->post('txt_traslado'),
+				'HORA'				=> $this->input->post('txt_hora'),
+				'IDCHOFER'			=> $this->input->post('txt_conductor'),
+				'BAUCHER'			=> ($this->input->post('txt_comprobante')),
+				'CECO'				=> $this->input->post('txt_ceco'),
+				'IDVEHICULO'		=> $this->input->post('txt_vehiculo'),
+				'MONTO'				=> $this->input->post('txt_monto'),
+				'OBSERVACIONES'		=> strtoupper($this->input->post('txt_observaciones'))
+ 			);
+		} else {
+			//'FORMATO_PAGO'=>strtoupper($this->input->post('txt_forma_pago')),
+			$this->data = array(
+				'IDTRASLADO'		=> $last_id,
+				'IDCLIENTE' 		=> strtoupper($this->input->post('txt_cliente')),
+				'ID_USUARIO' 		=> $this->session->userdata('logged_in')["usuario_i"],
+				'ID_VENDEDOR'		=> $id_vendedor,
+				'LUGAR_REF' 		=> strtoupper($this->input->post('txt_referencial')),
+				'DOMICILIO'   		=> $this->input->post('txt_domicilio'),
+				'NUM_EXT'			=> $this->input->post('txt_num_ext'),
+				'COLONIA' 			=> strtoupper($this->input->post('txt_colonia')),
+				'CRUCE1'			=> strtoupper($this->input->post('txt_cruce_uno')),
+				'CRUCE2'			=> strtoupper($this->input->post('txt_cruce_dos')),
+				'NOMBRE_PASAJERO'	=> strtoupper($this->input->post('txt_nombre_2')),
+				'NUM_PASAJEROS'		=> ($this->input->post('txt_num_pasajeros')),
+				'NOMBRE_SOLICITANTE'=> ($this->input->post('txt_nombre_solicitante')),
+				'FECHA'				=> $this->input->post('txt_traslado'),
+				'HORA'				=> $this->input->post('txt_hora'),
+				'IDCHOFER'			=> $this->input->post('txt_conductor'),
+				'BAUCHER'			=> ($this->input->post('txt_comprobante')),
+				'CECO'				=> $this->input->post('txt_ceco'),
+				'IDVEHICULO'		=> $this->input->post('txt_vehiculo'),
+				'MONTO'				=> $this->input->post('txt_monto'),
+				'OBSERVACIONES'		=> strtoupper($this->input->post('txt_observaciones'))
  			);
 		}
 		//strtoupper($this->input->post('txt_comprobante'))
-
-
 		$params_chofer = array('IDCHOFER'=>$this->data['IDCHOFER']);
 		$this->db->select('HORA');
 		$this->db->from('tbl_traslados');
@@ -263,7 +293,18 @@ class Rides extends CI_Model
 		}
 
 
-		$queryChar = "tbl_traslados.IDTRASLADO as ID, (tbl_cliente.RFC),tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT, tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO, CONCAT(tbl_traslados.LUGAR_REF, ' a ' , tbl_traslados.DOMICILIO ) as RUTA, DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA_PAGO,tbl_traslados.FORMATO_PAGO,tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,tbl_traslados.PAGADO,(tbl_traslados.MONTO) as MONTO";
+		$queryChar = "tbl_traslados.IDTRASLADO as ID, 
+						(tbl_cliente.RFC),
+						tbl_cliente.R_SOCIAL AS CLIENTE,
+						CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT, 
+						tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO, 
+						CONCAT(tbl_traslados.LUGAR_REF, 
+						' a ' , 
+						tbl_traslados.DOMICILIO ) as RUTA, 
+						DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA_PAGO,
+						tbl_traslados.FORMATO_PAGO,
+						tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,
+						tbl_traslados.PAGADO,(tbl_traslados.MONTO) as MONTO";
 		$this->db->select($queryChar,FALSE);
 		$this->db->from('tbl_traslados , tbl_cliente');
 		$this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' ");

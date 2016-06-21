@@ -60,18 +60,18 @@ class Choferes extends CI_Controller
 				$this->success = '<div class="alert alert-success">'.$result['msg'].'</div>';
 				
 			}
-		}
-		
+		}	
 			
-			$data['nombre'] = $this->session_data['nombre'];
-			$data['apellido'] = $this->session_data['apellido'];
-			$data['usuario_i'] = $this->session_data['usuario_i'];
-			$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
-			$data['success'] = $this->success;
-			$data['error'] = $this->error_msg;
-            $data['titulo'] = 'Agregar Chofer';
-			$data['content']  = 'nuevo_chofer';
-			$this->load->view('main_template',$data);
+		$data['nombre'] = $this->session_data['nombre'];
+		$data['permiso'] = $this->session_data['role'];
+		$data['apellido'] = $this->session_data['apellido'];
+		$data['usuario_i'] = $this->session_data['usuario_i'];
+		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
+		$data['success'] = $this->success;
+		$data['error'] = $this->error_msg;
+        $data['titulo'] = 'Agregar Chofer';
+		$data['content']  = 'nuevo_chofer';
+		$this->load->view('main_template',$data);
 		
 	}
 
@@ -110,6 +110,7 @@ class Choferes extends CI_Controller
 				$this->error_msg = '<div class="alert  text-danger">No hay choferes Registrados en el sistema. Registre uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_chofer.html">Aquí</a></div>';
 			}
 			$data['nombre'] = $this->session_data['nombre'];
+			$data['permiso'] = $this->session_data['role'];
 			$data['apellido'] = $this->session_data['apellido'];
 			$data['usuario_i'] = $this->session_data['usuario_i'];
 			$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
@@ -193,7 +194,6 @@ class Choferes extends CI_Controller
 	}
 	public function reporte(){
 		$char = "";
-
 		$this->estadisticas = $this->drivers->estadisticasXchofer();
 		header('Content-type: application/vnd.ms-excel');
         	header('Content-Disposition: attachment; filename=Estadisticas_'.$this->estadisticas[0]['NOMBRECH'].'.xls');
@@ -206,8 +206,7 @@ class Choferes extends CI_Controller
 			."<th width='420'>Chofer</th>"
 			."<th width='420'>Monto</th>"
 			."<th width='420'>Comentarios</th>"
-			."</tr></thead><tbody>";
-			
+			."</tr></thead><tbody>";			
 			$remove = array('$',',');
 			$total = 0;
 			foreach($this->estadisticas as $current){
@@ -223,9 +222,9 @@ class Choferes extends CI_Controller
 				$char.="</tr>";
 
 			}
-				setlocale(LC_MONETARY, "en_US");
-        		$total = money_format('%(#10n',$total);
-			$char.='<tr><td colspan=4><b>Total:</b></td><td><b>'.($total).'</b></td></tr>';
+			setlocale(LC_MONETARY, "en_US");
+    		$total = money_format('%(#10n',$total);
+			$char.='<tr><td colspan=4><b>Total:</b></td><td><b>'.'$'.($total).'</b></td></tr>';
 			$char.="</tbody></table>";
 
 			echo $char;
@@ -308,6 +307,7 @@ class Choferes extends CI_Controller
 
 		$data['choferes']  = $this->drivers->catalogo_chofer();
 		$data['nombre'] = $this->session_data['nombre'];
+		$data['permiso'] = $this->session_data['role'];
 		$data['apellido'] = $this->session_data['apellido'];
 		$data['usuario_i'] = $this->session_data['usuario_i'];
 		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];

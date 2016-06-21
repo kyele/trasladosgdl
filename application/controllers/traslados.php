@@ -11,6 +11,7 @@ class Traslados extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('rides','',TRUE);
+		$this->load->model('users','',TRUE);
 		$this->char_error_open = '<span class="btn btn-danger btn-xs" style="margin:3px;"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true"> &nbsp;×</button>';
 		$this->char_error_close = '</span>';
         $this->success = '';
@@ -25,16 +26,8 @@ class Traslados extends CI_Controller
 			redirect('login','refresh');
 		}
 	}
-	public function nuevo(){
-
+	public function nuevo() {
 		$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
-		if($this->input->post("txt_Direccion_sol")){
-			//echo 'solicitante';
-
-		}
-		else if($this->input->post("txt_Direccion_sol")){
-			//echo 'cliente';
-		}
 		if($this->input->post("txt_Direccion_sol"))
 		{
 
@@ -51,10 +44,9 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_ceco', 'ceco', 'trim|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|xss_clean');
+			//$this->form_validation->set_rules('txt_vendedores', 'Vendedor', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('data_solicitante', 'cliente', 'trim');
-		}
-		else if($this->input->post("txt_domicilio"))
-		{
+		} else if( $this->input->post("txt_domicilio" ) ) {
 			$this->form_validation->set_rules('txt_cliente', 'Cliente', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_referencial', 'Lugar Referencial', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_domicilio', 'Domicilio', 'trim|required|xss_clean');
@@ -63,7 +55,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_cruce_uno', 'Cruce 1', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_cruce_dos', 'Cruce 2', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('data_client', 'cliente', 'trim');
-			$this->form_validation->set_rules('txt_nombre','Nombre', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_nombre_2','Nombre', 'required|trim|xss_clean');
 			$this->form_validation->set_rules('txt_num_pasajeros', 'Número de Pasajeros', 'trim|required|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_traslado', 'Fecha de Traslado	', 'trim|required|exact_length[10]|xss_clean');
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
@@ -74,13 +66,16 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|decimal|xss_clean');
 			$this->form_validation->set_rules('txt_ceco', 'Ceco', 'trim|required|numeric|xss_clean');
 			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|xss_clean');
+			$this->form_validation->set_rules('txt_vendedores', 'Vendedor', 'required|trim|xss_clean');
+
 		}
 
 		$this->form_validation->set_message('required', 'El  %s es requerido');
 		$this->form_validation->set_message('valid_email', 'El %s no es válido');
+		//var_dump($this->input->post('txt_vendedores'));
 		if($this->form_validation->run() === TRUE){
-
-			 $result = $this->rides->crear();
+			//var_dump($this->input->post('txt_vendedores'));
+			$result = $this->rides->crear();
 			if($result['status'] === FALSE)
 			{
 				$this->error_msg = '<div class="alert alert-info text-center"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true"> &nbsp;×</button>'.$result['msg'].'</div>';
@@ -300,42 +295,23 @@ class Traslados extends CI_Controller
 		$this->form_validation->set_rules('txt_fecha_ini', 'Fecha Inicial', 'trim|required|exact_length[10]|xss_clean');
 		$this->form_validation->set_rules('txt_fecha_fin', 'Fecha Final', 'trim|required|exact_length[10]|xss_clean');
 		$this->form_validation->set_message('required', 'La  %s es requerida');
-		if($this->form_validation->run() === TRUE)
-		{
+		if($this->form_validation->run() === TRUE) {
 			$data['reportes'] = $this->rides->catalogo_servicios();
 			if($data['reportes'] === FALSE){
 				$this->error_msg = '<div class="alert  alert-danger">No hay reportes de servicio con las fechas especificadas.</div>';
 			}
-
 		}
 
-			$data['nombre'] = $this->session_data['nombre'];
-			$data['apellido'] = $this->session_data['apellido'];
-			$data['usuario_i'] = $this->session_data['usuario_i'];
-			$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
-			$data['success'] = $this->success;
-			$data['error'] = $this->error_msg;
-            $data['titulo'] = 'Reportes de Servicio';
-			$data['content']  = 'catalogo_servicios';
-			$this->load->view('main_template',$data);
-	}
-
-
-	// public function catalogo_servicio(){
-	// 		// $data['servicios']  = $this->rides->catalogo_servicios();
-	// 		// if(($data['servicios']) === FALSE){
-	// 		// 	$this->error_msg = '<div class="alert  text-danger">No hay reportes de servicio disponibles en el sistema.</div>';
-	// 		// }
-	// 		$data['nombre'] = $this->session_data['nombre'];
-	// 		$data['apellido'] = $this->session_data['apellido'];
-	// 		$data['usuario_i'] = $this->session_data['usuario_i'];
-	// 		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
-	// 		$data['success'] = $this->success;
-	// 		$data['error'] = $this->error_msg;
- //            $data['titulo'] = 'Reportes de Servicio';
-	// 		$data['content']  = 'catalogo_servicios';
-	// 		$this->load->view('main_template',$data);
-	// }
+		$data['nombre'] = $this->session_data['nombre'];
+		$data['apellido'] = $this->session_data['apellido'];
+		$data['usuario_i'] = $this->session_data['usuario_i'];
+		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
+		$data['success'] = $this->success;
+		$data['error'] = $this->error_msg;
+        $data['titulo'] = 'Reportes de Servicio';
+		$data['content']  = 'catalogo_servicios';
+		$this->load->view('main_template',$data);
+	}	
 	public function pdf_servicio($vehiculo){
 		$datos = $this->rides->pdf_servicio($vehiculo);
 		if($datos === FALSE)

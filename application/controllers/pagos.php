@@ -123,21 +123,16 @@ class Pagos extends CI_Controller
 		$this->pdf->Output($this->pdf->titulo.".pdf",'D');
 		}
 	}
-	public function estatus_pagos(){
-
+	public function estatus_pagos() {
 			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
 			$this->form_validation->set_rules('txt_fecha_ini', 'Fecha Inicial', 'trim|required|exact_length[10]|xss_clean');
 			$this->form_validation->set_rules('txt_fecha_fin', 'Fecha Final', 'trim|required|exact_length[10]|xss_clean');
 			$this->form_validation->set_message('required', 'La  %s es requerida');
-			if($this->form_validation->run() === TRUE)
-			{
+			if( $this->form_validation->run() === TRUE ) {
 				$resultado = $this->rides->situacion_pago_traslados();
-
-
 				if($resultado === FALSE){
 					$this->error_msg = '<div class="alert  alert-danger">No hay traslados disponibles las fechas especificadas.</div>';
-				}
-				else{
+				} else {
 					$this->session->set_userdata('fecha_ini',$this->input->post('txt_fecha_ini'));
 					$this->session->set_userdata('fecha_fin',$this->input->post('txt_fecha_fin'));
 
@@ -148,8 +143,6 @@ class Pagos extends CI_Controller
 					$data['trasladosNoPagados']  = $resultado['traslados_no_pagados'];
 					$data['txc'] = $resultado['txc'];
 				}
-
-				
 			}
 			$data['nombre'] = $this->session_data['nombre'];
 			$data['apellido'] = $this->session_data['apellido'];

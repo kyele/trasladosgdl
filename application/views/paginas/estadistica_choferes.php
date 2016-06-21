@@ -34,69 +34,62 @@
                 <?php echo validation_errors();
                 date_default_timezone_set("America/Mexico_City");
                 ?>
-
                  <?php $attributes = array('id' => 'myform_ver_notas'); echo form_open(base_url().'estadisticas_chofer.html',$attributes); ?>
                     <div class="row">
-                     <div class="form-group col-sm-12 col-md-12 col-lg-4">
-                         <label for="txt_chofer">Chofer</label>
-                         <select name="txt_chofer" class="form-control input-sm"  id="txt_chofer">
-                         <option value="---">Seleccionar Chofer</option>
-                          <?php
-                            if(!empty($choferes)){
-                                foreach($choferes as $current){
-                                    $nombre = $current['NOMBRE'].' '.$current['APEPAT'].' '.$current['APEMAT'];
-                                    echo '<option value="'.$current['IDCHOFER'].'" '.set_select("txt_chofer",$current['IDCHOFER']).'>'.$nombre.'</option>';
-                                }
-                            }
-                         ?>
-                         </select>
-                     </div>
-                        <div class="form-group col-sm-6 col-md-6 col-lg-2">
-                      <label for="txt_fecha_i" >Fecha inicial</label>
-                            <div class="input-group date" id="fecha_ini_container" >
-
+                        <div class="form-group col-sm-12 col-md-12 col-lg-4">
+                            <label for="txt_chofer">Chofer</label>
+                            <select name="txt_chofer" class="form-control input-sm"  id="txt_chofer">
+                                <option value="---">Seleccionar Chofer</option>
                                 <?php
-
+                                    if(!empty($choferes)){
+                                        foreach($choferes as $current){
+                                            $nombre = $current['NOMBRE'].' '.$current['APEPAT'].' '.$current['APEMAT'];
+                                            echo '<option value="'.$current['IDCHOFER'].'" '.set_select("txt_chofer",$current['IDCHOFER']).'>'.$nombre.'</option>';
+                                        }
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6 col-lg-2">
+                            <label for="txt_fecha_i" >Fecha inicial</label>
+                            <div class="input-group date" id="fecha_ini_container" >
+                                <?php
                                     $fecha_a = localtime(time(), 1);
                                     $anyo_a  = $fecha_a["tm_year"] + 1900;
                                     $mes_a   = $fecha_a["tm_mon"] + 1;
                                     $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
                                     $dia_a   = 1;
-
-
                                     $fechaI = '0'.$dia_a.'/'.$mes_a.'/'.$anyo_a;
 
                                 ?>
                                 <input class="form-control input-sm" size="16" type="text" id="txt_fecha_i" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_i" value="<?php echo set_value('txt_fecha_i'); ?>"  readonly style="cursor:pointer !important">
                                 <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                             </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6 col-lg-2">
+                              <label for="txt_fecha_f" >Fecha Final</label>
+                                <div class="input-group date" id="fecha_fin_container" >
 
-                    </div>
-                    <div class="form-group col-sm-6 col-md-6 col-lg-2">
-                          <label for="txt_fecha_f" >Fecha Final</label>
-                            <div class="input-group date" id="fecha_fin_container" >
+                                    <?php
+                                        $fecha_a = localtime(time(), 1);
+                                        $anyo_a  = $fecha_a["tm_year"] + 1900;
+                                        $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
+                                        $dia_a   = ( ($dia_a = $fecha_a["tm_mday"]) <10 ) ? '0'.$dia_a: $dia_a;
 
-                                <?php
-                                    $fecha_a = localtime(time(), 1);
-                                    $anyo_a  = $fecha_a["tm_year"] + 1900;
-                                    $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
-                                    $dia_a   = ( ($dia_a = $fecha_a["tm_mday"]) <10 ) ? '0'.$dia_a: $dia_a;
-
-                                    $fechaI = $dia_a.'/'.$mes_a.'/'.$anyo_a;
-                                ?>
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_f" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_f" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
-                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
-                            </div>
-                    </div>
-                     <div class="form-group col-sm-12 col-md-12 col-lg-2">
-                        <br>
+                                        $fechaI = $dia_a.'/'.$mes_a.'/'.$anyo_a;
+                                    ?>
+                                    <input class="form-control input-sm" size="16" type="text" id="txt_fecha_f" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_f" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
+                                    <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                                </div>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-2">
+                            <br>
                            <button type="submit" class="btn btn-red pull-right">Buscar</button>
-                    </div>
+                        </div>
                     </div>
                     <hr>
-
                 </form>
-              <?php if (!empty($estadisticas)  && $estadisticas->TOTALTRASLADOS >0):?>
+                <?php if (!empty($estadisticas)  && $estadisticas->TOTALTRASLADOS >0):?>
                 <div class="row">
                     <div class="col-sm-12">
                     <?php 
@@ -105,25 +98,16 @@
                             $tmp = $this->session->flashdata('datosC');
                             $ini = $tmp['ini'];$fin = $tmp['fin'];$chofer = $tmp['chofer'];
                         }
-                     ?>
-                    
-                        <?php $attributes = array('id' => 'myform_reporte_estadisticas'); echo form_open(base_url().'reporte_estadisticas_chofer.html',$attributes); ?>
-                            <button type="submit" class="btn btn-success btn-lg pull-right">Exportar a Excel</button>
-                        </form>
-
+                     ?>                    
+                    <?php $attributes = array('id' => 'myform_reporte_estadisticas'); echo form_open(base_url().'reporte_estadisticas_chofer.html',$attributes); ?>
+                        <button type="submit" class="btn btn-success btn-lg pull-right">Exportar a Excel</button>
+                    </form>
                     </div>
-
                 </div>
-              <?php endif ?>
-
-
- <hr>
-
-
+                <?php endif ?>
+                <hr>
                 <?php echo $error; echo $success; ?>
                 <?php if (!empty($estadisticas) ): ?>
-                    
-                
                     <?php if ($estadisticas->TOTALTRASLADOS > 0): ?>
                          <div class="table-responsive">
                             <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green">
@@ -144,12 +128,10 @@
                                         </tr>
                                 </tbody>
                             </table>
-                        </div>
-                    
-                <?php else: ?>
-                    <div class="alert alert-danger">No se han encontrado traslados con las fechas especificadas</div>
-                    <?php endif ?>
-                       
+                        </div>                    
+                    <?php else: ?>
+                        <div class="alert alert-danger">No se han encontrado traslados con las fechas especificadas</div>
+                    <?php endif ?>                       
                 <?php endif ?>
             </div>
         </div>

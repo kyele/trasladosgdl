@@ -9,6 +9,7 @@ class Usuarios extends CI_Controller
     public $success;
     public $error_msg;
     public $name_img;
+    public $estadisticas;
 	function __construct()
 	{	
 		parent::__construct();
@@ -29,15 +30,14 @@ class Usuarios extends CI_Controller
 		}
 
 	}
-	public function nuevo(){
-		
-			$data['nombre'] = $this->session_data['nombre'];
-			$data['apellido'] = $this->session_data['apellido'];
-			$data['usuario_i'] = $this->session_data['usuario_i'];
-			$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
-            $data['titulo'] = 'Agregar Usuario';
-			$data['content']  = 'nuevo_usuario';
-			$this->load->view('main_template',$data);		
+	public function nuevo(){		
+		$data['nombre'] = $this->session_data['nombre'];
+		$data['apellido'] = $this->session_data['apellido'];
+		$data['usuario_i'] = $this->session_data['usuario_i'];
+		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
+        $data['titulo'] = 'Agregar Usuario';
+		$data['content']  = 'nuevo_usuario';
+		$this->load->view('main_template',$data);		
 	}
     function file_check($file){
        if($_FILES['userfile']['type'] !== 'image/jpeg'){
@@ -240,6 +240,90 @@ class Usuarios extends CI_Controller
 		else{
 			show_404();
 		}
+	}
+	public function user_sale($client){
+		if($client ==='---'){
+			$this->form_validation->set_message('user_sale', 'Seleccione un Usuario');
+			return FALSE;
+		}
+		return TRUE;
+	}
+	public function reporte_vendedores () {
+		$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
+		$this->form_validation->set_rules( 'txt_user' , 'Usuario' , 'trim|required|xss_clean|callback_user_sale' );
+		$this->form_validation->set_rules( 'txt_fecha_ini' , 'Fecha Inicial' , 'trim|required|exact_length[10]|xss_clean' );
+		$this->form_validation->set_rules( 'txt_fecha_fin' , 'Fecha Final' , 'trim|required|exact_length[10]|xss_clean' );
+		if( $this->form_validation->run( ) === TRUE) {
+			$resultado  = $this->users->estadisticas();
+			if( ( $resultado ) === FALSE ) {
+				$this->error_msg = '<div class="alert  text-danger">No hay traslados agendados por este usuario en las fechas especificadas. agendo uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_traslado.html">Aquí</a></div>';
+			}else{
+				$data['estadisticas'] = $resultado;
+				$items = array( 
+								'ini'=>$this->input->post('txt_fecha_ini'),
+								'fin'=>$this->input->post('txt_fecha_fin'),
+								'user'=>$this->input->post('txt_user') 
+							);
+				$this->session->set_userdata('datosC',$items);
+			}
+
+
+		}
+
+		$data['usuarios']  		= $this->users->catalogo_operadores();
+		$data['nombre'] 		= $this->session_data['nombre'];
+		$data['apellido'] 		= $this->session_data['apellido'];
+		$data['usuario_i'] 		= $this->session_data['usuario_i'];
+		$data['imagen_perfil'] 	= $this->session_data['imagen_perfil'];
+		$data['success'] 		= $this->success;
+		$data['error'] 			= $this->error_msg;
+        $data['titulo'] 		= 'Reportes de Vendedores';
+		$data['content']  		= 'reporte_vendedores';
+		$this->load->view('main_template',$data);
+	}
+	public function reporte(){
+		$char = "";
+		$this->estadisticas = $this->users->estadisticasXoperador();
+		header('Content-type: application/vnd.ms-excel');
+        	header('Content-Disposition: attachment; filename=Estadisticas_'.$this->estadisticas[0]['NOMBREUS'].'.xls');
+			$char = "<table  border='1'  bordercolor='#3B5389'>"
+			."<thead bgcolor='#CCCCCC'  align ='center'>"
+			."<tr>"
+			."<th>ID Traslado</th>"
+			."<th width='300'>Fecha de Alta</th>"
+			."<th width='420'>Cliente</th>"
+			."<th>Fecha del Traslado</th>"
+			."<th width='420'>Ruta</th>"
+			."<th width='420'>Usuario</th>"
+			."<th width='420'>Monto</th>"
+			."<th width='420'>Comentarios</th>"			
+			."</tr></thead><tbody>";			
+			$remove = array('$',',');
+			$total = 0;
+			foreach($this->estadisticas as $current){
+				$char.= "<tr>";
+				$tmp  = str_replace($remove,'',$current['MONTO']);
+				$total+= $tmp;
+				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
+				$char.="<td align='center'>".$current['FECHA_ALTA']."</td>";
+				if( $current['R_SOCIAL']  == '' ){
+					$char.="<td width='420' align='center'><b>".$current['NOMBRECL']."</b></td>";	
+				} else {
+					$char.="<td width='420' align='center'><b>".$current['R_SOCIAL']."</b></td>";
+				}
+				$char.="<td align='center'>".$current['FECHA']."</td>";
+				$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
+				$char.="<td width='420'>".$current['NOMBREUS']."</td>";				
+				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
+				$char.="<td width='420'><b>".$current['OBSERVACIONES']."</b></td>";
+				$char.="</tr>";
+
+			}
+			setlocale(LC_MONETARY, "en_US");
+    		$total = money_format('%(#10n',$total);
+			$char.='<tr><td colspan=6><b>Total:</b></td><td><b>'.'$'.($total).'</b></td></tr>';
+			$char.="</tbody></table>";
+			echo $char;		
 	}
 	
 }

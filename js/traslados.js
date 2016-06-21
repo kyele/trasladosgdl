@@ -1025,7 +1025,7 @@ $(document).ready(function(){
     })
     $("#myform_traslado").on('submit',function(e){
 
-        var nombre          = $('#txt_nombre').val();
+        var nombre          = $('#txt_nombre_2').val();
         var num_pasajeros   = $('#txt_num_pasajeros').val();
         var ceco            = $('#txt_ceco').val();
         var monto           = $('#txt_monto').val();
@@ -1053,7 +1053,6 @@ $(document).ready(function(){
         } else {
             $('#msj_monto').text('');
         }
-
         console.log(nombre.length);
         if( ( nombre.length * num_pasajeros.length * ceco.length * monto.length ) > 0 ) {
 
