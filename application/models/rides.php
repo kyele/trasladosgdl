@@ -44,8 +44,8 @@ class Rides extends CI_Model
 			return array('status'=>false,'msg'=>$this->data['msg']);
         }
 
-        $this->db->select('IDVENDEDOR,NOMBRE,APEPAT,APEMAT');
-        $this->db->from('tbl_vendedores');
+        $this->db->select('IDVENDEDOR,NOMBRE_AGENCIA,NOMBRE_V');
+        $this->db->from('vst_vendedores_agencia');
         $queryCh = $this->db->get();
         if($queryCh->num_rows()>0){
         	$this->data['vendedores'] = $queryCh->result_array();

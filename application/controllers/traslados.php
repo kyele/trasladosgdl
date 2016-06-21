@@ -61,7 +61,7 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_hora', 'Hora de Traslado', 'trim|required|xss_clean');
 			// $this->form_validation->set_rules('txt_forma_pago', 'Formato de Pago', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_conductor', 'Nombre del Conductor', 'trim|xss_clean');
-			 $this->form_validation->set_rules('txt_comprobante', 'Baucher', 'trim|xss_clean');
+			$this->form_validation->set_rules('txt_comprobante', 'Baucher', 'trim|xss_clean');
 			$this->form_validation->set_rules('txt_vehiculo', 'Vehículo', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_monto', 'Monto', 'trim|required|decimal|xss_clean');
 			$this->form_validation->set_rules('txt_ceco', 'Ceco', 'trim|required|numeric|xss_clean');
@@ -93,25 +93,23 @@ class Traslados extends CI_Controller
 				redirect("nuevo_traslado","refresh");
 			}
 		}
+		$data['info'] = $this->rides->catalogos();
+		if($data['info']['status'] === FALSE){
+			$this->error_msg = $data['info']['msg'];
+			$data['info'] = array();
+		}else{
+			$data['info'] = $data['info']['info'];
+		}
 
-			$data['info'] = $this->rides->catalogos();
-			if($data['info']['status'] === FALSE){
-				$this->error_msg = $data['info']['msg'];
-				$data['info'] = array();
-			}else{
-				$data['info'] = $data['info']['info'];
-			}
-
-			$data['nombre'] = $this->session_data['nombre'];
-			$data['apellido'] = $this->session_data['apellido'];
-			$data['usuario_i'] = $this->session_data['usuario_i'];
-			$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
-			$data['success'] = $this->success;
-			$data['error'] = $this->error_msg;
-            $data['titulo'] = 'Agendar Traslado';
-			$data['content']  = 'nuevo_traslado';
-			$this->load->view('main_template',$data);
-
+		$data['nombre'] = $this->session_data['nombre'];
+		$data['apellido'] = $this->session_data['apellido'];
+		$data['usuario_i'] = $this->session_data['usuario_i'];
+		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
+		$data['success'] = $this->success;
+		$data['error'] = $this->error_msg;
+        $data['titulo'] = 'Agendar Traslado';
+		$data['content']  = 'nuevo_traslado';
+		$this->load->view('main_template',$data);
 	}
 	public function agenda_traslados(){
 

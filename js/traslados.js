@@ -298,6 +298,25 @@ var rides = {
             $("#txt_nvo_cliente").val('');
         });
     },
+    modal_agencia:function() {
+        $( "#modal_agencia" ).modal( {
+            backdrop:'static',
+            keyboard:true
+        })/*.on('shown.bs.modal',function(e){
+            var text = $("#txt_cliente option:selected").html();
+            var valor = $("#txt_cliente").val();
+            $("#txt_nvoCliente").val(text);
+            $("#txt_nvo_cliente").val(valor);
+
+            $("#txt_nuevo_solicitante").val('');
+            $("#txt_nuevo_dir").val('')
+
+        })*/.on('hidden.bs.modal',function(){
+            $("#txt_nuevo_solicitante").val('');
+            $("#txt_nuevo_dir").val('')
+            $("#txt_nvo_cliente").val('');
+        });
+    },
     catalago_solicitantes:function(cliente,url){
         $("#txt_nombre_sol").empty();
         rides.solicitantes=Array();
@@ -606,14 +625,10 @@ var rides = {
             //rides.modal($(this).attr('id'),$(this).is(':checked')); esta funcion pedi ael kilometraje
             rides.update_ride($(this).attr('id'),'true');
         });
-
         $('#table_traslados').on('click','a.ver_detalle_traslado',function(e){
             e.preventDefault();
             rides.payments($(this).attr('id'),$(this).data('status'));
         });
-
-
-
         $('#table_traslados').on('click','a.cancelar_traslado',function(e){
             e.preventDefault();
 
@@ -623,7 +638,6 @@ var rides = {
             var id = $(this).data('id');
             var color = $(this).val();
             rides.changeColor(id,color);
-
         });
         $('#btnPayFactSelection').on('click',function(){
             rides.payFacInPackage();
@@ -636,17 +650,13 @@ var rides = {
         });
         $('#table_traslados_pagos').on('click',":checkbox",function(){
             rides.addSelection($(this));
-
         });
-
-
         $('#table_traslados_pagos').on('click','a',function(e){
             e.preventDefault();
             //abrir un modal
             rides.modal_comprobante($(this).attr('id'));
             //rides.pay_ride($(this).attr('id'));
         });
-
         $('#myform_info_pay_lote').submit(function(e){
             e.preventDefault();
             var  fecha =$('#txt_fecha_pago_lote').val();
@@ -701,9 +711,7 @@ var rides = {
                     );
                 }
             });
-
         });
-
         $('#myform_info_fact_lote').submit(function(e){
             e.preventDefault();
             var tipo = $('#txt_tipo_lote').val();
@@ -760,9 +768,7 @@ var rides = {
                     );
                 }
             });
-
         });
-
         $('#myform_info_comprobante_lote').submit(function(e){
             e.preventDefault();
             var tipo = $('#txt_tipo_lote').val();
@@ -821,9 +827,7 @@ var rides = {
                     );
                 }
             });
-
         });
-
         $('#myform_info_comprobante').submit(function(e){
             e.preventDefault();
             $.ajax({
@@ -877,7 +881,6 @@ var rides = {
                     );
                 }
             });
-
         });
         $('#myform_info_servicio').submit(function(e){
             e.preventDefault();
@@ -900,7 +903,6 @@ var rides = {
                 }
             });
         });
-
         $('#myform_solicitante').submit(function(e){
             // alert($(this).attr('action'));
             e.preventDefault();
@@ -928,7 +930,32 @@ var rides = {
                 }
             });
         });
+        $('#myform_agencia').submit(function(e){
+            // alert($(this).attr('action'));
+            e.preventDefault();
+            $.ajax({
+                url:$(this).attr('action'),
+                type:'POST',
+                dataType:'json',
+                data:$(this).serialize(),
+                success:function(data){
+                    if(! data.status){
+                        $('#contErrorSolicitante').html(data.msg);
+                    } else {
+                        $('#contErrorSolicitante').empty().html(data.msg);
+                        //rides.catalago_solicitantes($("#txt_cliente").val(),rides.url);
+                        setTimeout(function(){
+                            $("#modal_solicitante").modal('hide');
+                            $('#contErrorSolicitante').empty();
 
+                        },3000);
+                    }
+                },
+                error:function(){
+                    $('#contErrorSolicitante').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
+                }
+            });
+        });
         $('#myform_detalle_traslado').submit(function(e){
 
             e.preventDefault();
@@ -961,11 +988,12 @@ var rides = {
                 }
             });
         });
-
         $("#btn_nuevo_solicitante").click(function() {
             rides.modal_solicitante();
         });
-
+        $("#btn_nueva_agencia").click(function() {
+            rides.modal_agencia();
+        });
     },
     showRidesToday:function(){
 

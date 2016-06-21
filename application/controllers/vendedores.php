@@ -26,7 +26,8 @@ class Vendedores extends CI_Controller
 		}
 
 	}
-	public function nuevo( ) {		
+	public function nuevo( ) {
+		$data['agencias']  		= $this->sellers->catalogo_agencias();
 		$data['nombre'] 		= $this->session_data['nombre'];
 		$data['apellido'] 		= $this->session_data['apellido'];
 		$data['usuario_i'] 		= $this->session_data['usuario_i'];
@@ -35,26 +36,34 @@ class Vendedores extends CI_Controller
 		$data['content']  		= 'nuevo_vendedor';
 		$this->load->view( 'main_template' , $data );
 	}
-	public function crear( ) {		
+	public function crear( ) {
 		$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
 		$this->form_validation->set_rules('txt_nombre','Nombre', 'required|trim|xss_clean');
 		$this->form_validation->set_rules('txt_apepat','Apellido Paterno', 'required|trim|xss_clean');
 		$this->form_validation->set_rules('txt_apemat','Apellido Materno', 'required|trim|xss_clean|xss_clean');
-		$this->form_validation->set_rules('txt_email','Correo Electronico', 'required|valid_email|trim|xss_clean');
-		$this->form_validation->set_rules('txt_telefono', 'Teléfono 1', 'trim|exact_length[10]|xss_clean');
+		$this->form_validation->set_rules('txt_email','Correo Electronico', 'valid_email|trim|xss_clean');
+		$this->form_validation->set_rules('txt_telefono', 'Teléfono', 'trim|exact_length[10]|xss_clean');
+		$this->form_validation->set_rules('txt_comision', 'Comision', 'trim|required|numeric|xss_clean');
         $this->form_validation->set_message('required', 'El  %s es requerido');
        	$this->form_validation->set_message('valid_email', 'El %s no es válido');
 
 		if ($this->form_validation->run( ) === FALSE) { 
 			$data = array( 'errors'=>validation_errors() , 'statusError'=>TRUE );
 			echo json_encode( $data );
-		} else {		
+		} else {
+			if($this->input->post( 'txt_agencia' ) == "---"){
+				$id_agencia = NULL;
+			} else {
+				$id_agencia = $this->input->post( 'txt_agencia' );
+			}
 			$datos = array(
+				'id_agencia'=> $id_agencia,
 				'nombre'	=> strtoupper($this->input->post( 'txt_nombre' ) ),
 				'apepat'	=> strtoupper($this->input->post( 'txt_apepat' ) ),
 				'apemat'	=> strtoupper($this->input->post( 'txt_apemat' ) ),
 				'email'		=> $this->input->post( 'txt_email' ),
 				'telefono'	=> $this->input->post( 'txt_telefono' ),
+				'comision'  => $this->input->post( 'txt_comision' ),
 			);
 			$result  = $this->sellers->nuevo( $datos );
 			if( ! $result['status'] ) {

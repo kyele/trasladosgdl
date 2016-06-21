@@ -7,6 +7,8 @@ class Sellers extends CI_Model {
     public $apemat;
     public $email;
     public $telefono;
+    public $id_agencia;
+    public $comision;
 	function __construct() {
         $this->load->database();
         $this->datos_sess   = $this->session->userdata( 'logged_in' );
@@ -24,11 +26,13 @@ class Sellers extends CI_Model {
             return array( 'status'=>FALSE , 'mensaje'=>"El correo electronico <b>".$datos['email']."</b> Ya existe." );
         }
         $data = array(
+                'ID_AGENCIA'=> $datos['id_agencia'],
                 'NOMBRE'    => strtoupper($datos['nombre']),
                 'APEPAT'    => strtoupper($datos['apepat']),
                 'APEMAT'    => strtoupper($datos['apemat']),
                 'EMAIL'     => $datos['email'],
                 'TELEFONO'  => $datos['telefono'],
+                'COMISION'  => $datos['comision'],
             );
         $this->db->insert('tbl_vendedores',$data);
         if($this->db->affected_rows() > 0) {
@@ -41,6 +45,16 @@ class Sellers extends CI_Model {
         $this->db->select('IDVENDEDOR,NOMBRE,APEPAT,APEMAT,EMAIL,FECHA_ALTA,TELEFONO');
         $this->db->order_by("APEPAT");
         $this->db->from('tbl_vendedores');
+        $queryC = $this->db->get();
+        if($queryC->num_rows()>0){
+            return $queryC->result_array();
+        }
+        return FALSE;
+    }
+    public function catalogo_agencias() {
+        $this->db->select('IDAGENCIA,NOMBRE,ABREVIACION');
+        $this->db->order_by("NOMBRE");
+        $this->db->from('tbl_agencia');
         $queryC = $this->db->get();
         if($queryC->num_rows()>0){
             return $queryC->result_array();
@@ -121,6 +135,5 @@ class Sellers extends CI_Model {
             return array('estadisticas'=>$myArray,'noPagados'=>number_format($monto_no_pagados,2),'pagados'=>number_format($monto_pagados,2),'traslados_pagados'=>$tPagados,'traslados_no_pagados'=>$tNoPagados,"txc"=>$myArrayConteo);
         }
         return FALSE;
-    }
     }
 }
