@@ -5,22 +5,22 @@
                 <small>Agrege un nuevo usuario</small>
             </h1>
             <ol class="breadcrumb">
-                <h4><li class="active"><i class="fa fa-user"></i> Nuevo Usuario</li></h4>
-                <li class="pull-right">
-                 
-                </li>
+                <li class="active"><i class="fa fa-desktop"></i><a href="<?php echo base_url() ?>home.html"> Inicio</a></li>
+                <li class="active"><i class="fa fa-users"></i><a href="<?php echo base_url() ?>catalogo_usuarios.html"> Usuarios</a></li>
+                <li><i class="fa fa-user"></i> Nuevo Usuario</li>
+                <li class="pull-right"></li>
             </ol>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="portlet portlet-default">
-    <div class="portlet-heading">
-        <div class="portlet-title">
-            <h4>Registro</h4>
+        <div class="portlet-heading">
+            <div class="portlet-title">
+                <h4>Registro</h4>
+            </div>        
+            <div class="clearfix"></div>
         </div>        
-        <div class="clearfix"></div>
-    </div>        
         <div class="portlet-body">           
             <?php echo validation_errors(); ?> 
              <div id="contError"></div>           

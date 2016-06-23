@@ -53,7 +53,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo base_url() ?>catalogo_agencias.html">
+                        <a href="<?php echo base_url() ?>agencias.html">
                             <i class="fa fa-map-o"></i> Agencias
                         </a>
                     </li>
@@ -171,11 +171,11 @@
                             <i class="fa fa-file-text-o"> Estadisticas de Vehiculos</i>
                         </a>
                     </li>
-                     <li>
+                    <!--<li>
                         <a href="<?php echo base_url() ?>catalogo_servicios.html">
                             <i class="fa fa-bar-chart-o"> Reporte de Gasolina</i>
                         </a>
-                    </li>
+                    </li>-->
                     <li>
                         <a href="<?php echo base_url() ?>reporte_operadores.html">
                             <i class="fa fa-file-excel-o" aria-hidden="true"> Reporte de vendedores</i>

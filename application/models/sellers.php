@@ -51,6 +51,50 @@ class Sellers extends CI_Model {
         }
         return FALSE;
     }
+    public function get_vendedor(){
+        $param = array( 'IDVENDEDOR'=>strtoupper( $this->input->post('vendedor' ) ) );
+        $this->db->select(' IDVENDEDOR as txt_id,
+                            ID_AGENCIA as txt_agencia_selec,
+                            NOMBRE as txt_nombre,
+                            APEPAT as txt_apepat,
+                            APEMAT as txt_apemat,
+                            EMAIL  as txt_email,
+                            TELEFONO as txt_telefono,
+                            COMISION as txt_comision');
+        $query = $this->db->get_where('tbl_vendedores',$param);
+        if( $query->num_rows > 0 ) {
+            return $query->row();
+        } else {
+            return FALSE;
+        }
+    }
+    public function update_vendedor(){
+        $this->id_vendedor = $this->session->userdata('id_vendedor');
+        if($this->input->post( 'txt_agencia_selec' ) == "---"){
+            $id_agencia = NULL;
+        } else {
+            $id_agencia = $this->input->post( 'txt_agencia_selec' );
+        }
+        $this->data  = array(
+                'id_agencia'=> $id_agencia,
+                'nombre'    => strtoupper($this->input->post( 'txt_nombre' ) ),
+                'apepat'    => strtoupper($this->input->post( 'txt_apepat' ) ),
+                'apemat'    => strtoupper($this->input->post( 'txt_apemat' ) ),
+                'email'     => $this->input->post( 'txt_email' ),
+                'telefono'  => $this->input->post( 'txt_telefono' ),
+                'comision'  => $this->input->post( 'txt_comision' ),
+            );
+        $param_vendedor     = array('IDVENDEDOR'=>$this->id_vendedor);
+        $this->db->trans_begin();
+        $this->db->update('tbl_vendedores',$this->data,$param_vendedor);
+        if($this->db->trans_status() === TRUE){
+            $this->db->trans_commit();
+            return array('status'=>TRUE,'msg'=>'<div class="alert alert-success">La información del vendedor <b>'. $this->data['nombre'].'</b> ha sido actualizada.</div>');
+        } else {
+            $this->db->trans_rollback();
+            return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");
+        }
+    }
     public function crear_agencia() {
         $this->data = array(
                 'NOMBRE'        => strtoupper($this->input->post('txt_nombre_agencia')),
@@ -77,7 +121,7 @@ class Sellers extends CI_Model {
         }
     }
     public function catalogo_agencias() {
-        $this->db->select('IDAGENCIA,NOMBRE,ABREVIACION');
+        $this->db->select('IDAGENCIA,NOMBRE,ABREVIACION,EMAIL,TELEFONO');
         $this->db->order_by("NOMBRE");
         $this->db->from('tbl_agencia');
         $queryC = $this->db->get();
@@ -85,6 +129,50 @@ class Sellers extends CI_Model {
             return $queryC->result_array();
         }
         return FALSE;
+    }
+    public function get_agencia(){
+        $param = array( 'IDAGENCIA'=>strtoupper( $this->input->post('agencia' ) ) );
+        $this->db->select(' IDAGENCIA as txt_id,
+                            NOMBRE as txt_nombre_agencia,
+                            ABREVIACION as txt_abrev,
+                            EMAIL  as txt_email,
+                            TELEFONO as txt_telefono');
+        $query = $this->db->get_where('tbl_agencia',$param);
+        if( $query->num_rows > 0 ) {
+            return $query->row();
+        } else {
+            return FALSE;
+        }
+    }
+    public function update_agencia(){
+        $this->id_agencia   = $this->session->userdata('id_agencia');
+        $this->abreviacion  = $this->session->userdata('abreviacion');
+        $this->data         = array(
+                'NOMBRE'        => strtoupper($this->input->post('txt_nombre_agencia')),
+                'ABREVIACION'   => strtoupper($this->input->post('txt_abrev')),
+                'EMAIL'         => strtoupper($this->input->post('txt_email')),
+                'TELEFONO'      => strtoupper($this->input->post('txt_telefono'))
+            );
+        
+        if( $this->data['ABREVIACION'] !== $this->abreviacion ){
+            $params = array( 'ABREVIACION'=>$this->data["ABREVIACION"] );
+            $this->db->select('ABREVIACION');
+            $validar_abrev = $this->db->get_where('tbl_agencia',$params);
+            if( $validar_abrev->num_rows() === 1 ) {
+                return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ya existe la abreviacion <b>".$this->data['ABREVIACION']."</b>, por favor elija una nueva</div>");
+            }
+        }
+
+        $param_agencia = array( 'IDAGENCIA' => $this->id_agencia );
+        $this->db->trans_begin();
+        $this->db->update( 'tbl_agencia' , $this->data , $param_agencia );
+        if($this->db->trans_status() === TRUE){
+            $this->db->trans_commit();
+            return array('status'=>TRUE,'msg'=>'<div class="alert alert-success">La información de la agencia <b>'. $this->data['NOMBRE'].'</b> ha sido actualizada.</div>');
+        } else {
+            $this->db->trans_rollback();
+            return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");
+        }
     }
     public function reporte_vendedores( ) {
         if($this->input->post('txt_fecha_ini') && $this->input->post('txt_fecha_fin'))

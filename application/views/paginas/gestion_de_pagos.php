@@ -18,182 +18,172 @@
             </ol>
         </div>
     </div>
-
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <div class="portlet portlet-default">
-            <div class="portlet-heading">
-                <div class="portlet-title">
-
-                    <h4>Búsqueda</h4>
-                </div>
-                <div class="clearfix"></div>
+    <div class="portlet portlet-default">
+        <div class="portlet-heading">
+            <div class="portlet-title">
+                <h4>Búsqueda</h4>
             </div>
-            <div class="portlet-body">
-                <?php echo validation_errors();
-                date_default_timezone_set("America/Mexico_City");
-                ?>
+            <div class="clearfix"></div>
+        </div>
+        <div class="portlet-body">
+            <?php echo validation_errors();
+            date_default_timezone_set("America/Mexico_City");
+            ?>
 
-                 <?php $attributes = array('id' => 'myform_ver_notas'); echo form_open(base_url().'gestion_de_pagos.html',$attributes); ?>
-                    <div class="row">
-                     <div class="form-group col-sm-12 col-md-12 col-lg-4">
-                         <label for="txt_cliente">Cliente</label>
-                         <select name="txt_cliente" class="form-control input-sm"  id="txt_cliente">
-                         <option value="---">Seleccionar cliente</option>
-                          <?php
-                            if(!empty($clientes)){
-                                foreach($clientes as $current){
-                                    $nombre = ($current['R_SOCIAL'] == '') ? $current['NOMBRE'].' '.$current['APEPAT'].' '.$current['APEMAT'] : $current['R_SOCIAL'];
-                                    echo '<option value="'.$current['RFC'].'" '.set_select("txt_cliente",$current['RFC']).'>'.$nombre.'</option>';
-                                }
+             <?php $attributes = array('id' => 'myform_ver_notas'); echo form_open(base_url().'gestion_de_pagos.html',$attributes); ?>
+                <div class="row">
+                 <div class="form-group col-sm-12 col-md-12 col-lg-4">
+                     <label for="txt_cliente">Cliente</label>
+                     <select name="txt_cliente" class="form-control input-sm"  id="txt_cliente">
+                     <option value="---">Seleccionar cliente</option>
+                      <?php
+                        if(!empty($clientes)){
+                            foreach($clientes as $current){
+                                $nombre = ($current['R_SOCIAL'] == '') ? $current['NOMBRE'].' '.$current['APEPAT'].' '.$current['APEMAT'] : $current['R_SOCIAL'];
+                                echo '<option value="'.$current['RFC'].'" '.set_select("txt_cliente",$current['RFC']).'>'.$nombre.'</option>';
                             }
-                         ?>
-                         </select>
-                     </div>
-                        <div class="form-group col-sm-6 col-md-6 col-lg-2">
-                      <label for="txt_fecha_i" >Fecha inicial</label>
-                            <div class="input-group date" id="fecha_ini_container" >
-
-                                <?php
-
-                                    $fecha_a = localtime(time(), 1);
-                                    $anyo_a  = $fecha_a["tm_year"] + 1900;
-                                    $mes_a   = $fecha_a["tm_mon"] + 1;
-                                    $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
-                                    $dia_a   = 1;
-
-
-                                    $fechaI = '0'.$dia_a.'/'.$mes_a.'/'.$anyo_a;
-
-                                ?>
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_i" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_i" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
-                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
-                            </div>
-
-                    </div>
+                        }
+                     ?>
+                     </select>
+                 </div>
                     <div class="form-group col-sm-6 col-md-6 col-lg-2">
-                      <label for="txt_fecha_f" >Fecha Final</label>
-                        <div class="input-group date" id="fecha_fin_container" >
+                  <label for="txt_fecha_i" >Fecha inicial</label>
+                        <div class="input-group date" id="fecha_ini_container" >
 
                             <?php
+
                                 $fecha_a = localtime(time(), 1);
                                 $anyo_a  = $fecha_a["tm_year"] + 1900;
+                                $mes_a   = $fecha_a["tm_mon"] + 1;
                                 $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
-                                $dia_a   = ( ($dia_a = $fecha_a["tm_mday"]) <10 ) ? '0'.$dia_a: $dia_a;
+                                $dia_a   = 1;
 
-                                $fechaI = $dia_a.'/'.$mes_a.'/'.$anyo_a;
+
+                                $fechaI = '0'.$dia_a.'/'.$mes_a.'/'.$anyo_a;
+
                             ?>
-                            <input class="form-control input-sm" size="16" type="text" id="txt_fecha_f" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_f" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
+                            <input class="form-control input-sm" size="16" type="text" id="txt_fecha_i" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_i" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
                             <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                         </div>
-                    </div>
-                     <div class="form-group col-sm-12 col-md-12 col-lg-2">
-                        <br>
-                           <button type="submit" class="btn btn-red pull-right">Buscar</button>
-                    </div>
-                    </div>
-                    <hr>
 
-                </form>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <p class="text-info">Seleccione una acción para los traslados que ha seleccionado</p>
-                    </div>
-                    <div class="col-xs-12 col-sm-3 center-block">
-                        <button class="btn btn-success btn-lg center-block" id="btnPayFactSelection">Pagar y Facturar $</button>
-                    </div>
-                    <div class="col-xs-12 col-sm-3 center-block">
-                        <button class="btn btn-success btn-lg center-block" id="btnPaySelection">Pagar $</button>
-                    </div>
-                    <div class="col-xs-12 col-sm-3 center-block">
-                        <button class="btn btn-success btn-lg center-block" id="btnFactSelection">Facturar $</button>
+                </div>
+                <div class="form-group col-sm-6 col-md-6 col-lg-2">
+                  <label for="txt_fecha_f" >Fecha Final</label>
+                    <div class="input-group date" id="fecha_fin_container" >
+
+                        <?php
+                            $fecha_a = localtime(time(), 1);
+                            $anyo_a  = $fecha_a["tm_year"] + 1900;
+                            $mes_a   = ( ($mes_a = $fecha_a["tm_mon"] + 1 ) < 10)  ? '0'.$mes_a : $mes_a;
+                            $dia_a   = ( ($dia_a = $fecha_a["tm_mday"]) <10 ) ? '0'.$dia_a: $dia_a;
+
+                            $fechaI = $dia_a.'/'.$mes_a.'/'.$anyo_a;
+                        ?>
+                        <input class="form-control input-sm" size="16" type="text" id="txt_fecha_f" data-date-viewmode="days" data-date="01/01/2013" data-date-format="dd/mm/yyyy" name="txt_fecha_f" value="<?php echo $fechaI; ?>"  readonly style="cursor:pointer !important">
+                        <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                     </div>
                 </div>
+                 <div class="form-group col-sm-12 col-md-12 col-lg-2">
+                    <br>
+                       <button type="submit" class="btn btn-red pull-right">Buscar</button>
+                </div>
+                </div>
+                <hr>
 
-
- <hr>
-
-
-                <?php echo $error; echo $success; ?>
-                    <?php
-                        if(!empty($pagos) && is_array($pagos)){
-
-                    ?>
-                        <div class="table-responsive">
-                            <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Folio</th>
-                                        <th>Cliente</th>
-                                        <th width="200">Pasajero</th>
-                                        <th>Chofer</th>
-                                        <th>Vehiculo</th>
-                                        <th>Ruta</th>
-                                        <th>Cantidad a Pagar</th>
-                                        <th>Fecha de Traslado</th>
-                                        <th>Fecha de Pago</th>
-                                        <th>Pagar</th>
-                                        <th>Status</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody id="table_traslados_pagos" class="text-center">
-                                    <?php
-                                        foreach ($pagos as $item) {
-                                    ?>
-                                        <tr class="text-center">
-                                            <td><?php echo $item['ID'] ?></td>
-                                            <td  id="comprobante_<?php echo $item['ID'] ?>"><?php echo (($item['IDCOMPROBANTE'] =='')?'N/D':$item['IDCOMPROBANTE']) ?></td>
-                                            <td><?php if($item['CLIENTE'] == ''){ echo $item['NOMBRE'];}else{echo $item['CLIENTE'];} ?></td>
-                                            <td width="200"><?php echo $item['N_PASAJERO'] ?></td>
-                                            <td><?php echo $item['NOMBRECH'] ?></td>
-                                            <td><?php echo $item['MODELO'] ?></td>
-                                            <td><?php echo $item['RUTA'] ?></td>
-                                            <td><?php echo "$".$item['MONTO'] ?></td>
-                                            <td><?php echo $item['FECHA'] ?></td>
-                                            <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
-                                            <td >
-                                                <input  type="checkbox" class="chk_payment" data-id="<?php echo $item['ID'] ?>" id="chk_payment_<?php echo $item['ID'] ?>">
-
-                                            </td>
-                                        <?php  if ($item['PAGADO'] == 'NO' && $item['IDCOMPROBANTE'] == ''): ?>
-                                            <td class="text-center text-danger" >
-                                                <strong>PENDIENTE</strong>
-                                            </td>
-                                        <?php  elseif ($item['PAGADO'] == 'SI' && $item['IDCOMPROBANTE'] == ''): ?>
-                                            <td class="text-center text-warning" >
-                                                <strong>PAGADO</strong>
-                                            </td>
-                                        <?php  elseif ($item['PAGADO'] == 'NO' && $item['IDCOMPROBANTE'] != ''): ?>
-                                            <td class="text-center text-warning" >
-                                                <strong>FACTURADO</strong>
-                                            </td>
-                                        <?php else:?>
-                                            <td class="text-center text-success" >
-                                                <strong>PAGADO / FACTURADO</strong>
-                                            </td>
-                                        <?php endif ?>
-                                                
-                                        </tr>
-                                            
-                                    <?php
-                                        } //llave foreach
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <div class="row">
-                       <div class="col-sm-2">
-                           <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>
-                       </div>
-                    </div>
-
-                     <?php
-                        }//llave if
-                     ?>
+            </form>
+            <div class="row">
+                <div class="col-xs-12">
+                    <p class="text-info">Seleccione una acción para los traslados que ha seleccionado</p>
+                </div>
+                <div class="col-xs-12 col-sm-3 center-block">
+                    <button class="btn btn-success btn-lg center-block" id="btnPayFactSelection">Pagar y Facturar $</button>
+                </div>
+                <div class="col-xs-12 col-sm-3 center-block">
+                    <button class="btn btn-success btn-lg center-block" id="btnPaySelection">Pagar $</button>
+                </div>
+                <div class="col-xs-12 col-sm-3 center-block">
+                    <button class="btn btn-success btn-lg center-block" id="btnFactSelection">Facturar $</button>
+                </div>
             </div>
+            <hr>
+            <?php echo $error; echo $success; ?>
+                <?php
+                    if(!empty($pagos) && is_array($pagos)){
+                ?>
+                    <div class="table-responsive">
+                        <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Folio</th>
+                                    <th>Cliente</th>
+                                    <th width="200">Pasajero</th>
+                                    <th>Chofer</th>
+                                    <th>Vehiculo</th>
+                                    <th>Ruta</th>
+                                    <th>Cantidad a Pagar</th>
+                                    <th>Fecha de Traslado</th>
+                                    <th>Fecha de Pago</th>
+                                    <th>Pagar</th>
+                                    <th>Status</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="table_traslados_pagos" class="text-center">
+                                <?php
+                                    foreach ($pagos as $item) {
+                                ?>
+                                    <tr class="text-center">
+                                        <td><?php echo $item['ID'] ?></td>
+                                        <td  id="comprobante_<?php echo $item['ID'] ?>"><?php echo (($item['IDCOMPROBANTE'] =='')?'N/D':$item['IDCOMPROBANTE']) ?></td>
+                                        <td><?php if($item['CLIENTE'] == ''){ echo $item['NOMBRE'];}else{echo $item['CLIENTE'];} ?></td>
+                                        <td width="200"><?php echo $item['N_PASAJERO'] ?></td>
+                                        <td><?php echo $item['NOMBRECH'] ?></td>
+                                        <td><?php echo $item['MODELO'] ?></td>
+                                        <td><?php echo $item['RUTA'] ?></td>
+                                        <td><?php echo "$".$item['MONTO'] ?></td>
+                                        <td><?php echo $item['FECHA'] ?></td>
+                                        <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
+                                        <td >
+                                            <input  type="checkbox" class="chk_payment" data-id="<?php echo $item['ID'] ?>" id="chk_payment_<?php echo $item['ID'] ?>">
+
+                                        </td>
+                                    <?php  if ($item['PAGADO'] == 'NO' && $item['IDCOMPROBANTE'] == ''): ?>
+                                        <td class="text-center text-danger" >
+                                            <strong>PENDIENTE</strong>
+                                        </td>
+                                    <?php  elseif ($item['PAGADO'] == 'SI' && $item['IDCOMPROBANTE'] == ''): ?>
+                                        <td class="text-center text-warning" >
+                                            <strong>PAGADO</strong>
+                                        </td>
+                                    <?php  elseif ($item['PAGADO'] == 'NO' && $item['IDCOMPROBANTE'] != ''): ?>
+                                        <td class="text-center text-warning" >
+                                            <strong>FACTURADO</strong>
+                                        </td>
+                                    <?php else:?>
+                                        <td class="text-center text-success" >
+                                            <strong>PAGADO / FACTURADO</strong>
+                                        </td>
+                                    <?php endif ?>
+                                            
+                                    </tr>
+                                        
+                                <?php
+                                    } //llave foreach
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <div class="row">
+                   <div class="col-sm-2">
+                       <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>
+                   </div>
+                </div>
+                 <?php
+                    }//llave if
+                 ?>
         </div>
     </div>
 </div>

@@ -112,6 +112,11 @@ $route['catalogo_vendedores'] 			= 'vendedores/catalogo_vendedores';
 $route['estadisticas_vendedores'] 		= 'vendedores/estaditicas_vendedores';
 $route['catalogo_agencias'] 			= 'vendedores/catalogo_agencias';
 $route['nueva_agencia'] 				= 'vendedores/nueva_agencia';
+$route['ver_vendedor'] 					= 'vendedores/informacion_vendedor';
+$route['actualizar_vendedor']			= 'vendedores/update_info_vendedor';
+$route['agencias'] 						= 'vendedores/agencias';
+$route['ver_agencia'] 					= 'vendedores/informacion_agencia';
+$route['actualizar_agencia'] 			= 'vendedores/update_agencia';
 
 $route['home'] 							= 'home';
 $route['salir'] 						= 'home/logout';

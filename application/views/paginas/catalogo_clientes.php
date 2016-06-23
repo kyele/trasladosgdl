@@ -14,85 +14,78 @@
     });
 </script>
 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="page-title">
-                            <h1>Clientes
-                                <small>Catálogo</small>
-                            </h1>
-                           <ol class="breadcrumb">
-                                <li><i class="fa fa-dashboard"></i>  <a href="<?php echo base_url() ?>home.html">Inicio</a>
-                                </li>
-                                <li class="active">Catálogo de Clientes</li>
-                            </ol>
-                        </div>
-                    </div>
-                    
+    <div class="col-lg-12">
+        <div class="page-title">
+            <h1>Clientes
+                <small>Catálogo</small>
+            </h1>
+           <ol class="breadcrumb">
+                <li class="active"><i class="fa fa-desktop"></i>  <a href="<?php echo base_url() ?>home.html">Inicio</a></li>
+                <li><i class="fa fa-users"></i> Catálogo de Clientes</li>
+            </ol>
+        </div>
+    </div>                    
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <div class="portlet portlet-default">
-            <div class="portlet-heading">
-                <div class="portlet-title">
-                
-                    <h4>Listado</h4>
-                </div>
-                <div class="clearfix"></div>
+    <div class="portlet portlet-default">
+        <div class="portlet-heading">
+            <div class="portlet-title">
+            
+                <h4>Listado</h4>
             </div>
-            <div class="portlet-body">
-                <?php echo $error; echo $success; ?>
-                    <?php 
-                        if(!empty($clientes)){
+            <div class="clearfix"></div>
+        </div>
+        <div class="portlet-body">
+            <?php echo $error; echo $success; ?>
+                <?php 
+                    if(!empty($clientes)){
 
-                    ?>
-                        <div class="table-responsive">
-                            <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green" style="font-size:12px;">
-                                <thead>
+                ?>
+                    <div class="table-responsive">
+                        <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green" style="font-size:12px;">
+                            <thead>
+                                <tr>
+                                    <th>RFC</th>
+                                    <th>Razón Social</th>
+                                    <th>Nombre</th>
+                                    <th>Teléfono</th>
+                                    <th>Adeudos</th>
+                                    <th>Detalle</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="table_clientes">
+                                <?php 
+                                    foreach ($clientes as $item) {
+                                ?>
                                     <tr>
-                                        <th>RFC</th>
-                                        <th>Razón Social</th>
-                                        <th>Nombre</th>
-                                        <th>Teléfono</th>
-                                        <th>Adeudos</th>
-                                        <th>Detalle</th>
-                                        
+                                        <td><?php echo $item['RFC'] ?></td>
+                                        <td><?php echo $item['R_SOCIAL'] ?></td>
+                                        <td><?php echo $item['NOMBRE'].' '.$item['APEPAT'].' '.$item['APEMAT']?></td>
+                                        <td><?php echo $item['TELEFONO_1']?> </td>
+                                        <td class="text-center"><a title="ver" class="text-success btn-adeudo" data-ref="<?php echo $item['RFC'] ?>"><span class="fa fa-file-excel-o fa-2x"></span></a></td>
+                                        <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $item["RFC"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
                                     </tr>
-                                </thead>
-                                <tbody id="table_clientes">
-                                    <?php 
-                                        foreach ($clientes as $item) {
-                                    ?>
-                                        <tr>
-                                            <td><?php echo $item['RFC'] ?></td>
-                                            <td><?php echo $item['R_SOCIAL'] ?></td>
-                                            <td><?php echo $item['NOMBRE'].' '.$item['APEPAT'].' '.$item['APEMAT']?></td>
-                                            <td><?php echo $item['TELEFONO_1']?> </td>
-                                            <td class="text-center"><a title="ver" class="text-success btn-adeudo" data-ref="<?php echo $item['RFC'] ?>"><span class="fa fa-file-excel-o fa-2x"></span></a></td>
-                                            <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $item["RFC"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
-                                        </tr>
-                                    <?php
-                                        } //llave foreach
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <div class="row">
-                       <div class="col-sm-2">
-                           <a href="<?php echo base_url() ?>nuevo_cliente.html" class='btn btn-red'>Nuevo Cliente</a>   
-                       </div>
+                                <?php
+                                    } //llave foreach
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
+                <div class="row">
+                   <div class="col-sm-2">
+                       <a href="<?php echo base_url() ?>nuevo_cliente.html" class='btn btn-red'>Nuevo Cliente</a>   
+                   </div>
+                </div>
 
-                     <?php
-                        }//llave if
-                     ?>
+                 <?php
+                    }//llave if
+                 ?>
 
 
-            </div>
-          
-        </div>    
-
-    </div>   
+        </div>
+    </div>
 </div>
-
     
 <div class="modal modal-flex fade" id="modal_cliente" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">

@@ -121,28 +121,24 @@ class Choferes extends CI_Controller
 			$this->load->view('main_template',$data);
 	}
 	public function informacion_chofer(){
-		if($this->input->is_ajax_request() && $this->input->post('chofer')){
+		if( $this->input->is_ajax_request() && $this->input->post( 'chofer' ) ) {
 			$result = $this->drivers->get_chofer();
-			if($result === FALSE){
-				$data = array('status'=> FALSE,'msg'=>'<div class="alert alert-danger">No se encontraron resultados para mostrar</div>');
-				echo json_encode($data);
-			}else{
-				
-				$this->session->set_userdata('rfc_chofer',strtoupper($this->input->post('chofer')));
-				$this->session->set_userdata('nss_chofer',$result->txt_nss);
-				$this->session->set_userdata('curp_chofer',strtoupper($result->txt_curp));
-
-				$data = array('status'=>TRUE,'chofer'=>$result);
-				echo json_encode($data);
+			if( $result === FALSE ) {
+				$data = array( 'status'=> FALSE , 'msg'=>'<div class="alert alert-danger">No se encontraron resultados para mostrar</div>' );
+				echo json_encode( $data );
+			}else {				
+				$this->session->set_userdata( 'rfc_chofer' , strtoupper( $this->input->post( 'chofer' ) ) );
+				$this->session->set_userdata( 'nss_chofer' , $result->txt_nss );
+				$this->session->set_userdata( 'curp_chofer' , strtoupper( $result->txt_curp ) );
+				$data = array( 'status'=>TRUE , 'chofer'=>$result );
+				echo json_encode( $data );
 			}
-		}
-		else{
+		} else{
 			show_404();
-		}
-		
+		}		
 	}
 	public function update_info_chofer(){
-		if($this->input->is_ajax_request()){
+		if( $this->input->is_ajax_request() ) {
 			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
 			$this->form_validation->set_rules('txt_rfc', 'RFC', 'required|trim|xss_clean|exact_length[10]');
 			$this->form_validation->set_rules('txt_nombre','Nombre', 'required|trim|xss_clean');
@@ -165,20 +161,15 @@ class Choferes extends CI_Controller
 			$this->form_validation->set_rules('txt_salario', 'Salario', 'trim|numeric|required|max_length[10]|xss_clean');
 			$this->form_validation->set_rules('txt_observaciones', 'Observaciones', 'trim|max_length[50]|xss_clean');
 			$this->form_validation->set_message('required', 'El  %s es requerido');
-
-			if ($this->form_validation->run() === FALSE)
-			{ 
-				$data = array('msg'=>validation_errors(),'status'=>FALSE);
+			if ( $this->form_validation->run() === FALSE ) { 
+				$data = array( 'msg'=>validation_errors() , 'status'=>FALSE );
 				echo json_encode($data);
-			}
-			else
-			{
+			} else {
 				$result =   $this->drivers->update_chofer();
 				$data = array('status'=>$result['status'],'msg'=>$result['msg']);
 				echo json_encode($data);
 			}
-		}
-		else{
+		} else {
 			show_404();
 		}
 	}

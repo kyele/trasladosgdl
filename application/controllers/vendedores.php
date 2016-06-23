@@ -80,15 +80,61 @@ class Vendedores extends CI_Controller
 		if(($data['vendedores']) === FALSE){
 			$this->error_msg = '<div class="alert  text-danger">No hay vendedores Registrados en el sistema. Registre uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_vendedor.html">Aquí</a></div>';
 		}
-		$data['nombre'] = $this->session_data['nombre'];
-		$data['apellido'] = $this->session_data['apellido'];
-		$data['usuario_i'] = $this->session_data['usuario_i'];
-		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
-		$data['success'] = $this->success;
-		$data['error'] = $this->error_msg;
-                $data['titulo'] = 'Catalogo de vendedores';
-		$data['content']  = 'catalogo_vendedores';
+		$data['agencias']  		= $this->sellers->catalogo_agencias();
+		$data['nombre'] 		= $this->session_data['nombre'];
+		$data['apellido'] 		= $this->session_data['apellido'];
+		$data['usuario_i'] 		= $this->session_data['usuario_i'];
+		$data['imagen_perfil'] 	= $this->session_data['imagen_perfil'];
+		$data['success'] 		= $this->success;
+		$data['error'] 			= $this->error_msg;
+        $data['titulo'] 		= 'Catalogo de vendedores';
+		$data['content']  		= 'catalogo_vendedores';
 		$this->load->view('main_template',$data);
+	}
+	public function informacion_vendedor(){
+		if( $this->input->is_ajax_request() && $this->input->post( 'vendedor' ) ) {
+			$result = $this->sellers->get_vendedor();
+			if( $result === FALSE ) {
+				$data = array( 'status'=> FALSE , 'msg'=>'<div class="alert alert-danger">No se encontraron resultados para mostrar</div>' );
+				echo json_encode( $data );
+			}else {				
+				$this->session->set_userdata( 'id_vendedor' , 	strtoupper( $this->input->post( 'vendedor' ) ) );
+				$this->session->set_userdata( 'id_agencia' , 	$result->txt_agencia_selec );
+				$this->session->set_userdata( 'nombre' ,		$result->txt_nombre );
+				$this->session->set_userdata( 'apepat' ,		$result->txt_apepat );
+				$this->session->set_userdata( 'apemat' ,		$result->txt_apemat );
+				$this->session->set_userdata( 'correo' ,		$result->txt_email );
+				$this->session->set_userdata( 'telefono' , 		$result->txt_telefono );
+				$this->session->set_userdata( 'comision' , 		$result->txt_comision );
+				$data = array( 'status'=>TRUE , 'vendedor'=>$result );
+				echo json_encode( $data );
+			}
+		} else{
+			show_404();
+		}		
+	}
+	public function update_info_vendedor() {
+		if( $this->input->is_ajax_request() ) {
+			$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
+			$this->form_validation->set_rules('txt_nombre','Nombre', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_apepat','Apellido Paterno', 'required|trim|xss_clean');
+			$this->form_validation->set_rules('txt_apemat','Apellido Materno', 'required|trim|xss_clean|xss_clean');
+			$this->form_validation->set_rules('txt_email','Correo Electronico', 'valid_email|trim|xss_clean');
+			$this->form_validation->set_rules('txt_telefono', 'Teléfono', 'trim|exact_length[10]|xss_clean');
+			$this->form_validation->set_rules('txt_comision', 'Comision', 'trim|required|numeric|xss_clean');
+	        $this->form_validation->set_message('required', 'El  %s es requerido');
+	       	$this->form_validation->set_message('valid_email', 'El %s no es válido');
+			if ( $this->form_validation->run() === FALSE ) { 
+				$data = array( 'msg'=>validation_errors() , 'status'=>FALSE );
+				echo json_encode($data);
+			} else {
+				$result =   $this->sellers->update_vendedor();
+				$data = array( 'status'=>$result['status'] , 'msg'=>$result['msg'] );
+				echo json_encode($data);
+			}
+		} else {
+			show_404();
+		}
 	}
 	public function estaditicas_vendedores() {
 		$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
@@ -149,6 +195,60 @@ class Vendedores extends CI_Controller
                 echo json_encode($result);
             }
 		}else {
+			show_404();
+		}
+	}
+	public function agencias( ) {
+		$data['agencias']  		= $this->sellers->catalogo_agencias();
+		if( ($data['agencias']) === FALSE ) {
+			$this->error_msg 	= '<div class="alert  text-danger">No hay Agencias Registradas en el Sistema.</div>';
+		}
+		$data['agencias']  		= $this->sellers->catalogo_agencias();
+		$data['nombre'] 		= $this->session_data['nombre'];
+		$data['apellido'] 		= $this->session_data['apellido'];
+		$data['usuario_i'] 		= $this->session_data['usuario_i'];
+		$data['imagen_perfil'] 	= $this->session_data['imagen_perfil'];
+		$data['success'] 		= $this->success;
+		$data['error'] 			= $this->error_msg;
+        $data['titulo'] 		= 'Catalogo de Agencias';
+		$data['content']  		= 'catalogo_agencias';
+		$this->load->view('main_template',$data);
+	}
+	public function informacion_agencia(){
+		if( $this->input->is_ajax_request() && $this->input->post( 'agencia' ) ) {
+			$result = $this->sellers->get_agencia();
+			if( $result === FALSE ) {
+				$data = array( 'status'=> FALSE , 'msg'=>'<div class="alert alert-danger">No se encontraron resultados para mostrar</div>' );
+				echo json_encode( $data );
+			}else {				
+				$this->session->set_userdata( 'id_agencia' , 	strtoupper( $this->input->post( 'agencia' ) ) );
+				$this->session->set_userdata( 'nombre' ,		$result->txt_nombre_agencia );
+				$this->session->set_userdata( 'abreviacion' ,	$result->txt_abrev );
+				$this->session->set_userdata( 'correo' ,		$result->txt_email );
+				$this->session->set_userdata( 'telefono' , 		$result->txt_telefono );
+				$data = array( 'status'=>TRUE , 'vendedor'=>$result );
+				echo json_encode( $data );
+			}
+		} else{
+			show_404();
+		}		
+	}
+	public function update_agencia() {
+		if( $this->input->is_ajax_request() ) {
+			$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
+			$this->form_validation->set_rules('txt_nombre_agencia', 'Nombre Agencia', 'required|trim|xss_clean');
+            $this->form_validation->set_rules('txt_abrev', 'Abreviacion', 'required|trim|exact_length[3]|xss_clean');
+            $this->form_validation->set_rules('txt_email','Correo Electronico', 'valid_email|trim|xss_clean');
+            $this->form_validation->set_rules('txt_telefono', 'Teléfono', 'trim|exact_length[10]|xss_clean');
+			if ( $this->form_validation->run() === FALSE ) { 
+				$data = array( 'msg'=>validation_errors() , 'status'=>FALSE );
+				echo json_encode($data);
+			} else {
+				$result =   $this->sellers->update_agencia();
+				$data = array( 'status'=>$result['status'] , 'msg'=>$result['msg'] );
+				echo json_encode($data);
+			}
+		} else {
 			show_404();
 		}
 	}

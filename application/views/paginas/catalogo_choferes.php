@@ -19,71 +19,68 @@
             <h1>Choferes
                 <small>Catálogo</small>
             </h1>
-           <ol class="breadcrumb">
-                <li><i class="fa fa-dashboard"></i>  <a href="<?php echo base_url() ?>home.html">Inicio</a>
-                </li>
-                <li class="active">Catálogo de Choferes</li>
+            <ol class="breadcrumb">
+                <li class="active"><i class="fa fa-desktop"></i>  <a href="<?php echo base_url() ?>home.html">Inicio</a></li>
+                <li><i class="fa fa-truck"></i> Catálogo de Choferes</li>
             </ol>
         </div>
     </div>                    
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <div class="portlet portlet-default">
-            <div class="portlet-heading">
-                <div class="portlet-title">
-                    <h4>Listado</h4>
-                </div>
-                <div class="clearfix"></div>
+    <div class="portlet portlet-default">
+        <div class="portlet-heading">
+            <div class="portlet-title">
+                <h4>Listado</h4>
             </div>
-            <div class="portlet-body">
-                <?php echo $error; echo $success; ?>
-                <?php 
-                    if(!empty($choferes)){
-                ?>
-                    <div class="table-responsive">
-                        <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green" style="font-size:12px;">
-                            <thead>
-                                <tr>
-                                    <th>RFC</th>
-                                    <th>Nombre</th>
-                                    <th>Teléfono</th>
-                                    <th>Disponible</th>
-                                    <th>Detalle</th>
-                                    <th>Traslados</th>
-                                    <th>Desactivar</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table_choferes">
-                                <?php 
-                                    foreach ($choferes as $item) {
-                                ?>
-                                    <tr class='<?php echo ($item["SITUACION"] ==="B") ? "danger": ""; ?>'>
-                                        <td><?php echo $item['IDCHOFER'] ?></td>
-                                        <td><?php echo $item['NOMBRE'] ?></td>
-                                        <td><?php echo $item['TELEFONO1'] ?></td>
-                                        <td><?php echo ($item['DISPONIBILIDAD'] == 1) ? 'SI':'NO' ?></td>
-                                        <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $item["IDCHOFER"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
-                                        <td class="text-center"><a title="ver" class="text-success btn-myRides" data-nombrech ="<?php echo $item['NOMBRE'] ?>" data-ref="<?php echo $item['IDCHOFER'] ?>"><span class="fa fa-file-excel-o fa-2x"></span></a></td>
-                                        <td class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["IDCHOFER"] ?>'  <?php echo ($item["SITUACION"] === "A" ) ? "checked": "";?> ></td>
-                                    </tr>
-                                <?php
-                                    } //llave foreach
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <div class="row">
-                   <div class="col-sm-2">
-                       <a href="<?php echo base_url() ?>nuevo_chofer.html" class='btn btn-red'>Nuevo Chofer</a>   
-                   </div>
-                </div>
-                 <?php
-                    }//llave if
-                 ?>
-            </div>          
+            <div class="clearfix"></div>
         </div>
-    </div>   
+        <div class="portlet-body">
+            <?php echo $error; echo $success; ?>
+            <?php 
+                if(!empty($choferes)){
+            ?>
+                <div class="table-responsive">
+                    <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green" style="font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th>RFC</th>
+                                <th>Nombre</th>
+                                <th>Teléfono</th>
+                                <th>Disponible</th>
+                                <th>Detalle</th>
+                                <th>Traslados</th>
+                                <th>Desactivar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table_choferes">
+                            <?php 
+                                foreach ($choferes as $item) {
+                            ?>
+                                <tr class='<?php echo ($item["SITUACION"] ==="B") ? "danger": ""; ?>'>
+                                    <td><?php echo $item['IDCHOFER'] ?></td>
+                                    <td><?php echo $item['NOMBRE'] ?></td>
+                                    <td><?php echo $item['TELEFONO1'] ?></td>
+                                    <td><?php echo ($item['DISPONIBILIDAD'] == 1) ? 'SI':'NO' ?></td>
+                                    <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $item["IDCHOFER"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
+                                    <td class="text-center"><a title="ver" class="text-success btn-myRides" data-nombrech ="<?php echo $item['NOMBRE'] ?>" data-ref="<?php echo $item['IDCHOFER'] ?>"><span class="fa fa-file-excel-o fa-2x"></span></a></td>
+                                    <td class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["IDCHOFER"] ?>'  <?php echo ($item["SITUACION"] === "A" ) ? "checked": "";?> ></td>
+                                </tr>
+                            <?php
+                                } //llave foreach
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            <div class="row">
+               <div class="col-sm-2">
+                   <a href="<?php echo base_url() ?>nuevo_chofer.html" class='btn btn-red'>Nuevo Chofer</a>   
+               </div>
+            </div>
+             <?php
+                }//llave if
+             ?>
+        </div>          
+    </div> 
 </div>    
 <div class="modal modal-flex fade" id="modal_chofer" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">

@@ -93,6 +93,52 @@ var obj = {
 				}
 			});
  		});
+ 		$('#myform_info_vendedor').submit(function(e){
+			e.preventDefault();
+			$.ajax({
+				url:$(this).attr('action'),
+				type:'POST',
+				dataType:'json',
+				data:$(this).serialize(),
+				success:function(data){
+					(!data.status)?function(){
+						$('#contError').html(data.msg);
+					}
+					():function(){
+						$('#contError').empty().html(data.msg);
+						setTimeout(function(){
+							location.reload();
+						},2000);
+					}();
+				},
+				error:function(){
+					$('#contError').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
+				}
+			});
+ 		});
+ 		$('#myform_info_agencia').submit(function(e){
+			e.preventDefault();
+			$.ajax({
+				url:$(this).attr('action'),
+				type:'POST',
+				dataType:'json',
+				data:$(this).serialize(),
+				success:function(data){
+					(!data.status)?function(){
+						$('#contError').html(data.msg);
+					}
+					():function(){
+						$('#contError').empty().html(data.msg);
+						setTimeout(function(){
+							location.reload();
+						},2000);
+					}();
+				},
+				error:function(){
+					$('#contError').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
+				}
+			});
+ 		});
  	},
  	modal:function(rfc){
  		url_img = this.url;
@@ -137,8 +183,7 @@ var obj = {
 					$('#myform_my_rides [input]').val('');
 					$('#nombre_chofer_tr').html('');
 				});
- 	},
- 	
+ 	}, 	
  	update_status:function(id,status){
  		id_tmp = id.split('_');
  		$.ajax({
@@ -185,9 +230,7 @@ var obj = {
 	 					}
  					);
  			}
- 		});
- 		
- 		
+ 		}); 		
  	},
  	update_user:function(id,status){
  		id_tmp = id.split('_');
@@ -236,14 +279,69 @@ var obj = {
  					);
  			}
  		});
- 		
- 		
+ 	},
+ 	modal_vendedores:function(id){
+ 		$.ajax({
+			url:this.url+'ver_vendedor.html',
+			type:'POST',
+			dataType:'json',
+			data:{'vendedor':id},
+			beforeSend:function(data){				
+			},
+			success:function(data){
+				if(data.status){
+					$('#modal_vendedor').modal({ 
+			            backdrop:'static',
+			            keyboard:true 
+      				}).on('shown.bs.modal',function(e){
+      					if(data.vendedor['txt_agencia_selec'] == null) {
+      						data.vendedor['txt_agencia_selec'] = '---';
+      					}
+		                $.each(data.vendedor,function(key,value){
+        	    			$('#'+key).val(value);	
+            			});
+            			$('#txt_agencia_selec').select2();
+     				}).on('hidden.bs.modal',function(){
+     					$('#myform_info_vendedor [input]').val('');
+     				});
+				}
+				
+			},
+			error:function(){				
+			}
+ 		});
+ 	},
+ 	modal_agencias:function(id){
+ 		$.ajax({
+			url:this.url+'ver_agencia.html',
+			type:'POST',
+			dataType:'json',
+			data:{'agencia':id},
+			beforeSend:function(data){				
+			},
+			success:function(data){
+				if(data.status){
+					$('#modal_agencia').modal({ 
+			            backdrop:'static',
+			            keyboard:true 
+      				}).on('shown.bs.modal',function(e){
+		                $.each(data.vendedor,function(key,value){
+        	    			$('#'+key).val(value);	
+            			});
+     				}).on('hidden.bs.modal',function(){
+     					$('#myform_info_agencia [input]').val('');
+     				});
+				}
+				
+			},
+			error:function(){				
+			}
+ 		});
  	}
 };
 
 $(document).ready(function(){
 	obj.initialize();
 	obj.alta_usuarios();
-	obj.init_components();
-	
+	obj.init_components();	
 });

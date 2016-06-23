@@ -24,124 +24,120 @@
             <small>Agenda</small>
         </h1>
        <ol class="breadcrumb">
-            <li><i class="fa fa-dashboard"></i>  <a href="<?php echo base_url() ?>home.html">Inicio</a>
-            </li>
-            <li class="active">Agenda de Traslados</li>
+            <li class="active"><i class="fa fa-desktop"></i><a href="<?php echo base_url() ?>home.html"> Inicio</a></li>
+            <li class="active"><i class="fa fa-plane"></i> Agenda de Traslados</li>
         </ol>
     </div>
 </div>
-
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <div class="portlet portlet-default">
-            <div class="portlet-heading">
-                <div class="portlet-title">
-                    <h4>Listado</h4>
-                </div>
-                <div class="clearfix"></div>
+    <div class="portlet portlet-default">
+        <div class="portlet-heading">
+            <div class="portlet-title">
+                <h4>Listado</h4>
             </div>
-            <div class="portlet-body">
-                <?php echo $error; echo $success; ?>
-                <?php echo validation_errors();?>
-                 <?php $attributes = array('id' => 'myform_agendafecha_traslados'); echo form_open(base_url().'agenda_de_traslados.html',$attributes); ?>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-md-6 col-lg-2">
-                                <label for="txt_fecha_ini" >Fecha inicial</label>
+            <div class="clearfix"></div>
+        </div>
+        <div class="portlet-body">
+            <?php echo $error; echo $success; ?>
+            <?php echo validation_errors();?>
+             <?php $attributes = array('id' => 'myform_agendafecha_traslados'); echo form_open(base_url().'agenda_de_traslados.html',$attributes); ?>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                            <label for="txt_fecha_ini" >Fecha inicial</label>
 
-                                <div class="input-group date" id="fecha_ini_container" >
-                                    <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly style="cursor:pointer !important">
-                                    <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
-                                </div>
-
-                        </div>
-                        <div class="form-group col-sm-12 col-md-6 col-lg-2">
-                            <label for="txt_fecha_fin" >Fecha Final</label>
-                            <div class="input-group date" id="fecha_fin_container" >
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_fin" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_fin" value="<?php echo set_value('txt_fecha_fin'); ?>"  readonly style="cursor:pointer !important">
+                            <div class="input-group date" id="fecha_ini_container" >
+                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly style="cursor:pointer !important">
                                 <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                             </div>
-                        </div>
-                         <div class="form-group col-sm-12 col-md-12 col-lg-2">
-                            <br>
-                               <button type="submit" class="btn btn-red pull-right">Buscar</button>
+
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                        <label for="txt_fecha_fin" >Fecha Final</label>
+                        <div class="input-group date" id="fecha_fin_container" >
+                            <input class="form-control input-sm" size="16" type="text" id="txt_fecha_fin" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_fin" value="<?php echo set_value('txt_fecha_fin'); ?>"  readonly style="cursor:pointer !important">
+                            <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                         </div>
                     </div>
-                    <hr>
-                    </form>
-                    <?php
-                        if(!empty($traslados)){
+                     <div class="form-group col-sm-12 col-md-12 col-lg-2">
+                        <br>
+                           <button type="submit" class="btn btn-red pull-right">Buscar</button>
+                    </div>
+                </div>
+                <hr>
+                </form>
+                <?php
+                    if(!empty($traslados)){
 
-                    ?>
-                        <div class="table-responsive">
-                            <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green">
-                                <thead style="font-size:12px;">
-                                    <tr>
-                                        <th>Color</th>
-                                        <th>ID</th>
-                                        <th>Cliente</th>
-                                        <th>Pasajero</th>
-                                        <th>Chofer</th>
-                                        <th>Vehiculo</th>
-                                        <th>Fecha y Hora del Traslado</th>
-                                        <th>Estado</th>
-                                        <th>Detalle</th>
-                                        <th>Actualizar Traslado</th>
-                                        <th>Traslado</th>
+                ?>
+                    <div class="table-responsive">
+                        <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green">
+                            <thead style="font-size:12px;">
+                                <tr>
+                                    <th>Color</th>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Pasajero</th>
+                                    <th>Chofer</th>
+                                    <th>Vehiculo</th>
+                                    <th>Fecha y Hora del Traslado</th>
+                                    <th>Estado</th>
+                                    <th>Detalle</th>
+                                    <th>Actualizar Traslado</th>
+                                    <th>Traslado</th>
+                                </tr>
+
+                            </thead>
+                            <?php $class = '';$estado='';?>
+                            <tbody id="table_traslados" style="font-size:12px;">
+                                <?php
+                                    foreach ($traslados as $item) {
+                                ?>
+                                <?php  if($item["ESTATUS"] ==="EC") { $class  = "warning ".$item['RFC']; } else if($item["ESTATUS"]=="C"){ $class  = "danger ".$item['RFC']; }else{$class  =  "success ".$item['RFC'];} ?>
+                                    <tr  id="field_ride_<?php echo $item['ID'] ?>" class='<?php echo $class ?>' style="background:<?php echo $item['COLOR'];?> " >
+                                        <td style="background:<?php echo $item['COLOR'];?> "><input type="color" data-id="<?php echo $item['RFC'] ?>" value="<?php echo $item['COLOR'] ?>"></td>
+                                        <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['ID'] ?></td>
+                                        <td style="background:<?php echo $item['COLOR'];?> "><?php echo ($item['CLIENTE']=='')?$item['NOMBRE']:$item['CLIENTE'] ?></td>
+                                        <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['N_PASAJERO'] ?></td>
+                                        <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['NOMBRECH'] ?></td>
+                                        <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['MODELO'] ?></td>
+                                        <td style="background:<?php echo $item['COLOR'];?> " class="text-center"><?php echo $item['FECHA'] ?><strong><?php echo '&nbsp'.'&nbsp'.$item['HORA'] ?></strong></td>
+                                        <?php
+                                            if($item['ESTATUS'] === "EC") {$estado =  'PENDIENTE';}else if($item['ESTATUS'] == 'C'){$estado = 'CANCELADO';}else{$estado = 'REALIZADO';}
+                                         ?>
+
+                                        <td style="background:<?php echo $item['COLOR'];?>;font-weight:bold; " id='estado_t_<?php echo $item["ID"] ?>' class="text-<?php echo $class ?>"><?php echo $estado ?></td>
+
+                                        <?php //if ($item['ESTATUS'] == 'EC'): ?>
+                                        	<td style="background:<?php echo $item['COLOR'];?> " class="text-center"><a  class="btn btn-link btn-xs ver_detalle_traslado" id='<?php echo $item["ID"] ?>' data-status="<?php echo $item['ESTATUS'] ?>">Ver</a></td>
+                                        <?php //else: ?>
+                                        	<!--<td class="text-center">N/A</td>-->
+                                        <?php //endif ?>
+
+                                        <td style="background:<?php echo $item['COLOR'];?> " class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["ID"] ?>'  <?php echo ($item["ESTATUS"] === "T" ) ? "checked disabled": "";?> ></td>
+
+                                        <?php if ($item['ESTATUS'] == 'EC'): ?>
+                                            <td style="background:<?php echo $item['COLOR'];?> " class="text-center" id="updTras_<?php echo $item['ID'] ?>"><a class="text-danger cancelar_traslado" data-traslado = "<?php echo $item['ID'] ?>" data-status="C" href="#" id="linkstatus_<?php echo $item['ID'] ?>">Cancelar</a></td>
+                                        <?php else: ?>
+                                            <td style="background:<?php echo $item['COLOR'];?>  " class="text-center" id="updTras_<?php echo $item['ID'] ?>"> <a href="#" class="text-warning cancelar_traslado" data-traslado="<?php echo $item['ID'] ?>" data-status="EC" id="linkstatus_<?php echo $item['ID'] ?>">Restaurar</a> </td>
+                                        <?php endif ?>
+
                                     </tr>
+                                <?php
+                                    } //llave foreach
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                       <div class="col-sm-2">
+                           <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>
+                       </div>
+                    </div>
 
-                                </thead>
-                                <?php $class = '';$estado='';?>
-                                <tbody id="table_traslados" style="font-size:12px;">
-                                    <?php
-                                        foreach ($traslados as $item) {
-                                    ?>
-                                    <?php  if($item["ESTATUS"] ==="EC") { $class  = "warning ".$item['RFC']; } else if($item["ESTATUS"]=="C"){ $class  = "danger ".$item['RFC']; }else{$class  =  "success ".$item['RFC'];} ?>
-                                        <tr  id="field_ride_<?php echo $item['ID'] ?>" class='<?php echo $class ?>' style="background:<?php echo $item['COLOR'];?> " >
-                                            <td style="background:<?php echo $item['COLOR'];?> "><input type="color" data-id="<?php echo $item['RFC'] ?>" value="<?php echo $item['COLOR'] ?>"></td>
-                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['ID'] ?></td>
-                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo ($item['CLIENTE']=='')?$item['NOMBRE']:$item['CLIENTE'] ?></td>
-                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['N_PASAJERO'] ?></td>
-                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['NOMBRECH'] ?></td>
-                                            <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['MODELO'] ?></td>
-                                            <td style="background:<?php echo $item['COLOR'];?> " class="text-center"><?php echo $item['FECHA'] ?><strong><?php echo '&nbsp'.'&nbsp'.$item['HORA'] ?></strong></td>
-                                            <?php
-                                                if($item['ESTATUS'] === "EC") {$estado =  'PENDIENTE';}else if($item['ESTATUS'] == 'C'){$estado = 'CANCELADO';}else{$estado = 'REALIZADO';}
-                                             ?>
-
-                                            <td style="background:<?php echo $item['COLOR'];?>;font-weight:bold; " id='estado_t_<?php echo $item["ID"] ?>' class="text-<?php echo $class ?>"><?php echo $estado ?></td>
-
-                                            <?php //if ($item['ESTATUS'] == 'EC'): ?>
-                                            	<td style="background:<?php echo $item['COLOR'];?> " class="text-center"><a  class="btn btn-link btn-xs ver_detalle_traslado" id='<?php echo $item["ID"] ?>' data-status="<?php echo $item['ESTATUS'] ?>">Ver</a></td>
-                                            <?php //else: ?>
-                                            	<!--<td class="text-center">N/A</td>-->
-                                            <?php //endif ?>
-
-                                            <td style="background:<?php echo $item['COLOR'];?> " class="text-center"><input type="checkbox" id = 'chk_<?php echo $item["ID"] ?>'  <?php echo ($item["ESTATUS"] === "T" ) ? "checked disabled": "";?> ></td>
-
-                                            <?php if ($item['ESTATUS'] == 'EC'): ?>
-                                                <td style="background:<?php echo $item['COLOR'];?> " class="text-center" id="updTras_<?php echo $item['ID'] ?>"><a class="text-danger cancelar_traslado" data-traslado = "<?php echo $item['ID'] ?>" data-status="C" href="#" id="linkstatus_<?php echo $item['ID'] ?>">Cancelar</a></td>
-                                            <?php else: ?>
-                                                <td style="background:<?php echo $item['COLOR'];?>  " class="text-center" id="updTras_<?php echo $item['ID'] ?>"> <a href="#" class="text-warning cancelar_traslado" data-traslado="<?php echo $item['ID'] ?>" data-status="EC" id="linkstatus_<?php echo $item['ID'] ?>">Restaurar</a> </td>
-                                            <?php endif ?>
-
-                                        </tr>
-                                    <?php
-                                        } //llave foreach
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                           <div class="col-sm-2">
-                               <a href="<?php echo base_url() ?>nuevo_traslado.html" class='btn btn-red'>Agendar Traslado</a>
-                           </div>
-                        </div>
-
-                     <?php
-                        }//llave if
-                     ?>
-            </div>
+                 <?php
+                    }//llave if
+                 ?>
         </div>
     </div>
 </div>

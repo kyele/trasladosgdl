@@ -10,112 +10,99 @@
     });
 </script>
 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="page-title">
-                            <h1>Vehiculos
-                                <small>Catálogo</small>
-                            </h1>
-                           <ol class="breadcrumb">
-                                <li><i class="fa fa-dashboard"></i>  <a href="<?php echo base_url() ?>home.html">Inicio</a>
-                                </li>
-                                <li class="active">Catálogo de Vehiculos</li>
-                            </ol>
-                        </div>
-                    </div>
-                    
+    <div class="col-lg-12">
+        <div class="page-title">
+            <h1>Vehiculos
+                <small>Catálogo</small>
+            </h1>
+           <ol class="breadcrumb">
+                <li class="active"><i class="fa fa-desktop"></i><a href="<?php echo base_url() ?>home.html"> Inicio</a></li>
+                <li><i class="fa fa-car"></i> Catálogo de Vehiculos</li>
+            </ol>
+        </div>
+    </div>          
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <div class="portlet portlet-default">
-            <div class="portlet-heading">
-                <div class="portlet-title">
-                    <h4>Listado</h4>
-                </div>
-                <div class="clearfix"></div>
+    <div class="portlet portlet-default">
+        <div class="portlet-heading">
+            <div class="portlet-title">
+                <h4>Listado</h4>
             </div>
-            <div class="portlet-body">
-                <?php echo $error; echo $success; ?>
-                    <?php 
-                        if(!empty($vehiculos)){
+            <div class="clearfix"></div>
+        </div>
+        <div class="portlet-body">
+            <?php echo $error; echo $success; ?>
+                <?php 
+                    if(!empty($vehiculos)){
 
-                    ?>
-                        <div class="table-responsive">
-                            <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green" style="font-size:12px;">
-                                <thead>
-                                    <tr>
-                                        <th>Matricula</th>
-                                        <th>N° Motor</th>
-                                        <th>Tipo</th>
-                                        <th>Marca</th>
-                                        <th>Modelo</th>
-                                        <th>Pasajeros</th>
-                                        <th>Puertas</th>
-                                        <th>Color</th>
-                                        <th>Actualizar</th>
-                                        <th>Desactivar</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table_vehiculos">
-                                    <?php 
-                                        foreach ($vehiculos as $valor) {
-                                    ?>
-                                        <tr class='<?php echo ($valor["ESTATUS"] === "B") ? "danger": ""; ?>'>
+                ?>
+                    <div class="table-responsive">
+                        <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green" style="font-size:12px;">
+                            <thead>
+                                <tr>
+                                    <th>Matricula</th>
+                                    <th>N° Motor</th>
+                                    <th>Tipo</th>
+                                    <th>Marca</th>
+                                    <th>Modelo</th>
+                                    <th>Pasajeros</th>
+                                    <th>Puertas</th>
+                                    <th>Color</th>
+                                    <th>Actualizar</th>
+                                    <th>Desactivar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table_vehiculos">
+                                <?php 
+                                    foreach ($vehiculos as $valor) {
+                                ?>
+                                    <tr class='<?php echo ($valor["ESTATUS"] === "B") ? "danger": ""; ?>'>
 
-                                            <td><?php echo $valor['MATRICULA'] ?></td>
-                                            <td><?php echo $valor['NUM_MOTOR'] ?></td>
-                                            <td><?php echo $valor['TIPO_VEHICULO'] ?></td>
-                                            
-                                           <?php 
-                                        foreach ($marcas as $valorMarca) {
-                                            if($valorMarca["IDMARCA"]===$valor["IDMARCA"])
-                                            {    
-                                    ?>
-                                            <td><?php echo $valorMarca['MARCA'] ?></td>
+                                        <td><?php echo $valor['MATRICULA'] ?></td>
+                                        <td><?php echo $valor['NUM_MOTOR'] ?></td>
+                                        <td><?php echo $valor['TIPO_VEHICULO'] ?></td>
+                                        
+                                       <?php 
+                                    foreach ($marcas as $valorMarca) {
+                                        if($valorMarca["IDMARCA"]===$valor["IDMARCA"])
+                                        {    
+                                ?>
+                                        <td><?php echo $valorMarca['MARCA'] ?></td>
 
+                                    <?php }
+                                        }
+
+                                        
+                                    foreach ($modelos as $valorModelo) {
+                                        if($valorModelo["IDMODELO"]===$valor["IDMODELO"])
+                                        {
+                                ?>
+                                        <td><?php echo $valorModelo['MODELO'] ?></td>
                                         <?php }
-                                            }
+                                        } ?>
 
-                                            
-                                        foreach ($modelos as $valorModelo) {
-                                            if($valorModelo["IDMODELO"]===$valor["IDMODELO"])
-                                            {
-                                    ?>
-                                            <td><?php echo $valorModelo['MODELO'] ?></td>
-                                            <?php }
-                                            } ?>
-
-                                            <td><?php echo $valor['NUM_PASAJEROS'] ?></td>
-                                            <td><?php echo $valor['NUM_PUERTAS'] ?></td>
-                                            <td><?php echo $valor['COLOR'] ?></td>
-                                            <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $valor["IDVEHICULO"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
-                                            <td class="text-center"><input type="checkbox" id = 'chk_<?php echo $valor["IDVEHICULO"] ?>'  <?php echo ($valor["ESTATUS"] === "A" ) ? "checked": "";?> ></td>
-                                        </tr>
-                                    <?php
-                                        } //llave foreach
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    <div class="row">
-                       <div class="col-sm-2">
-                           <a href="<?php echo base_url() ?>nuevo_vehiculo.html" class='btn btn-red'>Nuevo Vehiculo</a>   
-                       </div>
+                                        <td><?php echo $valor['NUM_PASAJEROS'] ?></td>
+                                        <td><?php echo $valor['NUM_PUERTAS'] ?></td>
+                                        <td><?php echo $valor['COLOR'] ?></td>
+                                        <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $valor["IDVEHICULO"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
+                                        <td class="text-center"><input type="checkbox" id = 'chk_<?php echo $valor["IDVEHICULO"] ?>'  <?php echo ($valor["ESTATUS"] === "A" ) ? "checked": "";?> ></td>
+                                    </tr>
+                                <?php
+                                    } //llave foreach
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
-
-
-                     <?php
-                        }//llave if
-
-                     ?>
-                  
-
-
-            </div>
-          
-        </div>    
-
-    </div>   
+                <div class="row">
+                   <div class="col-sm-2">
+                       <a href="<?php echo base_url() ?>nuevo_vehiculo.html" class='btn btn-red'>Nuevo Vehiculo</a>   
+                   </div>
+                </div>
+                <?php
+                    }//llave if
+                ?>
+        </div>
+    </div>
 </div>
 
     

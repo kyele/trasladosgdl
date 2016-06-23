@@ -7,13 +7,14 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="page-title">
-            <h1>Vendedores/
+            <h1>Vendedores
                 <small>Agrege un nuevo vendedor</small>
             </h1>
             <ol class="breadcrumb">
-                <h4><li class="active"><i class="fa fa-briefcase"></i> Nuevo Vendedor</li></h4>
-                <li class="pull-right">
-                </li>
+                <li class="active"><i class="fa fa-desktop"></i><a href="<?php echo base_url() ?>home.html"> Inicio</a></li>
+                <li class="active"><i class="fa fa-briefcase"></i><a href="<?php echo base_url() ?>catalogo_vendedores.html"> Vendedores</a></li>
+                <li><i class="fa fa-briefcase"></i> Nuevo Vendedor</li>
+                <li class="pull-right"></li>
             </ol>
         </div>
     </div>
@@ -46,7 +47,7 @@
                 </div>
                 <div class="col-xs-4">
                     <br>
-                    <button type="button" id="btn_nueva_agencia" class="btn btn-red pull-right">Nueva Agencia</button>   
+                    <button type="button" id="btn_nueva_agencia" class="btn btn-red pull-right"><i class="fa fa-map-o"></i> Nueva Agencia</button>   
                 </div>
                 <div class="clearfix"></div>
                 <div class="form-group col-sm-6">
@@ -121,16 +122,11 @@
                             <div class="form-group col-sm-12" id="form_group">
                                 <br/>
                                 <button type="submit" class="btn btn-red pull-right">Guardar</button>   
-                            </div>                         
+                            </div>
                          </form>
                      </div>
-
-                 </div>
-                                                 
-             </div>
-           
-        </div>
-        
-    </div>
-    
+                 </div>                                                 
+             </div>           
+        </div>        
+    </div>    
 </div>
