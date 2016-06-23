@@ -235,43 +235,34 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div id="contError"></div> 
-                        <?php echo validation_errors();?> 
-               
-                 <?php $attributes = array('id' => 'myform_my_rides'); echo form_open(base_url().'mis_traslados.html',$attributes); ?>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-md-6 col-lg-2">
-                        <input type="hidden" id="hidd_myride" name="rides">
-                      <label for="txt_fecha_ini" >Fecha inicial</label>
-                               
-                            <div class="input-group date" id="fecha_ini_container" >
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly>
-                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                        <?php echo validation_errors();?>                
+                        <?php $attributes = array('id' => 'myform_my_rides'); echo form_open(base_url().'mis_traslados.html',$attributes); ?>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                    <input type="hidden" id="hidd_myride" name="rides">
+                                    <label for="txt_fecha_ini" >Fecha inicial</label>                               
+                                    <div class="input-group date" id="fecha_ini_container" >
+                                        <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly>
+                                        <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                                    </div>                       
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                    <label for="txt_fecha_fin" >Fecha Final</label>
+                                    <div class="input-group date" id="fecha_fin_container" >
+                                        <input class="form-control input-sm" size="16" type="text" id="txt_fecha_fin" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_fin" value="<?php echo set_value('txt_fecha_fin'); ?>"  readonly>
+                                        <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                                    </div>
+                                </div>
+                                 <div class="form-group col-sm-12 col-md-12 col-lg-2">
+                                    <br>
+                                       <button type="submit" class="btn btn-red pull-right">Generar</button>   
+                                </div>
                             </div>
-                        
+                            <hr>
+                        </form>
                     </div>
-                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
-                          <label for="txt_fecha_fin" >Fecha Final</label>
-                            <div class="input-group date" id="fecha_fin_container" >
-                                <input class="form-control input-sm" size="16" type="text" id="txt_fecha_fin" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_fin" value="<?php echo set_value('txt_fecha_fin'); ?>"  readonly>
-                                <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
-                            </div>
-                    </div>
-                     <div class="form-group col-sm-12 col-md-12 col-lg-2">
-                        <br>
-                           <button type="submit" class="btn btn-red pull-right">Generar</button>   
-                    </div>
-                    </div>
-                    <hr>
-
-                </form>
-                    </div>
-
-                </div>
-                                                
-            </div>
-           
-        </div>
-        
-    </div>
-    
+                </div>                                                
+            </div>           
+        </div>        
+    </div>    
 </div>

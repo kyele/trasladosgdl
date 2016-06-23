@@ -545,7 +545,6 @@ class Traslados extends CI_Controller
 		$this->pdf->Output($this->pdf->titulo.".pdf",'D');
 		}
 	}
-
 	public function  nuevo_solicitante(){
 			$this->form_validation->set_error_delimiters($this->char_error_open,$this->char_error_close);
 			$this->form_validation->set_rules('txt_nvo_cliente', 'Nombre', 'required|trim|xss_clean');
@@ -563,24 +562,18 @@ class Traslados extends CI_Controller
             }
 		// echo "entro";
 	}
-
 	public function  informe_solicitante(){
-
-		if($this->input->is_ajax_request())
-		{
+		if($this->input->is_ajax_request()){
 			$data  = $this->rides->informe_solicitante();
 			if($data === FALSE){
 				$this->error_msg = '<div class="alert  text-danger">No hay solicitantes Registradas en el sistema. Registre una nueva.</div>';
 				$result=array("status"=>false,"msg"=>$this->error_msg);
 					echo  json_encode($result);
-			}else
-            {
+			}else{
                 $resul=array("status"=>true,"solicitantes"=>$data);
                 echo json_encode($resul);
             }
-		}
-		else
-		{
+		}else{
 			show_404();
 		}
 	}

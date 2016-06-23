@@ -110,6 +110,8 @@ $route['form_vendedor'] 				= 'vendedores/nuevo';
 $route['nuevo_vendedor'] 				= 'vendedores/crear';
 $route['catalogo_vendedores'] 			= 'vendedores/catalogo_vendedores';
 $route['estadisticas_vendedores'] 		= 'vendedores/estaditicas_vendedores';
+$route['catalogo_agencias'] 			= 'vendedores/catalogo_agencias';
+$route['nueva_agencia'] 				= 'vendedores/nueva_agencia';
 
 $route['home'] 							= 'home';
 $route['salir'] 						= 'home/logout';

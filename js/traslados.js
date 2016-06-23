@@ -27,7 +27,6 @@ var rides = {
             $("#txt_Direccion_sol").attr('disabled',false)
             $("#data_solicitante").attr('disabled',false)
         }
-
     },
     update_ride:function(id,status){
         id_tmp = id.split('_');
@@ -151,7 +150,7 @@ var rides = {
             }
         });
     },
-     payments_mod:function(id,status){
+    payments_mod:function(id,status){
         id_tmp = id;
 
         $.ajax({
@@ -239,10 +238,6 @@ var rides = {
                         }
                     );
                 }();
-
-
-
-
             },
             error:function(){
                 $.bootstrapGrowl(
@@ -274,11 +269,8 @@ var rides = {
             }
 
         });
-
-
     },
-    modal_solicitante:function()
-    {
+    modal_solicitante:function(){
         $("#modal_solicitante").modal({
             backdrop:'static',
             keyboard:true
@@ -298,25 +290,6 @@ var rides = {
             $("#txt_nvo_cliente").val('');
         });
     },
-    modal_agencia:function() {
-        $( "#modal_agencia" ).modal( {
-            backdrop:'static',
-            keyboard:true
-        })/*.on('shown.bs.modal',function(e){
-            var text = $("#txt_cliente option:selected").html();
-            var valor = $("#txt_cliente").val();
-            $("#txt_nvoCliente").val(text);
-            $("#txt_nvo_cliente").val(valor);
-
-            $("#txt_nuevo_solicitante").val('');
-            $("#txt_nuevo_dir").val('')
-
-        })*/.on('hidden.bs.modal',function(){
-            $("#txt_nuevo_solicitante").val('');
-            $("#txt_nuevo_dir").val('')
-            $("#txt_nvo_cliente").val('');
-        });
-    },
     catalago_solicitantes:function(cliente,url){
         $("#txt_nombre_sol").empty();
         rides.solicitantes=Array();
@@ -331,8 +304,7 @@ var rides = {
             },
             success:function(data){
 
-                if(data.status){
-
+                if(data.status) {
                     options="";
                     rides.solicitantes=data.solicitantes;
                     $.each(data.solicitantes,function(key,value){
@@ -344,8 +316,7 @@ var rides = {
                     $("#txt_nombre_solicitante").val(valor);
 
 
-                }
-                else{
+                } else {
                     $('#contError').html(data.msg);
                     // vehi.modal_Modelo();
                 }
@@ -354,19 +325,45 @@ var rides = {
                 //alert("valio dick 2");
             }
         });
-
+    },
+    catalago_agencias:function(url){
+        $("#txt_agencia").empty();
+        rides.agencias  = Array();
+        rides.url       = url;
+        $.ajax({
+            url:url+'catalogo_agencias.html',
+            type:'POST',
+            dataType:'json',
+            beforeSend:function(data){
+            },
+            success:function(data){
+                if( data.status ){
+                    options         = "";
+                    rides.agencias  = data.agencias;
+                    $("#txt_agencia_selec").empty();
+                    $.each( data.agencias , function( key , value ) {
+                        options+="<option value="+value["IDAGENCIA"]+">"+value.NOMBRE+' - '+value.ABREVIACION+"</option>";
+                    });
+                    $("#txt_agencia_selec").append(options);
+                    valor=$("#txt_agencia_selec :selected").text();
+                    $("#txt_agencia").val(valor);
+                }
+                else{
+                    $('#contError').html("data.msg");
+                    // vehi.modal_Modelo();
+                }
+            },
+            error:function(){
+                //alert("valio dick 2");
+            }
+        });
     },
     load_solicitante:function(id){
         this.id_chk = id;
         pos = $('#txt_nombre_sol').val();
-
         if($('#'+this.id_chk).is(':checked') === true){
-
             $.each(rides.solicitantes, function(index, val) {
-
-                if(val.ID==pos)
-                {
-
+                if( val.ID == pos ){
                     $("#txt_Direccion_sol").val(val.DOMICILIO);
                     $.each(rides.data[rides.pos], function(index, val) {
                         $('#'+index).attr('disabled',true);
@@ -381,7 +378,6 @@ var rides = {
             });
             $("#txt_Direccion_sol").val('');
         }
-
     },
     modal_comprobante:function(id){
         id_tmp = id.split('_');
@@ -549,8 +545,7 @@ var rides = {
         }();
     },
     payFacInPackage:function(){
-         //alert(rides.checkPay.length)
-         var size = rides.checkPay.length;
+        var size = rides.checkPay.length;
         if(size== 0){
             $.bootstrapGrowl("No ha seleccionado traslados para pagar!",
                             {
@@ -572,8 +567,7 @@ var rides = {
         }
     },
     payInPackage:function(){
-         //alert(rides.checkPay.length)
-         var size = rides.checkPay.length;
+        var size = rides.checkPay.length;
         if(size== 0){
             $.bootstrapGrowl("No ha seleccionado traslados para pagar!",
                             {
@@ -584,7 +578,7 @@ var rides = {
                                 allow_dismiss:false
                             });
         }else{
-              $('#modal_paga_lote').modal({
+            $('#modal_paga_lote').modal({
                 backdrop:'static',
                 keyboard:true
             }).on('shown.bs.modal',function(e){
@@ -595,9 +589,8 @@ var rides = {
         }
     },
     factInPackage:function(){
-         //alert(rides.checkPay.length)
-         var size = rides.checkPay.length;
-        if(size== 0){
+        var size = rides.checkPay.length;
+        if( size == 0 ) {
             $.bootstrapGrowl("No ha seleccionado traslados para pagar!",
                             {
                                 type:'warning',
@@ -607,7 +600,7 @@ var rides = {
                                 allow_dismiss:false
                             });
         }else{
-              $('#modal_fact_lote').modal({
+            $('#modal_fact_lote').modal({
                 backdrop:'static',
                 keyboard:true
             }).on('shown.bs.modal',function(e){
@@ -618,8 +611,6 @@ var rides = {
         }
     },
     init_components:function(){
-
-
         $('#table_traslados').on('click',':checkbox',function(e){
             e.preventDefault();
             //rides.modal($(this).attr('id'),$(this).is(':checked')); esta funcion pedi ael kilometraje
@@ -930,32 +921,6 @@ var rides = {
                 }
             });
         });
-        $('#myform_agencia').submit(function(e){
-            // alert($(this).attr('action'));
-            e.preventDefault();
-            $.ajax({
-                url:$(this).attr('action'),
-                type:'POST',
-                dataType:'json',
-                data:$(this).serialize(),
-                success:function(data){
-                    if(! data.status){
-                        $('#contErrorSolicitante').html(data.msg);
-                    } else {
-                        $('#contErrorSolicitante').empty().html(data.msg);
-                        //rides.catalago_solicitantes($("#txt_cliente").val(),rides.url);
-                        setTimeout(function(){
-                            $("#modal_solicitante").modal('hide');
-                            $('#contErrorSolicitante').empty();
-
-                        },3000);
-                    }
-                },
-                error:function(){
-                    $('#contErrorSolicitante').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
-                }
-            });
-        });
         $('#myform_detalle_traslado').submit(function(e){
 
             e.preventDefault();
@@ -987,16 +952,12 @@ var rides = {
                     $('#contErrorDetalle').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
                 }
             });
-        });
+        });        
         $("#btn_nuevo_solicitante").click(function() {
             rides.modal_solicitante();
         });
-        $("#btn_nueva_agencia").click(function() {
-            rides.modal_agencia();
-        });
     },
     showRidesToday:function(){
-
         var fecha  = $('#txt_traslado').val();
         if($.trim(fecha) === ''){alert('No ha seleccionado una fecha para el traslado');return false;}
         $.ajax({
@@ -1035,9 +996,49 @@ var rides = {
                     });
                 }();
             }
-
         });
+    },
+    modal_agencia:function(){
+        $( "#modal_agencia" ).modal( {
+            backdrop:'static',
+            keyboard:true
+        }).on('hidden.bs.modal',function(){
+            $("#txt_nombre_agencia").val('');
+            $("#txt_abrev").val('');
+            $("#txt_email").val('');
+            $("#txt_telefono").val('');
+        });
+    },
+    init_agencia:function(){
+        $('#myform_agencia').submit( function( e ) {
+            // alert($(this).attr('action'));
+            e.preventDefault();
+            $.ajax({
+                url:$(this).attr('action'),
+                type:'POST',
+                dataType:'json',
+                data:$(this).serialize(),
+                success:function( data ) {
+                    if( !data.status ) {
+                        $( '#contErrorAgencia' ).html( data.msg );
+                    }else {
+                        $( '#contErrorAgencia' ).empty().html( data.msg );
+                        rides.catalago_agencias(rides.url);
+                        setTimeout(function(){
+                            $("#modal_agencia").modal('hide');
+                            $('#contErrorAgencia').empty();
 
+                        },3000);
+                    }
+                },
+                error:function(){
+                    $('#contErrorAgencia').html('Parece que su conexión a internet no va bien, intentelo más tarde.');
+                }
+            });
+        });
+        $("#btn_nueva_agencia").click(function() {
+            rides.modal_agencia();
+        });
     }
 };
 $(document).ready(function(){
@@ -1115,6 +1116,4 @@ $(document).ready(function(){
             e.preventDefault();
         }
     });
-
-
 });

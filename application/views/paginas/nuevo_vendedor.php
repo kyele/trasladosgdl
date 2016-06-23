@@ -1,6 +1,7 @@
 <script>
     $(document).ready(function() {
-        $('#txt_agencia').select2();
+        $('#txt_agencia_selec').select2();
+        rides.init_agencia();
     });
 </script>
 <div class="row">
@@ -31,7 +32,7 @@
             <?php $attributes = array( 'id' => 'myform' ); echo form_open(base_url().'nuevo_vendedor.html', $attributes ); ?>
                 <div class="form-group col-xs-8">
                     <label for="txt_agencia">Agencia</label>
-                    <select name="txt_agencia" class="form-control input-sm"  id="txt_agencia">
+                    <select name="txt_agencia_selec" class="form-control input-sm"  id="txt_agencia_selec">
                         <option value="---">Seleccionar Agencia</option>
                         <?php
                             if( !empty( $agencias ) ) {
@@ -45,8 +46,9 @@
                 </div>
                 <div class="col-xs-4">
                     <br>
-                    <button type="button" id="btn_nueva_agencia" class="btn btn-red pull-right">Nuevo</button>   
+                    <button type="button" id="btn_nueva_agencia" class="btn btn-red pull-right">Nueva Agencia</button>   
                 </div>
+                <div class="clearfix"></div>
                 <div class="form-group col-sm-6">
                     <label for="txt_nombre">Nombre:</label>
                     <input type="text" class="form-control" id="txt_nombre" style="text-transform:uppercase" name="txt_nombre" value="<?php echo set_value('txt_nombre'); ?>" >
@@ -98,16 +100,15 @@
             <div class="modal-body">
                  <div class="row">
                      <div class="col-sm-12">
-                        <div id="contErrorSolicitante"></div> 
+                        <div id="contErrorAgencia"></div> 
                         <?php $atributosMol = array('id' => 'myform_agencia'); echo form_open(base_url().'nueva_agencia.html',$atributosMol); ?>
                             <div class="form-group col-sm-6" id="form_group_txtMarca">
-                                <label for="txt_nueva_agencia">Nombre de la Agencia</label>
-                                <input type="text" class="form-control input-sm" id="txt_nueva_agencia" style="text-transform:uppercase" name="txt_nueva_agencia"  value="<?php echo set_value('txt_nueva_agencia'); ?>"  autofocus>
-                                 
+                                <label for="txt_nombre_agencia">Nombre de la Agencia</label>
+                                <input type="text" class="form-control input-sm" id="txt_nombre_agencia" style="text-transform:uppercase" name="txt_nombre_agencia"  value="<?php echo set_value('txt_nueva_agencia'); ?>"  autofocus>                                 
                             </div>
                             <div class="form-group col-sm-6" id="form_group_txtNuevoModelo">
-                                <label for="txt_nuevo_dir">Abreviacion</label>
-                                <input type="text" class="form-control input-sm" id="txt_nuevo_dir" style="text-transform:uppercase" name="txt_nuevo_dir"  value="<?php echo set_value('txt_nuevo_dir'); ?>" maxlength="20" autofocus>
+                                <label for="txt_abrev">Abreviacion</label>
+                                <input type="text" class="form-control input-sm" id="txt_abrev" style="text-transform:uppercase" name="txt_abrev"  value="<?php echo set_value('txt_abrev'); ?>" maxlength="20" autofocus>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="txt_email">Correo Electronico</label>

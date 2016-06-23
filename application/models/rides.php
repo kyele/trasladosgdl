@@ -625,7 +625,6 @@ class Rides extends CI_Model
 			$this->db->trans_rollback();
 			return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");
 		}
-
 	}
 	public function informe_solicitante(){
 		$param=array("IDCLIENTE"=>$this->input->post("cliente"));

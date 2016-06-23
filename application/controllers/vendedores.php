@@ -47,14 +47,14 @@ class Vendedores extends CI_Controller
         $this->form_validation->set_message('required', 'El  %s es requerido');
        	$this->form_validation->set_message('valid_email', 'El %s no es válido');
 
-		if ($this->form_validation->run( ) === FALSE) { 
+		if ($this->form_validation->run( ) === FALSE) {
 			$data = array( 'errors'=>validation_errors() , 'statusError'=>TRUE );
 			echo json_encode( $data );
 		} else {
-			if($this->input->post( 'txt_agencia' ) == "---"){
+			if($this->input->post( 'txt_agencia_selec' ) == "---"){
 				$id_agencia = NULL;
 			} else {
-				$id_agencia = $this->input->post( 'txt_agencia' );
+				$id_agencia = $this->input->post( 'txt_agencia_selec' );
 			}
 			$datos = array(
 				'id_agencia'=> $id_agencia,
@@ -121,5 +121,35 @@ class Vendedores extends CI_Controller
         $data['titulo'] 		= 'Reportes de Vendedores';
 		$data['content']  		= 'reporte_vendedores';
 		$this->load->view('main_template',$data);
+	}
+	public function nueva_agencia(){
+			$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
+			$this->form_validation->set_rules('txt_nombre_agencia', 'Nombre Agencia', 'required|trim|xss_clean');
+            $this->form_validation->set_rules('txt_abrev', 'Abreviacion', 'required|trim|exact_length[3]|xss_clean');
+            $this->form_validation->set_rules('txt_email','Correo Electronico', 'valid_email|trim|xss_clean');
+            $this->form_validation->set_rules('txt_telefono', 'Teléfono', 'trim|exact_length[10]|xss_clean');
+            if($this->form_validation->run() === TRUE){
+                $result = $this->sellers->crear_agencia();
+                $data 	= array('status'=>$result['status'],'msg'=>$result['msg']);
+				echo json_encode($data);
+            } else {
+        		$data = array('msg'=>validation_errors(),'status'=>FALSE);
+				echo json_encode($data);
+            }
+	}
+	public function catalogo_agencias(){
+		if( $this->input->is_ajax_request() ) {
+			$data  					= $this->sellers->catalogo_agencias();
+			if( $data === FALSE ) {
+				$this->error_msg 	= '<div class="alert  text-danger">No hay agencias Registradas en el sistema. Registre una nueva.</div>';
+				$result 			= array("status"=>false,"msg"=>$this->error_msg);
+					echo  json_encode($result);
+			}else {
+                $result = array( "status"=>true , "agencias"=>$data );
+                echo json_encode($result);
+            }
+		}else {
+			show_404();
+		}
 	}
 }

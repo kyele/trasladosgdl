@@ -27,12 +27,12 @@
                 <ul class="collapse nav" id="link_usuarios">
                     <li>
                         <a href="<?php echo base_url() ?>nuevo_usuario.html">
-                            <i class="fa fa-angle-double-right"></i> Alta
+                            <i class="fa fa-caret-right"></i> Alta
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo base_url() ?>catalogo_usuarios.html">
-                            <i class="fa fa-angle-double-right"></i> Ver
+                            <i class="fa fa-caret-right"></i> Ver
                         </a>
                     </li>
                 </ul>
@@ -44,12 +44,17 @@
                 <ul class="collapse nav" id="link_ventas">
                     <li>
                         <a href="<?php echo base_url() ?>form_vendedor.html">
-                            <i class="fa fa-angle-double-right"></i> Alta
+                            <i class="fa fa-caret-right"></i> Alta
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo base_url() ?>catalogo_vendedores.html">
-                            <i class="fa fa-angle-double-right"></i> Ver
+                            <i class="fa fa-caret-right"></i> Ver
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo base_url() ?>catalogo_agencias.html">
+                            <i class="fa fa-map-o"></i> Agencias
                         </a>
                     </li>
                 </ul>
@@ -61,12 +66,12 @@
                 <ul class="collapse nav" id="link_clientes">
                     <li>
                         <a href="<?php echo base_url() ?>nuevo_cliente.html">
-                            <i class="fa fa-angle-double-right"></i> Alta
+                            <i class="fa fa-caret-right"></i> Alta
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo base_url() ?>catalogo_clientes.html">
-                            <i class="fa fa-angle-double-right"></i> Ver
+                            <i class="fa fa-caret-right"></i> Ver
                         </a>
                     </li>
                 </ul>
@@ -79,12 +84,12 @@
                 <ul class="collapse nav" id="link_choferes">
                     <li>
                         <a href="<?php echo base_url() ?>nuevo_chofer.html">
-                            <i class="fa fa-angle-double-right"></i> Alta
+                            <i class="fa fa-caret-right"></i> Alta
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo base_url() ?>catalogo_choferes.html">
-                            <i class="fa fa-angle-double-right"></i> Ver
+                            <i class="fa fa-caret-right"></i> Ver
                         </a>
                     </li>
                    
@@ -100,12 +105,12 @@
                 <ul class="collapse nav" id="link_vehiculos">
                     <li>
                         <a href="<?php echo base_url() ?>nuevo_vehiculo.html">
-                            <i class="fa fa-angle-double-right"></i> Alta
+                            <i class="fa fa-caret-right"></i> Alta
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo base_url() ?>catalago_vehiculos.html">
-                            <i class="fa fa-angle-double-right"></i> Ver
+                            <i class="fa fa-caret-right"></i> Ver
                         </a>
                     </li>
                 </ul>
@@ -118,12 +123,12 @@
                 <ul class="collapse nav" id="link_traslados">
                     <li>
                         <a href="<?php echo base_url() ?>nuevo_traslado.html">
-                            <i class="fa fa-angle-double-right"></i> Altas
+                            <i class="fa fa-caret-right"></i> Altas
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo base_url() ?>agenda_de_traslados.html">
-                            <i class="fa fa-angle-double-right"></i> Ver
+                            <i class="fa fa-caret-right"></i> Ver
                         </a>
                     </li>
                     <li>

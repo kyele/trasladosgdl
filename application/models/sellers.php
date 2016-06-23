@@ -42,14 +42,39 @@ class Sellers extends CI_Model {
         }
     }
     public function catalogo_vendedores() {
-        $this->db->select('IDVENDEDOR,NOMBRE,APEPAT,APEMAT,EMAIL,FECHA_ALTA,TELEFONO');
-        $this->db->order_by("APEPAT");
-        $this->db->from('tbl_vendedores');
+        $this->db->select('NOMBRE_AGENCIA,ABREVIACION,IDVENDEDOR,NOMBRE_V,COMISION,EMAIL,TELEFONO');
+        $this->db->order_by("NOMBRE_AGENCIA");
+        $this->db->from('vst_vendedores_agencia');
         $queryC = $this->db->get();
         if($queryC->num_rows()>0){
             return $queryC->result_array();
         }
         return FALSE;
+    }
+    public function crear_agencia() {
+        $this->data = array(
+                'NOMBRE'        => strtoupper($this->input->post('txt_nombre_agencia')),
+                'ABREVIACION'   => strtoupper($this->input->post('txt_abrev')),
+                'EMAIL'         => strtoupper($this->input->post('txt_email')),
+                'TELEFONO'      => strtoupper($this->input->post('txt_telefono'))
+            );
+        $params = array('ABREVIACION'=>$this->data["ABREVIACION"]);
+        $this->db->select('ABREVIACION');
+        $validar_abrev = $this->db->get_where('tbl_agencia',$params);
+        if($validar_abrev->num_rows() === 1){
+            return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ya existe la abreviacion <b>".$this->data['ABREVIACION']."</b>, por favor elija una nueva</div>");
+        }
+        $this->db->trans_begin();
+        $this->db->insert('tbl_agencia',$this->data);
+        if($this->db->trans_status() === TRUE ) {
+            if($this->db->affected_rows() === 1 ) {
+                $this->db->trans_commit();
+                return array('status'=>TRUE,'msg'=>'<div class="alert alert-success">La agencia  '. $this->data['NOMBRE'].' ha sido agregado correctamente.</div>');
+            }
+        }else {
+            $this->db->trans_rollback();
+            return array('status'=>FALSE,'msg'=>"<div class='alert alert-danger'>Ha ocurrido un error inesperado intentelo mas tarde.</div>");
+        }
     }
     public function catalogo_agencias() {
         $this->db->select('IDAGENCIA,NOMBRE,ABREVIACION');
