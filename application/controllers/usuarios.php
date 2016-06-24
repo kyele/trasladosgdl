@@ -248,7 +248,7 @@ class Usuarios extends CI_Controller
 		}
 		return TRUE;
 	}
-	public function reporte_vendedores () {
+	public function reporte_operadores() {
 		$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
 		$this->form_validation->set_rules( 'txt_user' , 'Usuario' , 'trim|required|xss_clean|callback_user_sale' );
 		$this->form_validation->set_rules( 'txt_fecha_ini' , 'Fecha Inicial' , 'trim|required|exact_length[10]|xss_clean' );
@@ -266,8 +266,6 @@ class Usuarios extends CI_Controller
 							);
 				$this->session->set_userdata('datosC',$items);
 			}
-
-
 		}
 
 		$data['usuarios']  		= $this->users->catalogo_operadores();
@@ -277,8 +275,8 @@ class Usuarios extends CI_Controller
 		$data['imagen_perfil'] 	= $this->session_data['imagen_perfil'];
 		$data['success'] 		= $this->success;
 		$data['error'] 			= $this->error_msg;
-        $data['titulo'] 		= 'Reportes de Vendedores';
-		$data['content']  		= 'reporte_vendedores';
+        $data['titulo'] 		= 'Reportes de Operadores';
+		$data['content']  		= 'reporte_operadores';
 		$this->load->view('main_template',$data);
 	}
 	public function reporte(){

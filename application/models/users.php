@@ -182,11 +182,11 @@ class Users extends CI_Model
         }
     }
     public function estadisticas(){
-        $fecha_ini = date( 'Y-m-d H:i:s' , strtotime( $this->input->post('txt_fecha_ini') ) );
-        $fecha_fin = date( 'Y-m-d 23:59:59' , strtotime( $this->input->post('txt_fecha_fin') ) );
+        $fecha_ini  = date( 'Y-m-d H:i:s' , strtotime( $this->input->post('txt_fecha_ini') ) );
+        $fecha_fin  = date( 'Y-m-d 23:59:59' , strtotime( $this->input->post('txt_fecha_fin') ) );
 
-        $iduser = $this->input->post('txt_user');
-        $query = "COUNT( tbl_usuario.IDUSUARIO ) as TOTALTRASLADOS,tbl_usuario.NOMBRE,tbl_usuario.APEPAT,tbl_usuario.APEMAT, CONCAT('$',FORMAT( SUM( tbl_traslados.MONTO ) ,2) ) as GANANCIAS";
+        $iduser     = $this->input->post('txt_user');
+        $query      = "COUNT( tbl_usuario.IDUSUARIO ) as TOTALTRASLADOS,tbl_usuario.NOMBRE,tbl_usuario.APEPAT,tbl_usuario.APEMAT, CONCAT('$',FORMAT( SUM( tbl_traslados.MONTO ) ,2) ) as GANANCIAS";
         $this->db->select($query,false);
         $this->db->from("tbl_usuario,tbl_traslados ");
         $this->db->where("tbl_usuario.IDUSUARIO = '$iduser' and tbl_usuario.IDUSUARIO = tbl_traslados.ID_USUARIO and tbl_traslados.FECHA_ALTA BETWEEN '$fecha_ini' and '$fecha_fin' and tbl_traslados.ESTATUS <> 'C'");
@@ -197,20 +197,20 @@ class Users extends CI_Model
         return FALSE;
     }
     public function estadisticasXoperador(){
-        $dataSess  =  $this->session->userdata('datosC');
-        $fecha_ini = date( 'Y-m-d H:i:s' , strtotime( $dataSess['ini'] ) );
-        $fecha_fin = date( 'Y-m-d 23:59:59' , strtotime( $dataSess['fin'] ) );
-        $iduser = $dataSess['user'];
+        $dataSess   =  $this->session->userdata('datosC');
+        $fecha_ini  = date( 'Y-m-d H:i:s' , strtotime( $dataSess['ini'] ) );
+        $fecha_fin  = date( 'Y-m-d 23:59:59' , strtotime( $dataSess['fin'] ) );
+        $iduser     = $dataSess['user'];
          
-        $query =    "tbl_traslados.IDTRASLADO,
-                    CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,
-                    CONCAT(tbl_usuario.NOMBRE,' ',tbl_usuario.APEPAT,' ',tbl_usuario.APEMAT) as NOMBREUS,
-                    CONCAT('$',FORMAT(tbl_traslados.MONTO,2) ) as MONTO,
-                    tbl_cliente.R_SOCIAL,
-                    CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRECL,
-                    tbl_traslados.FECHA,
-                    tbl_traslados.FECHA_ALTA,
-                    tbl_traslados.OBSERVACIONES";
+        $query      =   "tbl_traslados.IDTRASLADO,
+                        CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,
+                        CONCAT(tbl_usuario.NOMBRE,' ',tbl_usuario.APEPAT,' ',tbl_usuario.APEMAT) as NOMBREUS,
+                        CONCAT('$',FORMAT(tbl_traslados.MONTO,2) ) as MONTO,
+                        tbl_cliente.R_SOCIAL,
+                        CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRECL,
+                        tbl_traslados.FECHA,
+                        tbl_traslados.FECHA_ALTA,
+                        tbl_traslados.OBSERVACIONES";
         $this->db->select($query,false);
         $this->db->from("tbl_usuario,tbl_traslados,tbl_cliente");
         $this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC and tbl_usuario.IDUSUARIO = '$iduser' and tbl_usuario.IDUSUARIO = tbl_traslados.ID_USUARIO and tbl_traslados.FECHA_ALTA BETWEEN '$fecha_ini' and '$fecha_fin' and tbl_traslados.ESTATUS <> 'C'");

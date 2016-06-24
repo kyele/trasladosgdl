@@ -136,12 +136,12 @@ class Vendedores extends CI_Controller
 			show_404();
 		}
 	}
-	public function estaditicas_vendedores() {
+	public function reporte_vendedores() {
 		$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
 		$this->form_validation->set_rules( 'txt_fecha_ini' , 'Fecha Inicial' , 'trim|required|exact_length[10]|xss_clean' );
 		$this->form_validation->set_rules( 'txt_fecha_fin' , 'Fecha Final' , 'trim|required|exact_length[10]|xss_clean' );
 		if( $this->form_validation->run() === TRUE ) {
-			$resultado = $this->rides->reporte_vendedores();
+			$resultado = $this->sellers->reporte_vendedores();
 			if($resultado === FALSE){
 				$this->error_msg = '<div class="alert  alert-danger">No hay traslados disponibles las fechas especificadas.</div>';
 			} else {
@@ -157,7 +157,7 @@ class Vendedores extends CI_Controller
 			}
 		}
 
-		$data['usuarios']  		= $this->users->catalogo_operadores();
+		//$data['usuarios']  		= $this->users->catalogo_operadores();
 		$data['nombre'] 		= $this->session_data['nombre'];
 		$data['apellido'] 		= $this->session_data['apellido'];
 		$data['usuario_i'] 		= $this->session_data['usuario_i'];

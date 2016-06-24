@@ -178,7 +178,12 @@
                     </li>-->
                     <li>
                         <a href="<?php echo base_url() ?>reporte_operadores.html">
-                            <i class="fa fa-file-excel-o" aria-hidden="true"> Reporte de vendedores</i>
+                            <i class="fa fa-file-excel-o" aria-hidden="true"> Reporte de Operadores</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo base_url() ?>reporte_vendedores.html">
+                            <i class="fa fa-file-excel-o" aria-hidden="true"> Reporte de Vendedores</i>
                         </a>
                     </li>
                    

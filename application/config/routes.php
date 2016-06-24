@@ -103,13 +103,12 @@ $route['mi_perfil/(imagen)']	  		= 'usuarios/update_profile/$1';
 $route['mi_perfil/(password)']    		= 'usuarios/update_profile/$1';
 $route['mi_perfil'] 					= 'usuarios/profile';
 $route['nuevo_usuario'] 				= 'usuarios/nuevo';
-$route['reporte_operadores'] 			= 'usuarios/reporte_vendedores';
+$route['reporte_operadores'] 			= 'usuarios/reporte_operadores';
 $route['reporte_estadisticas_ventas'] 	= 'usuarios/reporte';
 
 $route['form_vendedor'] 				= 'vendedores/nuevo';
 $route['nuevo_vendedor'] 				= 'vendedores/crear';
 $route['catalogo_vendedores'] 			= 'vendedores/catalogo_vendedores';
-$route['estadisticas_vendedores'] 		= 'vendedores/estaditicas_vendedores';
 $route['catalogo_agencias'] 			= 'vendedores/catalogo_agencias';
 $route['nueva_agencia'] 				= 'vendedores/nueva_agencia';
 $route['ver_vendedor'] 					= 'vendedores/informacion_vendedor';
@@ -117,6 +116,7 @@ $route['actualizar_vendedor']			= 'vendedores/update_info_vendedor';
 $route['agencias'] 						= 'vendedores/agencias';
 $route['ver_agencia'] 					= 'vendedores/informacion_agencia';
 $route['actualizar_agencia'] 			= 'vendedores/update_agencia';
+$route['reporte_vendedores'] 			= 'vendedores/reporte_vendedores';
 
 $route['home'] 							= 'home';
 $route['salir'] 						= 'home/logout';

@@ -175,16 +175,12 @@ class Sellers extends CI_Model {
         }
     }
     public function reporte_vendedores( ) {
-        if($this->input->post('txt_fecha_ini') && $this->input->post('txt_fecha_fin'))
-        {
+        if($this->input->post('txt_fecha_ini') && $this->input->post('txt_fecha_fin') ) {
             $fecha_ini = $this->input->post('txt_fecha_ini');
             $fecha_fin = $this->input->post('txt_fecha_fin');
-        }
-        else
-        {
+        } else {
             $fecha_ini = $this->session->userdata('fecha_ini');
             $fecha_fin = $this->session->userdata('fecha_fin');
-
         }
 
 
