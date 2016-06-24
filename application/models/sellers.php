@@ -182,8 +182,6 @@ class Sellers extends CI_Model {
             $fecha_ini = $this->session->userdata('fecha_ini');
             $fecha_fin = $this->session->userdata('fecha_fin');
         }
-
-
         $queryChar = "tbl_traslados.IDTRASLADO as ID, 
                         (tbl_cliente.RFC),
                         tbl_cliente.R_SOCIAL AS CLIENTE,

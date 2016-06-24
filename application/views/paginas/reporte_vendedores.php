@@ -8,7 +8,7 @@
     <div class="col-lg-12">
         <div class="page-title">
             <h1>Estadisticas
-                <small></small>
+                <small>vendedores</small>
             </h1>
            <ol class="breadcrumb">
                 <li><i class="fa fa-file-excel-o"></i>  <a href="<?php echo base_url() ?>reporte_operadores.html">Operadores - Vendedores</a>
