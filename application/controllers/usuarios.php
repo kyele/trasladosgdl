@@ -283,45 +283,45 @@ class Usuarios extends CI_Controller
 		$char = "";
 		$this->estadisticas = $this->users->estadisticasXoperador();
 		header('Content-type: application/vnd.ms-excel');
-        	header('Content-Disposition: attachment; filename=Estadisticas_'.$this->estadisticas[0]['NOMBREUS'].'.xls');
-			$char = "<table  border='1'  bordercolor='#3B5389'>"
-			."<thead bgcolor='#CCCCCC'  align ='center'>"
-			."<tr>"
-			."<th>ID Traslado</th>"
-			."<th width='300'>Fecha de Alta</th>"
-			."<th width='420'>Cliente</th>"
-			."<th>Fecha del Traslado</th>"
-			."<th width='420'>Ruta</th>"
-			."<th width='420'>Usuario</th>"
-			."<th width='420'>Monto</th>"
-			."<th width='420'>Comentarios</th>"			
-			."</tr></thead><tbody>";			
-			$remove = array('$',',');
-			$total = 0;
-			foreach($this->estadisticas as $current){
-				$char.= "<tr>";
-				$tmp  = str_replace($remove,'',$current['MONTO']);
-				$total+= $tmp;
-				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
-				$char.="<td align='center'>".$current['FECHA_ALTA']."</td>";
-				if( $current['R_SOCIAL']  == '' ){
-					$char.="<td width='420' align='center'><b>".$current['NOMBRECL']."</b></td>";	
-				} else {
-					$char.="<td width='420' align='center'><b>".$current['R_SOCIAL']."</b></td>";
-				}
-				$char.="<td align='center'>".$current['FECHA']."</td>";
-				$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
-				$char.="<td width='420'>".$current['NOMBREUS']."</td>";				
-				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
-				$char.="<td width='420'><b>".$current['OBSERVACIONES']."</b></td>";
-				$char.="</tr>";
-
+    	header('Content-Disposition: attachment; filename=Estadisticas_'.$this->estadisticas[0]['NOMBREUS'].'.xls');
+		$char = "<table  border='1'  bordercolor='#3B5389'>"
+		."<thead bgcolor='#CCCCCC'  align ='center'>"
+		."<tr>"
+		."<th>ID Traslado</th>"
+		."<th width='300'>Fecha de Alta</th>"
+		."<th width='420'>Cliente</th>"
+		."<th>Fecha del Traslado</th>"
+		."<th width='420'>Ruta</th>"
+		."<th width='420'>Usuario</th>"
+		."<th width='420'>Monto</th>"
+		."<th width='420'>Comentarios</th>"			
+		."</tr></thead><tbody>";			
+		$remove = array('$',',');
+		$total = 0;
+		foreach($this->estadisticas as $current){
+			$char.= "<tr>";
+			$tmp  = str_replace($remove,'',$current['MONTO']);
+			$total+= $tmp;
+			$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
+			$char.="<td align='center'>".$current['FECHA_ALTA']."</td>";
+			if( $current['R_SOCIAL']  == '' ){
+				$char.="<td width='420' align='center'><b>".$current['NOMBRECL']."</b></td>";	
+			} else {
+				$char.="<td width='420' align='center'><b>".$current['R_SOCIAL']."</b></td>";
 			}
-			setlocale(LC_MONETARY, "en_US");
-    		$total = money_format('%(#10n',$total);
-			$char.='<tr><td colspan=6><b>Total:</b></td><td><b>'.'$'.($total).'</b></td></tr>';
-			$char.="</tbody></table>";
-			echo $char;		
+			$char.="<td align='center'>".$current['FECHA']."</td>";
+			$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
+			$char.="<td width='420'>".$current['NOMBREUS']."</td>";				
+			$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
+			$char.="<td width='420'><b>".$current['OBSERVACIONES']."</b></td>";
+			$char.="</tr>";
+
+		}
+		setlocale(LC_MONETARY, "en_US");
+		$total = money_format('%(#10n',$total);
+		$char.='<tr><td colspan=6><b>Total:</b></td><td><b>'.'$'.($total).'</b></td></tr>';
+		$char.="</tbody></table>";
+		echo $char;		
 	}
 	
 }

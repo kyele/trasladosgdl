@@ -148,12 +148,13 @@ class Vendedores extends CI_Controller
 				$this->session->set_userdata('fecha_ini',$this->input->post('txt_fecha_ini'));
 				$this->session->set_userdata('fecha_fin',$this->input->post('txt_fecha_fin'));
 
-				$data['estadisticas']  = $resultado['estadisticas'];
-				$data['montoPagados']  = $resultado['pagados'];
-				$data['montoNoPagados']  = $resultado['noPagados'];
-				$data['trasladosPagados']  = $resultado['traslados_pagados'];
-				$data['trasladosNoPagados']  = $resultado['traslados_no_pagados'];
-				$data['txc'] = $resultado['txc'];
+				$data['estadisticas']  		= $resultado['estadisticas'];
+				$data['montoPagados']  		= $resultado['pagados'];
+				$data['montoNoPagados']  	= $resultado['noPagados'];
+				$data['trasladosPagados']  	= $resultado['traslados_pagados'];
+				$data['trasladosNoPagados'] = $resultado['traslados_no_pagados'];
+				$data['txc'] 				= $resultado['txc'];
+				$data['sellers_acum'] 		= $resultado['sellers_acum'];
 			}
 		}
 
@@ -168,7 +169,50 @@ class Vendedores extends CI_Controller
 		$data['content']  		= 'reporte_vendedores';
 		$this->load->view('main_template',$data);
 	}
-	public function nueva_agencia(){
+	public function reporte($id_vendedor){
+		$char = "";
+		$this->estadisticas = $this->sellers->estadisticasXvendedor($id_vendedor);
+		header('Content-type: application/vnd.ms-excel');
+    	header('Content-Disposition: attachment; filename=Reporte_vendedor_'.$this->estadisticas[0]['NOMBRE_V'].'.xls');
+		$char = "<table  border='1'  bordercolor='#3B5389'>"
+		."<thead bgcolor='#CCCCCC'  align ='center'>"
+		."<tr>"
+		."<th>ID Traslado</th>"
+		."<th width='450'>Agencia Vendedor</th>"
+		."<th >Id Vendedor</th>"
+		."<th width='450'>Vendedor</th>"
+		."<th width='420'>Cliente</th>"
+		."<th width='420'>Monto</th>"
+		."<th width='420'>Comision</th>"
+		."<th width='420'>Situacion de pago (del traslado)</th>"
+		."</tr></thead><tbody>";
+		$remove = array('$',',');
+		$total = 0;
+		foreach($this->estadisticas as $current){
+			$char.= "<tr>";
+			$tmp  = str_replace($remove,'',$current['MONTO']);
+			$total+= $tmp;
+			$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
+			$char.="<td align='center'>".$current['NOMBRE_AGENCIA']."</td>";
+			$char.="<td align='center'>".$current['IDVENDEDOR']."</td>";
+			if( $current['R_SOCIAL']  == '' ){
+				$char.="<td width='420' align='center'><b>".$current['CLIENTE_ALT']."</b></td>";	
+			} else {
+				$char.="<td width='420' align='center'><b>".$current['CLIENTE']."</b></td>";
+			}
+			$char.="<td width='420'><b>$".$current['MONTO']."</b></td>";
+			$char.="<td align='center'>$".( ($current['MONTO']/100)*($current['COMISION']) )."</td>";
+			$char.="<td'>".$current['PAGADO']."</td>";
+			$char.="</tr>";
+
+		}
+		setlocale(LC_MONETARY, "en_US");
+		$total = money_format('%(#10n',$total);
+		$char.='<tr><td colspan=5><b>Total:</b></td><td><b>'.'$'.($total).'</b></td></tr>';
+		$char.="</tbody></table>";
+		echo $char;
+	}
+	public function nueva_agencia() {
 			$this->form_validation->set_error_delimiters( $this->char_error_open , $this->char_error_close );
 			$this->form_validation->set_rules('txt_nombre_agencia', 'Nombre Agencia', 'required|trim|xss_clean');
             $this->form_validation->set_rules('txt_abrev', 'Abreviacion', 'required|trim|exact_length[3]|xss_clean');

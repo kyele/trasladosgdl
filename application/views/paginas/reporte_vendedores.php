@@ -74,19 +74,26 @@
                      <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="" class="well col-lg-12">
                         <strong>
-                            <div class="page-header"><h4 class="text-center">Los siguientes clientes han solicitado traslados en las fechas seleccionadas</h4></div>
+                            <div class="page-header"><h4 class="text-center">Los siguientes vendedores son los que han conseguido una venta en las fechas solicitadas:</h4></div>
                             <ol >
-                            <?php foreach ($txc as $current): ?>
-                                <li> <?php echo "<span class='text-info'>". $current["CLIENTE"]."</span> solicit&oacute; ".$current['NUM_TRASLADOS']." traslados" ?> </li>
+                                <?php //var_dump($sellers_acum) ?>
+                            <?php foreach ($sellers_acum as $current): ?>
+                                <li> 
+                                    <?php
+                                        $route = base_url().'reporte_por_vendedor/'.$current["IDVENDEDOR"];
+                                    ?>
+                                    
+                                    <?php 
+                                        echo    "<a href='".$route."' class='text-success'>
+                                                    <i class='fa fa-file-excel-o' aria-hidden='true'></i>
+                                                </a> 
+                                                Agencia: <span class='text-success'>". $current["AGENCIA"]."</span> - <span class='text-info'>". $current["VENDEDOR"]."</span> agendo:".$current['NUM_TRASLADOS']." traslados, comision: <span class='text-danger'> $". ( ($current['MONTO']/100)*$current['COMISION'] )."</span>"
+                                    ?>
+                                </li>
                             <?php endforeach ?>
                             </ol>
                         </strong>
                         </label>                                
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <a class="btn btn-primary btn-md" href="<?php echo base_url() ?>reporte_estadisticas.html"><strong>Reporte PDF    </strong> <span class="fa fa-file-pdf-o fa-2x"></span></a>   
                     </div>
                 </div>
                 <hr>
@@ -94,29 +101,36 @@
                     <table id="catalogo" class="table table-striped table-condensed table-bordered table-hover table-green">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>N° Tras.</th>
+                                <th>Agencia Vendedor</th>
+                                <th>ID Vendedor</th>
+                                <th>Vendedor</th>
                                 <th>Cliente</th>
-                                <th>Pasajero</th>
-                                <th>Ruta</th>
-                                <th>Cantidad a Pagar</th>
-                                <th>Fecha del Traslado</th>
-                                <th>Tipo de Pago</th>
+                                <th>Monto</th>
+                                <th>Comision</th>
                                 <th>Situación del Pago</th>
-                                
                             </tr>
                         </thead>
                         <tbody id="table_traslados_pagos">
                             <?php 
                                 foreach ($estadisticas as $item) {
+                                    $id             = strval($item["IDVENDEDOR"]);
+                                    if( strlen( $id ) == 1 ) {
+                                       $id          = '00'.$id; 
+                                    } elseif ( strlen( $id ) == 2 ) {
+                                        $id          = '0'.$id;
+                                    }
+                                    $abreviacion    = ($item['ABREVIACION'] == NULL)?'NON-'.$id:$item['ABREVIACION'].'-'.$id;
+                                    $agencia        = ($item['NOMBRE_AGENCIA'] == NULL)?'SIN AGENCIA':$item['NOMBRE_AGENCIA'];
                             ?>
                                 <tr >
-                                    <td><?php echo $item['ID'] ?></td>
+                                    <td><?php echo $item['ID']; ?></td>
+                                    <td><?php echo $item['NOMBRE_AGENCIA']; ?></td>
+                                    <td class="text-center"><?php echo $abreviacion ?></td>
+                                    <td><?php echo $item['NOMBRE_V']; ?></td>
                                     <td><?php echo ($item['CLIENTE'] != "") ? $item['CLIENTE']: $item['CLIENTE_ALT']; ?></td>
-                                    <td width="120"><?php echo $item['N_PASAJERO'] ?></td>
-                                    <td><?php echo $item['RUTA'] ?></td>
-                                    <td><?php echo "$".$item['MONTO'] ?></td>
-                                    <td id ='fecha_pago_<?php echo $item['ID']?>'><?php echo $item['FECHA_PAGO'] ?></td>
-                                    <td><?php echo $item['FORMATO_PAGO'] ?></td>
+                                    <td><?php echo "$".$item['MONTO']; ?></td>
+                                    <td><?php echo "$".( ($item['MONTO']/100)*($item['COMISION']) ); ?></td>
                                     <?php if($item['PAGADO'] === 'NO'){ ?>
                                         <th  class="text-warning text-center">Pendiente <span class="fa fa-exclamation-triangle"></span></th>
                                     <?php 

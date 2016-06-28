@@ -182,65 +182,139 @@ class Sellers extends CI_Model {
             $fecha_ini = $this->session->userdata('fecha_ini');
             $fecha_fin = $this->session->userdata('fecha_fin');
         }
-        $queryChar = "tbl_traslados.IDTRASLADO as ID, 
+        $queryChar = "tbl_traslados.IDTRASLADO as ID,
                         (tbl_cliente.RFC),
                         tbl_cliente.R_SOCIAL AS CLIENTE,
                         CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT, 
                         tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO, 
                         CONCAT(tbl_traslados.LUGAR_REF, 
                         ' a ' , 
-                        tbl_traslados.DOMICILIO ) as RUTA, 
-                        DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA_PAGO,
+                        tbl_traslados.DOMICILIO ) as RUTA,
+                        tbl_traslados.PAGADO,
+                        (tbl_traslados.MONTO) as MONTO,
+                        tbl_traslados.FECHA_PAGO,
                         tbl_traslados.FORMATO_PAGO,
-                        tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO,
-                        tbl_traslados.PAGADO,(tbl_traslados.MONTO) as MONTO";
+                        vst_vendedores_agencia.NOMBRE_AGENCIA,
+                        vst_vendedores_agencia.ABREVIACION,
+                        vst_vendedores_agencia.IDVENDEDOR,
+                        vst_vendedores_agencia.NOMBRE_V,
+                        vst_vendedores_agencia.COMISION";
         $this->db->select($queryChar,FALSE);
-        $this->db->from('tbl_traslados , tbl_cliente');
-        $this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' ");
-        $this->db->order_by('CLIENTE,MONTO,tbl_traslados.PAGADO');
+        $this->db->from( ' tbl_traslados , tbl_cliente , vst_vendedores_agencia ' );
+        $this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' AND tbl_traslados.ID_VENDEDOR = vst_vendedores_agencia.IDVENDEDOR");
+        $this->db->order_by('NOMBRE_V,MONTO,tbl_traslados.PAGADO');
         //$this->db->group_by('tbl_cliente.RFC');
         $queryT = $this->db->get();
-        if($queryT->num_rows()>0){
+        if( $queryT->num_rows()>0 ) {
 
-            $myArray = $queryT->result_array();
-            $monto_pagados = 0;
-            $monto_no_pagados = 0;
-            $tPagados=0;
-            $tNoPagados=0;
-            $myArrayConteo = array();
-            $contador  = 0;
-            $currentClient = $myArray[0]["RFC"];
-            $index = 0;
+            $myArray            = $queryT->result_array();
+            $monto_pagados      = 0;
+            $monto_no_pagados   = 0;
+            $tPagados           = 0;
+            $tNoPagados         = 0;
+            $monto_vendedor     = 0;
+            $myArrayConteo      = array();
+            $myArrayVendedores  = array();
+            $contador           = 0;
+            $currentClient      = $myArray[0]["RFC"];
+            $currentVendedor    = $myArray[0]["IDVENDEDOR"];
+            $index              = 0;
 
             foreach ($myArray as $current) {
-                    if($currentClient == $current["RFC"]){
-                        $contador++;
-                    }
-                    else{
-                        $myArrayConteo[] = array("NUM_TRASLADOS" => $contador, "CLIENTE"=> ($myArray[$index-1]["CLIENTE"] != "") ? $myArray[$index-1]["CLIENTE"]:$myArray[$index-1]["CLIENTE_ALT"] );
-                        $contador = 1;
-                        $currentClient = $current["RFC"];
-                    }
-
-                if($current['PAGADO'] == 'SI')
-                {
-
+                //var_dump($current);
+                if( $currentClient == $current["RFC"] ) {
+                    $contador++;
+                } else {
+                    $myArrayConteo[] = array("NUM_TRASLADOS" => $contador, "CLIENTE"=> ($myArray[$index-1]["CLIENTE"] != "") ? $myArray[$index-1]["CLIENTE"]:$myArray[$index-1]["CLIENTE_ALT"] );
+                    $contador = 1;
+                    $currentClient = $current["RFC"];
+                }
+                if($current['PAGADO'] == 'SI') {
                      $monto_pagados+=$current['MONTO'];
                      $tPagados++;
-                }
-                else{
-
+                } else {
                     $monto_no_pagados+=$current['MONTO'];
                     $tNoPagados++;
                 };
-
                 $index++;
-
+                //var_dump($myArrayConteo);
             }
+            $myArrayConteo[] = array("NUM_TRASLADOS" => $contador, "CLIENTE"=> ($myArray[$index-1]["CLIENTE"] != "") ? $myArray[$index-1]["CLIENTE"]:$myArray[$index-1]["CLIENTE_ALT"] );
+            $currentClient = $current["RFC"];
 
+            $contador   = 0;
+            $index      = 0;
+            foreach ($myArray as $current) {
+                //var_dump($current);
+                if( $currentVendedor == $current["IDVENDEDOR"] ){
+                    $monto_vendedor = $monto_vendedor + $current['MONTO'];
+                    $contador++;
+                } else{
+                    $myArrayVendedores[]    = array(    "NUM_TRASLADOS" => $contador, 
+                                                        "IDVENDEDOR"    => $myArray[$index-1]["IDVENDEDOR"], 
+                                                        "VENDEDOR"      => $myArray[$index-1]["NOMBRE_V"], 
+                                                        "AGENCIA"       => $myArray[$index-1]["NOMBRE_AGENCIA"], 
+                                                        "MONTO"         => $monto_vendedor,
+                                                        "COMISION"      => $myArray[$index-1]["COMISION"]
+                                                    );
+                    $contador               = 1;
+                    $monto_vendedor         = 0;
+                    $currentVendedor        = $current["IDVENDEDOR"];
+                }
+                $index++;
+                //var_dump($myArrayConteo);
+            }
+            //$myArrayVendedores[] = array("NUM_TRASLADOS" => $contador, "VENDEDOR"=> $myArray[$index-1]["NOMBRE_V"] , "AGENCIA"=> $myArray[$index-1]["NOMBRE_AGENCIA"]);
+            $myArrayVendedores[] = array(   "NUM_TRASLADOS" => $contador,
+                                            "IDVENDEDOR"    => $myArray[$index-1]["IDVENDEDOR"], 
+                                            "VENDEDOR"      => $myArray[$index-1]["NOMBRE_V"],
+                                            "AGENCIA"       => $myArray[$index-1]["NOMBRE_AGENCIA"], 
+                                            "MONTO"         => $monto_vendedor,
+                                            "COMISION"      => $myArray[$index-1]["COMISION"]
+                                        );
 
-            return array('estadisticas'=>$myArray,'noPagados'=>number_format($monto_no_pagados,2),'pagados'=>number_format($monto_pagados,2),'traslados_pagados'=>$tPagados,'traslados_no_pagados'=>$tNoPagados,"txc"=>$myArrayConteo);
+            //var_dump($myArrayVendedores);
+            return array(
+                'sellers_acum'      => $myArrayVendedores, 
+                'estadisticas'      => $myArray,
+                'noPagados'         => number_format($monto_no_pagados,2),
+                'pagados'           => number_format($monto_pagados,2),
+                'traslados_pagados' => $tPagados,'traslados_no_pagados'=>$tNoPagados,"txc"=>$myArrayConteo
+            );
         }
+        return FALSE;
+    }
+    public function estadisticasXvendedor($id_vendedor){
+        $fecha_ini  = $this->session->userdata('fecha_ini');
+        $fecha_fin  = $this->session->userdata('fecha_fin');
+        $query      = "tbl_traslados.IDTRASLADO as ID,
+                        (tbl_cliente.RFC),
+                        tbl_cliente.R_SOCIAL AS CLIENTE,
+                        CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT, 
+                        tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO, 
+                        CONCAT(tbl_traslados.LUGAR_REF, 
+                        ' a ' , 
+                        tbl_traslados.DOMICILIO ) as RUTA,
+                        tbl_traslados.PAGADO,
+                        (tbl_traslados.MONTO) as MONTO,
+                        tbl_traslados.FECHA_PAGO,
+                        tbl_traslados.FORMATO_PAGO,
+                        vst_vendedores_agencia.NOMBRE_AGENCIA,
+                        vst_vendedores_agencia.ABREVIACION,
+                        vst_vendedores_agencia.IDVENDEDOR,
+                        vst_vendedores_agencia.NOMBRE_V,
+                        vst_vendedores_agencia.COMISION";
+        $this->db->select($queryChar,FALSE);
+        $this->db->from( ' tbl_traslados , tbl_cliente , vst_vendedores_agencia ' );
+        $this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' AND '$id_vendedor' = vst_vendedores_agencia.IDVENDEDOR");
+        $this->db->order_by('NOMBRE_V,MONTO,tbl_traslados.PAGADO');
+        $resEstadisticas = $this->db->get();
+        
+        if($resEstadisticas->num_rows() >0){
+            
+            return $resEstadisticas->result_array();
+        }
+
         return FALSE;
     }
 }
