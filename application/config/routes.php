@@ -118,6 +118,7 @@ $route['ver_agencia'] 					= 'vendedores/informacion_agencia';
 $route['actualizar_agencia'] 			= 'vendedores/update_agencia';
 $route['reporte_vendedores'] 			= 'vendedores/reporte_vendedores';
 $route['reporte_por_vendedor/(:any)'] 	= 'vendedores/reporte/$1';
+$route['reporte_por_agencia'] 			= 'vendedores/reporte_agencia';
 
 $route['home'] 							= 'home';
 $route['salir'] 						= 'home/logout';

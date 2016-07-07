@@ -111,7 +111,6 @@
                         </table>
                     </div>                    
                 <?php else: ?>
-                    <?php var_dump($estadisticas); ?>
                     <div class="alert alert-danger">No se han encontrado traslados con las fechas especificadas</div>
                 <?php endif ?>                       
             <?php endif ?>

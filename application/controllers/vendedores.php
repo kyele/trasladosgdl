@@ -147,7 +147,10 @@ class Vendedores extends CI_Controller
 			} else {
 				$this->session->set_userdata('fecha_ini',$this->input->post('txt_fecha_ini'));
 				$this->session->set_userdata('fecha_fin',$this->input->post('txt_fecha_fin'));
-
+				if( $resultado['consulta_agencia'] == 0 ) {
+					$this->session->set_userdata( 'id_agencia', $this->input->post('txt_agencia_selec' ) );
+				}
+				$data['r_agencia']  		= $resultado['consulta_agencia'];
 				$data['estadisticas']  		= $resultado['estadisticas'];
 				$data['montoPagados']  		= $resultado['pagados'];
 				$data['montoNoPagados']  	= $resultado['noPagados'];
@@ -159,6 +162,7 @@ class Vendedores extends CI_Controller
 		}
 
 		//$data['usuarios']  		= $this->users->catalogo_operadores();
+		$data['agencias']  		= $this->sellers->catalogo_agencias();
 		$data['nombre'] 		= $this->session_data['nombre'];
 		$data['apellido'] 		= $this->session_data['apellido'];
 		$data['usuario_i'] 		= $this->session_data['usuario_i'];
@@ -172,6 +176,7 @@ class Vendedores extends CI_Controller
 	public function reporte($id_vendedor){
 		$char = "";
 		$this->estadisticas = $this->sellers->estadisticasXvendedor($id_vendedor);
+		//var_dump($this->estadisticas);
 		header('Content-type: application/vnd.ms-excel');
     	header('Content-Disposition: attachment; filename=Reporte_vendedor_'.$this->estadisticas[0]['NOMBRE_V'].'.xls');
 		$char = "<table  border='1'  bordercolor='#3B5389'>"
@@ -186,30 +191,130 @@ class Vendedores extends CI_Controller
 		."<th width='420'>Comision</th>"
 		."<th width='420'>Situacion de pago (del traslado)</th>"
 		."</tr></thead><tbody>";
-		$remove = array('$',',');
-		$total = 0;
+		$remove 		= array('$',',');
+		$total 			= 0;
+		$total_comision = 0;
 		foreach($this->estadisticas as $current){
 			$char.= "<tr>";
+			$id   = strval($current["IDVENDEDOR"]);
+                if( strlen( $id ) == 1 ) {
+                   $id          = '00'.$id; 
+                } elseif ( strlen( $id ) == 2 ) {
+                    $id          = '0'.$id;
+                }
+                $abreviacion    = ($current['ABREVIACION'] == NULL)?'NON-'.$id:$current['ABREVIACION'].'-'.$id;
+                $agencia        = ($current['NOMBRE_AGENCIA'] == NULL)?'SIN AGENCIA':$current['NOMBRE_AGENCIA'];
+			$comision = ( $current['MONTO']/100 ) * ( $current['COMISION'] );
+			//var_dump($comision);
 			$tmp  = str_replace($remove,'',$current['MONTO']);
 			$total+= $tmp;
-			$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
+			$char.="<td align='center'>".$current['ID']."</td>";
 			$char.="<td align='center'>".$current['NOMBRE_AGENCIA']."</td>";
-			$char.="<td align='center'>".$current['IDVENDEDOR']."</td>";
-			if( $current['R_SOCIAL']  == '' ){
+			$char.="<td align='center'>".$abreviacion."</td>";
+			$char.="<td align='center'>".$current['NOMBRE_V']."</td>";
+			if( $current['CLIENTE_ALT']  == '' ){
 				$char.="<td width='420' align='center'><b>".$current['CLIENTE_ALT']."</b></td>";	
 			} else {
 				$char.="<td width='420' align='center'><b>".$current['CLIENTE']."</b></td>";
 			}
-			$char.="<td width='420'><b>$".$current['MONTO']."</b></td>";
-			$char.="<td align='center'>$".( ($current['MONTO']/100)*($current['COMISION']) )."</td>";
-			$char.="<td'>".$current['PAGADO']."</td>";
+			$char.="<td align='right'><b>$".$current['MONTO']."</b></td>";
+			$char.="<td align='right'><b>$".$comision."</b></td>";
+			if ( $current['PAGADO'] === 'NO' ){
+				$char.="<td align='center' width='200'><b>Pendiente</b></td>";
+			} else {
+				$char.="<td align='center' width='200'><b>Realizado</b></td>";
+			}
 			$char.="</tr>";
 
 		}
 		setlocale(LC_MONETARY, "en_US");
-		$total = money_format('%(#10n',$total);
-		$char.='<tr><td colspan=5><b>Total:</b></td><td><b>'.'$'.($total).'</b></td></tr>';
-		$char.="</tbody></table>";
+		$total_comision	 = ($total/100)*($current['COMISION']);
+		$total 			 = money_format('%(#10n',$total);
+		$total_comision  = money_format('%(#10n',$total_comision);
+		$char 			.="	<tr>
+								<td colspan=5>
+									<b>Total:</b>
+								</td>
+								<td align='right'>
+									<b>$ ".$total."</b>
+								</td>
+								<td align='right'>
+									<b>$".$total_comision."</b>
+								</td>
+								</tr>";
+		$char 			.="</tbody></table>";
+		echo $char;
+	} 
+	public function reporte_agencia() {
+		$char = "";
+		$this->estadisticas = $this->sellers->estadisticasXagencia();
+		//var_dump($this->estadisticas);
+		header('Content-type: application/vnd.ms-excel');
+    	header('Content-Disposition: attachment; filename=Reporte_agencia_'.$this->estadisticas[0]['NOMBRE_AGENCIA'].'.xls');
+		$char = "<table  border='1'  bordercolor='#3B5389'>"
+		."<thead bgcolor='#CCCCCC'  align ='center'>"
+		."<tr>"
+		."<th>ID Traslado</th>"
+		."<th width='450'>Agencia Vendedor</th>"
+		."<th >Id Vendedor</th>"
+		."<th width='450'>Vendedor</th>"
+		."<th width='420'>Cliente</th>"
+		."<th width='420'>Monto</th>"
+		."<th width='420'>Comision</th>"
+		."<th width='420'>Situacion de pago (del traslado)</th>"
+		."</tr></thead><tbody>";
+		$remove 		= array('$',',');
+		$total 			= 0;
+		$total_comision = 0;
+		foreach($this->estadisticas as $current){
+			$char.= "<tr>";
+			$id   = strval($current["IDVENDEDOR"]);
+                if( strlen( $id ) == 1 ) {
+                   $id          = '00'.$id; 
+                } elseif ( strlen( $id ) == 2 ) {
+                    $id          = '0'.$id;
+                }
+                $abreviacion    = ($current['ABREVIACION'] == NULL)?'NON-'.$id:$current['ABREVIACION'].'-'.$id;
+                $agencia        = ($current['NOMBRE_AGENCIA'] == NULL)?'SIN AGENCIA':$current['NOMBRE_AGENCIA'];
+			$comision = ( $current['MONTO']/100 ) * ( $current['COMISION'] );
+			//var_dump($comision);
+			$tmp  = str_replace($remove,'',$current['MONTO']);
+			$total+= $tmp;
+			$char.="<td align='center'>".$current['ID']."</td>";
+			$char.="<td align='center'>".$current['NOMBRE_AGENCIA']."</td>";
+			$char.="<td align='center'>".$abreviacion."</td>";
+			$char.="<td align='center'>".$current['NOMBRE_V']."</td>";
+			if( $current['CLIENTE_ALT']  == '' ){
+				$char.="<td width='420' align='center'><b>".$current['CLIENTE_ALT']."</b></td>";	
+			} else {
+				$char.="<td width='420' align='center'><b>".$current['CLIENTE']."</b></td>";
+			}
+			$char.="<td align='right'><b>$".$current['MONTO']."</b></td>";
+			$char.="<td align='right'><b>$".$comision."</b></td>";
+			if ( $current['PAGADO'] === 'NO' ){
+				$char.="<td align='center' width='200'><b>Pendiente</b></td>";
+			} else {
+				$char.="<td align='center' width='200'><b>Realizado</b></td>";
+			}
+			$char.="</tr>";
+
+		}
+		setlocale(LC_MONETARY, "en_US");
+		$total_comision	 = ($total/100)*($current['COMISION']);
+		$total 			 = money_format('%(#10n',$total);
+		$total_comision  = money_format('%(#10n',$total_comision);
+		$char 			.="	<tr>
+								<td colspan=5>
+									<b>Total:</b>
+								</td>
+								<td align='right'>
+									<b>$ ".$total."</b>
+								</td>
+								<td align='right'>
+									<b>$".$total_comision."</b>
+								</td>
+								</tr>";
+		$char 			.="</tbody></table>";
 		echo $char;
 	}
 	public function nueva_agencia() {

@@ -2,6 +2,7 @@
     $(document).ready(function() {
         rides.url = '<?php echo base_url() ?>';
         $('#txt_fecha_ini,#txt_fecha_fin').datepicker();
+        $('#txt_agencia_selec').select2();
     });
 </script>
 <div class="row">
@@ -44,9 +45,24 @@
                             <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
                         </div>
                     </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label for="txt_agencia">Agencia</label>
+                        <select name="txt_agencia_selec" class="form-control input-sm"  id="txt_agencia_selec">
+                            <option value="all">TODAS</option>
+                            <option value="non">Sin Agencia - NON</option>
+                            <?php
+                                if( !empty( $agencias ) ) {
+                                    foreach($agencias as $current) {
+                                        $nombre = $current['NOMBRE'].' - '.$current['ABREVIACION'];
+                                        echo '<option value="'.$current['IDAGENCIA'].'" '.set_select("txt_agencia",$current['IDAGENCIA']).'>'.$nombre.'</option>';
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </div>
                     <div class="form-group col-sm-12 col-md-12 col-lg-2">
                         <br>
-                        <button type="submit" class="btn btn-red pull-right">Buscar</button>   
+                        <button type="submit" class="btn btn-red pull-right">Buscar</button>
                     </div>
                 </div>
                 <hr>
@@ -56,6 +72,18 @@
                 if(!empty($estadisticas)){
             ?>
                 <div class="row">
+                <?php 
+                    if( $r_agencia == 0 ){
+                        $route1 = base_url().'reporte_por_agencia.html';
+                        echo "<div class='col-sm-12'>
+                                <a type='' class='btn btn-green pull-left' href='$route1'>
+                                    <i class='fa fa-file-excel-o' aria-hidden='true'></i> Imprimir reporte de esta Agencia
+                                </a>
+                            </div>
+                            <div class='clearfix'></div>
+                            <br>";
+                    }
+                ?>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                             <label for="" class="alert alert-success col-lg-12">
                         <strong>

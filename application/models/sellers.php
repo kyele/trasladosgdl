@@ -182,7 +182,7 @@ class Sellers extends CI_Model {
             $fecha_ini = $this->session->userdata('fecha_ini');
             $fecha_fin = $this->session->userdata('fecha_fin');
         }
-        $queryChar = "tbl_traslados.IDTRASLADO as ID,
+        $queryChar     = "tbl_traslados.IDTRASLADO as ID,
                         (tbl_cliente.RFC),
                         tbl_cliente.R_SOCIAL AS CLIENTE,
                         CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT, 
@@ -199,14 +199,25 @@ class Sellers extends CI_Model {
                         vst_vendedores_agencia.IDVENDEDOR,
                         vst_vendedores_agencia.NOMBRE_V,
                         vst_vendedores_agencia.COMISION";
+        $where          = "tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' AND tbl_traslados.ID_VENDEDOR = vst_vendedores_agencia.IDVENDEDOR";
+        $todas_agencias = 1;
+        if( $this->input->post( 'txt_agencia_selec' ) != 'all' ){
+            $todas_agencias = 0;
+            if( $this->input->post( 'txt_agencia_selec' ) == 'non' ){
+                $id_agencia = null;
+                $where .= " AND vst_vendedores_agencia.IDAGENCIA = '$id_agencia'";
+            } else {
+                $id_agencia = $this->input->post( 'txt_agencia_selec' );
+                $where .= " AND vst_vendedores_agencia.IDAGENCIA = '$id_agencia'";
+            }
+        }
+        
         $this->db->select($queryChar,FALSE);
         $this->db->from( ' tbl_traslados , tbl_cliente , vst_vendedores_agencia ' );
-        $this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' AND tbl_traslados.ID_VENDEDOR = vst_vendedores_agencia.IDVENDEDOR");
+        $this->db->where($where);
         $this->db->order_by('NOMBRE_V,MONTO,tbl_traslados.PAGADO');
-        //$this->db->group_by('tbl_cliente.RFC');
         $queryT = $this->db->get();
         if( $queryT->num_rows()>0 ) {
-
             $myArray            = $queryT->result_array();
             $monto_pagados      = 0;
             $monto_no_pagados   = 0;
@@ -219,9 +230,7 @@ class Sellers extends CI_Model {
             $currentClient      = $myArray[0]["RFC"];
             $currentVendedor    = $myArray[0]["IDVENDEDOR"];
             $index              = 0;
-
             foreach ($myArray as $current) {
-                //var_dump($current);
                 if( $currentClient == $current["RFC"] ) {
                     $contador++;
                 } else {
@@ -237,7 +246,6 @@ class Sellers extends CI_Model {
                     $tNoPagados++;
                 };
                 $index++;
-                //var_dump($myArrayConteo);
             }
             $myArrayConteo[] = array("NUM_TRASLADOS" => $contador, "CLIENTE"=> ($myArray[$index-1]["CLIENTE"] != "") ? $myArray[$index-1]["CLIENTE"]:$myArray[$index-1]["CLIENTE_ALT"] );
             $currentClient = $current["RFC"];
@@ -245,7 +253,6 @@ class Sellers extends CI_Model {
             $contador   = 0;
             $index      = 0;
             foreach ($myArray as $current) {
-                //var_dump($current);
                 if( $currentVendedor == $current["IDVENDEDOR"] ){
                     $monto_vendedor = $monto_vendedor + $current['MONTO'];
                     $contador++;
@@ -262,9 +269,7 @@ class Sellers extends CI_Model {
                     $currentVendedor        = $current["IDVENDEDOR"];
                 }
                 $index++;
-                //var_dump($myArrayConteo);
             }
-            //$myArrayVendedores[] = array("NUM_TRASLADOS" => $contador, "VENDEDOR"=> $myArray[$index-1]["NOMBRE_V"] , "AGENCIA"=> $myArray[$index-1]["NOMBRE_AGENCIA"]);
             $myArrayVendedores[] = array(   "NUM_TRASLADOS" => $contador,
                                             "IDVENDEDOR"    => $myArray[$index-1]["IDVENDEDOR"], 
                                             "VENDEDOR"      => $myArray[$index-1]["NOMBRE_V"],
@@ -272,14 +277,15 @@ class Sellers extends CI_Model {
                                             "MONTO"         => $monto_vendedor,
                                             "COMISION"      => $myArray[$index-1]["COMISION"]
                                         );
-
-            //var_dump($myArrayVendedores);
             return array(
-                'sellers_acum'      => $myArrayVendedores, 
-                'estadisticas'      => $myArray,
-                'noPagados'         => number_format($monto_no_pagados,2),
-                'pagados'           => number_format($monto_pagados,2),
-                'traslados_pagados' => $tPagados,'traslados_no_pagados'=>$tNoPagados,"txc"=>$myArrayConteo
+                'sellers_acum'          => $myArrayVendedores, 
+                'estadisticas'          => $myArray,
+                'noPagados'             => number_format($monto_no_pagados,2),
+                'pagados'               => number_format($monto_pagados,2),
+                'traslados_pagados'     => $tPagados,
+                'traslados_no_pagados'  => $tNoPagados,
+                "txc"                   => $myArrayConteo,
+                'consulta_agencia'      => $todas_agencias,
             );
         }
         return FALSE;
@@ -304,9 +310,46 @@ class Sellers extends CI_Model {
                         vst_vendedores_agencia.IDVENDEDOR,
                         vst_vendedores_agencia.NOMBRE_V,
                         vst_vendedores_agencia.COMISION";
-        $this->db->select($queryChar,FALSE);
+        $this->db->select($query,FALSE);
         $this->db->from( ' tbl_traslados , tbl_cliente , vst_vendedores_agencia ' );
-        $this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' AND '$id_vendedor' = vst_vendedores_agencia.IDVENDEDOR");
+        $this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' AND tbl_traslados.ID_VENDEDOR = '$id_vendedor' AND tbl_traslados.ID_VENDEDOR = vst_vendedores_agencia.IDVENDEDOR");
+        $this->db->order_by('NOMBRE_V,MONTO,tbl_traslados.PAGADO');
+        $resEstadisticas = $this->db->get();
+        
+        if($resEstadisticas->num_rows() >0){
+            
+            return $resEstadisticas->result_array();
+        }
+
+        return FALSE;
+    }
+    public function estadisticasXagencia(){
+        $fecha_ini  = $this->session->userdata('fecha_ini');
+        $fecha_fin  = $this->session->userdata('fecha_fin');
+        $id_agencia = $this->session->userdata('id_agencia');
+        if( $id_agencia == 'non') {
+            $id_agencia = null;
+        }
+        $query      = "tbl_traslados.IDTRASLADO as ID,
+                        (tbl_cliente.RFC),
+                        tbl_cliente.R_SOCIAL AS CLIENTE,
+                        CONCAT(tbl_cliente.NOMBRE,' ',tbl_cliente.APEPAT) AS CLIENTE_ALT, 
+                        tbl_traslados.NOMBRE_PASAJERO as N_PASAJERO, 
+                        CONCAT(tbl_traslados.LUGAR_REF, 
+                        ' a ' , 
+                        tbl_traslados.DOMICILIO ) as RUTA,
+                        tbl_traslados.PAGADO,
+                        (tbl_traslados.MONTO) as MONTO,
+                        tbl_traslados.FECHA_PAGO,
+                        tbl_traslados.FORMATO_PAGO,
+                        vst_vendedores_agencia.NOMBRE_AGENCIA,
+                        vst_vendedores_agencia.ABREVIACION,
+                        vst_vendedores_agencia.IDVENDEDOR,
+                        vst_vendedores_agencia.NOMBRE_V,
+                        vst_vendedores_agencia.COMISION";
+        $this->db->select($query,FALSE);
+        $this->db->from( ' tbl_traslados , tbl_cliente , vst_vendedores_agencia ' );
+        $this->db->where("tbl_traslados.IDCLIENTE = tbl_cliente.RFC AND tbl_traslados.FECHA BETWEEN '$fecha_ini' AND '$fecha_fin' AND ESTATUS <> 'C' AND vst_vendedores_agencia.IDAGENCIA = '$id_agencia' AND tbl_traslados.ID_VENDEDOR = vst_vendedores_agencia.IDVENDEDOR");
         $this->db->order_by('NOMBRE_V,MONTO,tbl_traslados.PAGADO');
         $resEstadisticas = $this->db->get();
         
