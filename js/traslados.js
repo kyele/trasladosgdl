@@ -7,6 +7,7 @@ var rides = {
     cerrar:false,
     url:'',
     solicintantes:Array(),
+    id_vendedor:'',
     checkPay :[],
     pay_mod :false,
     load_info:function(id){
@@ -326,6 +327,41 @@ var rides = {
             }
         });
     },
+    vendedor_cliente: function( cliente, url ){
+        //$("#txt_nombre_vendedor").empty();
+        rides.id_vendedor;
+        rides.url=url;
+        $.ajax({
+            url:url+'vendedor_cliente.html',
+            type:'POST',
+            dataType:'json',
+            data:{ "cliente":cliente },
+            success:function( data ){
+                if( data.status ) {
+                    $("#txt_nombre_vendedor > option[value="+data.vendedor[0]['ID_VENDEDOR']+"]").prop('selected','selected');
+                    $("#txt_nombre_vendedor > option[value="+data.vendedor[0]['ID_VENDEDOR']+"]").attr('selected','selected');
+                    $("#txt_nombre_vendedor").prop("disabled", true);
+                } else if(!data.status) {
+                    $("#txt_nombre_vendedor > option[value=0]").prop('selected','selected');
+                    $("#txt_nombre_vendedor > option[value=0]").attr('selected','selected');
+                    $("#txt_nombre_vendedor").prop("disabled", true);
+                    console.log($("#txt_nombre_vendedor").val());
+                    $('#contWarning').html(data.msg);
+                }
+                valor=$("#txt_nombre_vendedor :selected").val();
+                $("#txt_vendedores").val(valor);
+                console.log($("#txt_vendedores").val());
+                setTimeout( function( ) {
+                    $( '[class~="alert-warning"]' ).fadeOut( function( ) {
+                        $( this ).remove( );
+                    });
+
+                },1500);
+            }, error:function(){
+                //alert("valio dick 2");
+            }
+        });
+    },
     catalago_agencias:function(url){
         $("#txt_agencia").empty();
         rides.agencias  = Array();
@@ -335,8 +371,7 @@ var rides = {
             type:'POST',
             dataType:'json',
             beforeSend:function(data){
-            },
-            success:function(data){
+            }, success:function(data){
                 if( data.status ){
                     options         = "";
                     rides.agencias  = data.agencias;
@@ -352,8 +387,7 @@ var rides = {
                     $('#contError').html("data.msg");
                     // vehi.modal_Modelo();
                 }
-            },
-            error:function(){
+            }, error:function(){
                 //alert("valio dick 2");
             }
         });

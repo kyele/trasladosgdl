@@ -72,7 +72,7 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="txt_comision">Comision por traslado %</label>
-                    <input type="number" class="form-control input-sm" id="txt_comision" min="1" max="100" name="txt_comision" value="<?php echo set_value('txt_comision'); ?>" >
+                    <input type="number" step="any" class="form-control input-sm" id="txt_comision" min="1" max="100" name="txt_comision" value="<?php echo set_value('txt_comision'); ?>" >
                 </div>
                 <div class="row">
                     <div class="col-sm-12">

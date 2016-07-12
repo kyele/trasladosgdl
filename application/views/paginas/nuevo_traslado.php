@@ -1,7 +1,8 @@
 <script>
     $(document).ready(function() {
         $('#txt_cliente').select2();
-        $("#txt_vendedores").select2();
+        console.log($('#txt_cliente').val());
+        //$("#txt_vendedores").select2();
         $("#data_client").popover({
             trigger:'hover',
         });
@@ -10,9 +11,10 @@
         });
         $('#txt_cliente').change(function(){
             $('#data_client').attr('checked',false);
-           rides.load_info('data_client'); 
+            rides.load_info('data_client'); 
             rides.catalago_solicitantes($("#txt_cliente").val(),'<?php echo base_url()?>');
-             $('#data_solicitante').attr('checked',false);
+            rides.vendedor_cliente( $("#txt_cliente").val() , '<?php echo base_url()?>' );
+            $('#data_solicitante').attr('checked',false);
             rides.load_solicitante('data_solicitante'); 
         });
         $('#txt_traslado').datepicker();
@@ -24,7 +26,8 @@
             showInputs: false
             
         });
-        rides.catalago_solicitantes($("#txt_cliente").val(),'<?php echo base_url()?>');
+        rides.catalago_solicitantes( $("#txt_cliente").val() , '<?php echo base_url()?>' );
+        rides.vendedor_cliente( $("#txt_cliente").val() , '<?php echo base_url()?>' );
 
         $('#txt_cliente').change(function(){
             $('#data_solicitante').attr('checked',false);
@@ -85,7 +88,7 @@
                 if($this->session->flashdata('alert-vehiculo')){ echo $this->session->flashdata('alert-vehiculo');}
                 echo $error;
              ?>
-            <div id="contError"></div>                  
+            <div id="contError"></div>
             <?php $attributes = array('id' => 'myform_traslado'); echo form_open(base_url().'nuevo_traslado.html',$attributes); ?>
                 <div class="col-xs-12">                       
                     <div class="well table-responsive">
@@ -111,6 +114,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
+                    <div id="contWarning" class="col-sm-12"></div>
                     <div class="form-group col-sm-12">
                         <label for="txt_cliente">Cliente:</label>                        
                         <div class="input-group">
@@ -185,7 +189,22 @@
                         <label for="txt_Direccion_sol"> Direccion del Solitante </label>
                         <input type="text" class="form-control input-sm" id="txt_Direccion_sol" style="text-transform:uppercase" name="txt_Direccion_sol" value="<?php echo set_value('txt_Direccion_sol'); ?>" >
                     </div>
-                    
+                    <div class="form-group col-sm-12">
+                        <label for="txt_nombre_vendedor">Vendedor:</label>
+                        <select  class="form-control input-sm" id="txt_nombre_vendedor" style="text-transform:uppercase" name="txt_nombre_vendedor">
+                            <option value="0">Sin vendedor Asignado</option>
+                            <?php 
+                                if(!empty($info['vendedores'])){
+                                    foreach($info['vendedores'] as $vendedor){
+                                        $nombre = $vendedor['NOMBRE_V'];
+                                        $nombre = ( $vendedor['NOMBRE_AGENCIA'] == NULL )?'Sin Agencia - '.$nombre : $vendedor['NOMBRE_AGENCIA'].' - '.$nombre;
+                                        echo '<option value="'.$vendedor['IDVENDEDOR'].'" '.set_select("txt_nombre_vendedor",$vendedor['IDVENDEDOR']) .'>'.$nombre.'</option>';
+                                    }
+                                }
+                             ?>
+                        </select>
+                        <input type="hidden" value="" name="txt_vendedores" id="txt_vendedores">
+                    </div>
                     <!--<div class="form-group col-sm-12" id="form_group_txtNuevoModelo">
                         <label for="txt_nuevo_dir">Direccion Solicitante</label>
                         <input type="text" class="form-control input-sm" id="txt_nuevo_dir" style="text-transform:uppercase" name="txt_nuevo_dir"  value="<?php echo set_value('txt_nuevo_dir'); ?>" maxlength="20" autofocus>
@@ -266,9 +285,9 @@
                     <div class="form-group col-sm-12">
                         <label for="txt_observaciones"> Observaciones</label>
                         <textarea name="txt_observaciones" id="txt_observaciones" style="resize:none;" class="form-control input-sm" cols="10" rows="13" ><?php echo set_value('txt_observaciones'); ?></textarea>
-                    </div>            
+                    </div>
                 </div>
-                <div class="row">
+                <!--<div class="row">
                     <div class="clearfix"></div>
                     <hr>
                     <div class="col-sm-12">
@@ -292,7 +311,7 @@
                              ?>
                         </select>
                     </div>
-                </div>
+                </div>-->
                 <div class="row">
                     <div class="col-sm-12">
                     <button type="submit" class="btn btn-red pull-right">Guardar</button>   

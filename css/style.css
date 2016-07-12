@@ -2076,3 +2076,6 @@ input[type="checkbox"]:checked::after,
     width: 80%;
     height: 80%;
 }
+#contWarning > .alert-warning{
+    padding: 10px !important;
+}

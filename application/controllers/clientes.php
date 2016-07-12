@@ -11,6 +11,7 @@ class Clientes extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('customers','',TRUE);
+		$this->load->model('rides','',TRUE);
 		$this->char_error_open = '<span class="btn btn-danger btn-xs" style="margin:3px;"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true"> &nbsp;×</button>';
 		$this->char_error_close = '</span>';
         $this->success = '';
@@ -56,6 +57,7 @@ class Clientes extends CI_Controller
 		$this->form_validation->set_rules('txt_telefono_uno', 'Teléfono 1', 'trim|exact_length[10]|xss_clean');
 		$this->form_validation->set_rules('txt_telefono_dos', 'Teléfono 2', 'trim|exact_length[10]|xss_clean');
 		$this->form_validation->set_rules('txt_email','Correo Electronico', 'required|valid_email|trim|xss_clean');	
+		$this->form_validation->set_rules('txt_vendedores', 'Vendedor', 'required|trim|xss_clean');
 		$this->form_validation->set_message('required', 'El  %s es requerido');
 		$this->form_validation->set_message('valid_email', 'El %s no es válido');
 		if($this->form_validation->run() === TRUE){
@@ -75,16 +77,22 @@ class Clientes extends CI_Controller
 			}
 		}
 		
-			
-			$data['nombre'] = $this->session_data['nombre'];
-			$data['apellido'] = $this->session_data['apellido'];
-			$data['usuario_i'] = $this->session_data['usuario_i'];
-			$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
-			$data['success'] = $this->success;
-			$data['error'] = $this->error_msg;
-            $data['titulo'] = 'Agregar Cliente';
-			$data['content']  = 'nuevo_cliente';
-			$this->load->view('main_template',$data);
+		$data['info'] = $this->rides->catalogos();
+		if($data['info']['status'] === FALSE){
+			$this->error_msg = $data['info']['msg'];
+			$data['info'] = array();
+		}else{
+			$data['info'] = $data['info']['info'];
+		}
+		$data['nombre'] = $this->session_data['nombre'];
+		$data['apellido'] = $this->session_data['apellido'];
+		$data['usuario_i'] = $this->session_data['usuario_i'];
+		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
+		$data['success'] = $this->success;
+		$data['error'] = $this->error_msg;
+        $data['titulo'] = 'Agregar Cliente';
+		$data['content']  = 'nuevo_cliente';
+		$this->load->view('main_template',$data);
 		
 	}
 	public function catalogo_clientes(){
@@ -93,20 +101,26 @@ class Clientes extends CI_Controller
 		{	
 			$this->session_data = $this->session->userdata('logged_in');
 		}
-		
-			$data['clientes']  = $this->customers->catalogo_cliente();
-			if(($data['clientes']) === FALSE){
-				$this->error_msg = '<div class="alert  text-danger">No hay Clientes Registrados en el sistema. Registre uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_cliente.html">Aquí</a></div>';
-			}
-			$data['nombre'] = $this->session_data['nombre'];
-			$data['apellido'] = $this->session_data['apellido'];
-			$data['usuario_i'] = $this->session_data['usuario_i'];
-			$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
-			$data['success'] = $this->success;
-			$data['error'] = $this->error_msg;
-            $data['titulo'] = 'Catalogo de Clientes';
-			$data['content']  = 'catalogo_clientes';
-			$this->load->view('main_template',$data);
+		$data['info'] = $this->rides->catalogos();
+		if($data['info']['status'] === FALSE){
+			$this->error_msg = $data['info']['msg'];
+			$data['info'] = array();
+		}else{
+			$data['info'] = $data['info']['info'];
+		}
+		$data['clientes']  = $this->customers->catalogo_cliente();
+		if(($data['clientes']) === FALSE){
+			$this->error_msg = '<div class="alert  text-danger">No hay Clientes Registrados en el sistema. Registre uno nuevo <a class="btn btn-green" href="'.base_url().'nuevo_cliente.html">Aquí</a></div>';
+		}
+		$data['nombre'] = $this->session_data['nombre'];
+		$data['apellido'] = $this->session_data['apellido'];
+		$data['usuario_i'] = $this->session_data['usuario_i'];
+		$data['imagen_perfil'] = $this->session_data['imagen_perfil'];
+		$data['success'] = $this->success;
+		$data['error'] = $this->error_msg;
+        $data['titulo'] = 'Catalogo de Clientes';
+		$data['content']  = 'catalogo_clientes';
+		$this->load->view('main_template',$data);
 	}
 	public function informacion_solicitante(){
 		if($this->input->is_ajax_request() && $this->input->post('solicitante') ){

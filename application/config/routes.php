@@ -53,6 +53,7 @@ $route['traslados/comprobante/(:any)'] 	= 'traslados/pdf/$1';
 $route['estatus_traslado'] 				= 'traslados/update_status';
 $route['agenda_de_traslados'] 			= 'traslados/agenda_traslados';
 $route['nuevo_traslado'] 				= 'traslados/nuevo';
+$route['vendedor_cliente'] 				= 'traslados/vendedor_cliente';
 
 $route['mis_traslados'] 				= 'choferes/trasladosRealizados';
 $route['estadisticas_chofer'] 			= "choferes/estadisticas";//nuevos modulos pendientes

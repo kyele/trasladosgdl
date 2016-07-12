@@ -5,7 +5,7 @@
             obj.url = '<?php echo base_url() ?>';
             obj.modal($(this).attr('id'));
         });
-         $('#table_choferes').on('click','a.btn-myRides',function(e){
+        $('#table_choferes').on('click','a.btn-myRides',function(e){
             e.preventDefault();
             obj.modalMyRides($(this).data('ref'),$(this).data('nombrech'));
         });

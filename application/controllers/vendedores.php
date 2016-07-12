@@ -175,6 +175,9 @@ class Vendedores extends CI_Controller
 	}
 	public function reporte($id_vendedor){
 		$char = "";
+		if($this->input->post('id_vendedor')){
+			$id_vendedor = $this->input->post('id_vendedor');
+		}
 		$this->estadisticas = $this->sellers->estadisticasXvendedor($id_vendedor);
 		//var_dump($this->estadisticas);
 		header('Content-type: application/vnd.ms-excel');

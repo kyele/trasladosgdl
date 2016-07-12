@@ -21,7 +21,7 @@ class Rides extends CI_Model
 
 	}
 	public function catalogos(){
-		$this->db->select("RFC,R_SOCIAL as txt_razon,CONCAT(NOMBRE ,' ', APEPAT,' ',APEMAT) as txt_nombre,DOMICILIO as txt_domicilio, NUM_EXT as txt_num_ext, CRUCE_1  as txt_cruce_uno,CRUCE_2 as txt_cruce_dos, COLONIA as txt_colonia",FALSE);
+		$this->db->select("RFC,ID_VENDEDOR,R_SOCIAL as txt_razon,CONCAT(NOMBRE ,' ', APEPAT,' ',APEMAT) as txt_nombre,DOMICILIO as txt_domicilio, NUM_EXT as txt_num_ext, CRUCE_1  as txt_cruce_uno,CRUCE_2 as txt_cruce_dos, COLONIA as txt_colonia",FALSE);
 		$this->db->from('tbl_cliente');
 		$queryC = $this->db->get();
 		if($queryC->num_rows()>0){
@@ -630,6 +630,17 @@ class Rides extends CI_Model
 		$param=array("IDCLIENTE"=>$this->input->post("cliente"));
 		$this->db->select('ID,IDCLIENTE,NOMBRE,DOMICILIO');
 		$resultMol = $this->db->get_where('tbl_solicitantes',$param);
+		if($resultMol->num_rows()>0){
+			return $resultMol->result_array();
+		}
+		return FALSE;
+	}
+	public function vendedor_cliente(){
+		$id_cliente = $this->input->post("cliente");
+		$this->db->select( 'ID_VENDEDOR' , FALSE );
+		$this->db->from( 'tbl_cliente' );
+		$this->db->where( "RFC = '$id_cliente' AND ID_VENDEDOR != 'NULL'" );
+		$resultMol = $this->db->get();
 		if($resultMol->num_rows()>0){
 			return $resultMol->result_array();
 		}

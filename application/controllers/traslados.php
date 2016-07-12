@@ -7,6 +7,7 @@ class Traslados extends CI_Controller
 	public $success;
     public $error_msg;
     public $pdf;
+    public $clientes_array = array();
 	function __construct()
 	{
 		parent::__construct();
@@ -69,7 +70,6 @@ class Traslados extends CI_Controller
 			$this->form_validation->set_rules('txt_vendedores', 'Vendedor', 'required|trim|xss_clean');
 
 		}
-
 		$this->form_validation->set_message('required', 'El  %s es requerido');
 		$this->form_validation->set_message('valid_email', 'El %s no es válido');
 		//var_dump($this->input->post('txt_vendedores'));
@@ -93,13 +93,14 @@ class Traslados extends CI_Controller
 				redirect("nuevo_traslado","refresh");
 			}
 		}
-		$data['info'] = $this->rides->catalogos();
+		$data['info'] 		= $this->rides->catalogos();
 		if($data['info']['status'] === FALSE){
 			$this->error_msg = $data['info']['msg'];
-			$data['info'] = array();
+			$data['info'] 	= array();
 		}else{
-			$data['info'] = $data['info']['info'];
+			$data['info'] 	= $data['info']['info'];
 		}
+		//var_dump($data['info']['vendedores']);
 
 		$data['nombre'] = $this->session_data['nombre'];
 		$data['apellido'] = $this->session_data['apellido'];
@@ -571,6 +572,21 @@ class Traslados extends CI_Controller
 					echo  json_encode($result);
 			}else{
                 $resul=array("status"=>true,"solicitantes"=>$data);
+                echo json_encode($resul);
+            }
+		}else{
+			show_404();
+		}
+	}
+	public function vendedor_cliente(){
+		if($this->input->is_ajax_request()){
+			$data  = $this->rides->vendedor_cliente();
+			if($data === FALSE){
+				$this->error_msg = '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Este cliente no tiene un vendedor asignado<div>';
+				$result=array("status"=>false,"msg"=>$this->error_msg);
+				echo  json_encode($result);
+			}else{
+                $resul=array("status"=>true,"vendedor"=>$data);
                 echo json_encode($resul);
             }
 		}else{

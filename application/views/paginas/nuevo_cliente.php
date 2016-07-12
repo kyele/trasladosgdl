@@ -1,6 +1,7 @@
 <script>
     $(document).ready(function($) {
         $('#txt_fecha_nac').datepicker();
+        $("#txt_vendedores").select2();
         setTimeout(function(){
             $('[class~="alert-success"]').fadeOut(function(){
                 $(this).remove();
@@ -134,6 +135,31 @@
                 <div class="row">
                     <div class="col-sm-12">
                     <button type="submit" class="btn btn-red pull-right">Guardar</button>   
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="col-sm-12">
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            En caso de que la <strong>venta</strong> de este <strong>traslado</strong> fue hecha por un vendedor externo favor de referenciarlo.
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="txt_vendedores">Vendedor:</label>
+                        <select  class="form-control input-sm" id="txt_vendedores" style="text-transform:uppercase" name="txt_vendedores">
+                            <option value="0">Seleccionar Vendedor</option>
+                            <?php 
+                                if(!empty($info['vendedores'])){
+                                    foreach($info['vendedores'] as $vendedor){
+                                        $nombre = $vendedor['NOMBRE_V'];
+                                        $nombre = ( $vendedor['NOMBRE_AGENCIA'] == NULL )?'Sin Agencia - '.$nombre : $vendedor['NOMBRE_AGENCIA'].' - '.$nombre;
+                                        echo '<option value="'.$vendedor['IDVENDEDOR'].'" '.set_select("txt_vendedores",$vendedor['IDVENDEDOR']) .'>'.$nombre.'</option>';
+                                    }
+                                }
+                             ?>
+                        </select>
                     </div>
                 </div>
             </form>

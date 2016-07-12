@@ -5,6 +5,10 @@
             obj.url = '<?php echo base_url() ?>';
             obj.modal_vendedores($(this).attr('id'));
         });
+        $('#table_vendedores').on('click','a.btn-mySales',function(e){
+            e.preventDefault();
+            obj.modalMySales($(this).data('ref'),$(this).data('nombrech'));
+        });
     });
 </script>
 <div class="row">
@@ -42,7 +46,7 @@
                                 <th>AGENCIA</th>
                                 <th>EMAIL</th>
                                 <th>TELEFONO</th>
-                                <th>COMISION</th>
+                                <th>REPORTE</th>
                                 <th>EDITAR</th>
                             </tr>
                         </thead>
@@ -64,7 +68,7 @@
                                     <td><?php echo $agencia ?></td>
                                     <td><?php echo $item['EMAIL'] ?></td>
                                     <td class="text-center"><?php echo $item['TELEFONO'] ?></td>
-                                    <td class="text-center"><?php echo '% '.$item['COMISION'] ?></td>
+                                    <td class="text-center"><a title="reporte" class="text-success btn-mySales" data-nombrech ="<?php echo $item['NOMBRE_V'] ?>" data-ref="<?php echo $item['IDVENDEDOR'] ?>"><span class="fa fa-file-excel-o fa-2x"></span></a></td>
                                     <td class="text-center"><a  class="btn btn-link btn-xs" id='<?php echo $item["IDVENDEDOR"] ?>'><span class="fa fa-pencil-square-o fa-2x"></span></a></td>
                                 </tr>
                             <?php
@@ -133,12 +137,57 @@
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="txt_comision">Comision por traslado %</label>
-                                <input type="number" class="form-control input-sm" id="txt_comision" min="1" max="100" name="txt_comision" value="<?php echo set_value('txt_comision'); ?>" >
+                                <input type="number" class="form-control input-sm" step="any" id="txt_comision" min="1" max="100" name="txt_comision" value="<?php echo set_value('txt_comision'); ?>" >
                             </div>
                             <div class="form-group text-right">
                                 <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
                              <button type="submit" class="btn btn-red">Guardar Cambios</button>
                             </div>                            
+                        </form>
+                    </div>
+                </div>                                                
+            </div>           
+        </div>        
+    </div>    
+</div>
+<div class="modal modal-flex fade" id="modal_my_sales" tabindex="-1" role="dialog" aria-labelledby="standardModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-center" id="title_chofer">Reporte de Traslados de <span id="nombre_chofer_tr"></span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="contError"></div> 
+                        <?php 
+                            echo validation_errors();
+                            $route  = 'reporte_por_vendedor/0';
+                        ?>
+                        <?php $attributes = array('id' => 'myform_my_sales'); echo form_open(base_url().$route,$attributes); ?>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                    <input type="hidden" id="id_vendedor" name="rides">
+                                    <label for="txt_fecha_ini" >Fecha inicial</label>                               
+                                    <div class="input-group date" id="fecha_ini_container" >
+                                        <input class="form-control input-sm" size="16" type="text" id="txt_fecha_ini" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_ini" value="<?php echo set_value('txt_fecha_ini'); ?>"  readonly>
+                                        <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                                    </div>                       
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                    <label for="txt_fecha_fin" >Fecha Final</label>
+                                    <div class="input-group date" id="fecha_fin_container" >
+                                        <input class="form-control input-sm" size="16" type="text" id="txt_fecha_fin" data-date-viewmode="days" data-date="01-01-2013" data-date-format="yyyy/mm/dd" name="txt_fecha_fin" value="<?php echo set_value('txt_fecha_fin'); ?>"  readonly>
+                                        <span class="input-group-addon input-sm"><i class="fa fa-calendar"> </i></span>
+                                    </div>
+                                </div>
+                                 <div class="form-group col-sm-12 col-md-12 col-lg-2">
+                                    <br>
+                                       <button type="submit" class="btn btn-red pull-right">Generar</button>   
+                                </div>
+                            </div>
+                            <hr>
                         </form>
                     </div>
                 </div>                                                

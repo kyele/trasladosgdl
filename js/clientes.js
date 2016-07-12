@@ -13,19 +13,22 @@ var customers = {
 				            backdrop:'static',
 				            keyboard:true 
           				}).on('shown.bs.modal',function(e){
+          					if(data.cliente['txt_vendedores'] == null) {
+	      						data.cliente['txt_vendedores'] = '0';
+	      					}
 			                $.each(data.cliente,function(key,value){
-            	    		$('#'+key).val(value);	
-            	    		if(key == 'contribuyente'){
-            	    			if(value != 'FISICA'){
-									$('.tipo').css('display','none');
-									$('.tipo1').css('display','block');
-								}else{
-									$('.tipo').css('display','block');
-									$('.tipo1').css('display','none');
+	            	    		$('#'+key).val(value);	
+	            	    		if(key == 'contribuyente'){
+	            	    			if(value != 'FISICA'){
+										$('.tipo').css('display','none');
+										$('.tipo1').css('display','block');
+									}else{
+										$('.tipo').css('display','block');
+										$('.tipo1').css('display','none');
+									}
 								}
-							}
-                		});
-              
+	                		});
+	                		$('#txt_vendedores').select2();
          				}).on('hidden.bs.modal',function(){
          					$('#myform_info_cliente [input]').val('');
          				});

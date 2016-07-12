@@ -291,8 +291,16 @@ class Sellers extends CI_Model {
         return FALSE;
     }
     public function estadisticasXvendedor($id_vendedor){
-        $fecha_ini  = $this->session->userdata('fecha_ini');
-        $fecha_fin  = $this->session->userdata('fecha_fin');
+        if($this->input->post('txt_fecha_ini') || $this->input->post('txt_fecha_fin') ) {
+            $fecha_ini      = $this->input->post('txt_fecha_ini');
+            $fecha_fin      = $this->input->post('txt_fecha_fin');
+        } else {
+            $fecha_ini = $this->session->userdata('fecha_ini');
+            $fecha_fin = $this->session->userdata('fecha_fin');
+        }
+        if( $this->input->post('rides') ) {
+            $id_vendedor    = $this->input->post('rides');
+        } 
         $query      = "tbl_traslados.IDTRASLADO as ID,
                         (tbl_cliente.RFC),
                         tbl_cliente.R_SOCIAL AS CLIENTE,

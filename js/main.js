@@ -1,5 +1,6 @@
 var obj = {
 	url:'',
+	id_vendedor:'',
 	initialize:function(){
 		$('#sidebar-toggle').click(function(e){
 			e.preventDefault();
@@ -174,15 +175,28 @@ var obj = {
  	},
  	modalMyRides:function(rfc,nombre){
  		$('#hidd_myride').val(rfc);
- 			$('#modal_my_rides').modal({ 
-	            backdrop:'static',
-	            keyboard:true 
-				}).on('shown.bs.modal',function(e){
-               		$('#nombre_chofer_tr').html(nombre);
- 				}).on('hidden.bs.modal',function(){
-					$('#myform_my_rides [input]').val('');
-					$('#nombre_chofer_tr').html('');
-				});
+			$('#modal_my_rides').modal({ 
+            backdrop:'static',
+            keyboard:true 
+		}).on('shown.bs.modal',function(e){
+       		$('#nombre_chofer_tr').html(nombre);
+			}).on('hidden.bs.modal',function(){
+			$('#myform_my_rides [input]').val('');
+			$('#nombre_chofer_tr').html('');
+		});
+ 	},
+ 	modalMySales:function(id,nombre){
+ 			//id_vendedor:id;
+ 			$('#id_vendedor').val(id);
+			$('#modal_my_sales').modal({ 
+            backdrop:'static',
+            keyboard:true 
+		}).on('shown.bs.modal',function(e){
+       		$('#nombre_chofer_tr').html(nombre);
+		}).on('hidden.bs.modal',function(){
+			$('#myform_my_sales [input]').val('');
+			$('#nombre_chofer_tr').html('');
+		});
  	}, 	
  	update_status:function(id,status){
  		id_tmp = id.split('_');

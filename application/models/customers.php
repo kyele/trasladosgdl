@@ -18,20 +18,33 @@ class Customers extends CI_Model
 		$this->status  = 'A';
 	}
 	public function crear(){
-		
-		$this->data = array(
-				'RFC' => strtoupper($this->input->post('txt_rfc')),     'R_SOCIAL' => strtoupper($this->input->post('txt_razon')),     
-				'TIPO_CONTRIBUYENTE' => strtoupper($this->input->post('tipo_contribuyente')),
-				'NUM_EXT'   => $this->input->post('txt_num_ext'),
-				'NOMBRE' => strtoupper($this->input->post('txt_nombre')),     'NUM_INT'   => $this->input->post('txt_num_int'),
-				'APEPAT' => strtoupper($this->input->post('txt_apepat')),     'CRUCE_1'    => strtoupper($this->input->post('txt_cruce_uno')),
-				'APEMAT' => strtoupper($this->input->post('txt_apemat')),     'CRUCE_2'    => strtoupper($this->input->post('txt_cruce_dos')),
-				'TELEFONO_1' => $this->input->post('txt_telefono_uno'),        'FECHA_NAC' => $this->input->post('txt_fecha_nac'),           
-				'TELEFONO_2' => $this->input->post('txt_telefono_dos'),        'DOMICILIO' => strtoupper($this->input->post('txt_domicilio')),       'PAIS' => strtoupper($this->input->post('txt_pais')),        
-				'ESTADO' => strtoupper($this->input->post('txt_estado')), 'MUNICIPIO' => strtoupper($this->input->post('txt_municipio')),         
-				'CODIGO_P'      => $this->input->post('txt_cp'),              'COLONIA' => strtoupper($this->input->post('txt_colonia')),   
-				'EMAIL' => $this->input->post('txt_email')
- 			);
+		if( $this->input->post("txt_vendedores") == "0" ) {
+			$id_vendedor = NULL;	
+		} else {
+			$id_vendedor = $this->input->post("txt_vendedores");
+		}
+		$this->data = array( 	'RFC' 					=> strtoupper($this->input->post('txt_rfc')),
+								'ID_VENDEDOR'			=> $id_vendedor,
+								'R_SOCIAL' 				=> strtoupper($this->input->post('txt_razon')),     
+								'TIPO_CONTRIBUYENTE' 	=> strtoupper($this->input->post('tipo_contribuyente')),
+								'NUM_EXT'   			=> $this->input->post('txt_num_ext'),
+								'NOMBRE' 				=> strtoupper($this->input->post('txt_nombre')),
+								'NUM_INT'   			=> $this->input->post('txt_num_int'),
+								'APEPAT' 				=> strtoupper($this->input->post('txt_apepat')),
+								'CRUCE_1'    			=> strtoupper($this->input->post('txt_cruce_uno')),
+								'APEMAT' 				=> strtoupper($this->input->post('txt_apemat')),
+								'CRUCE_2'    			=> strtoupper($this->input->post('txt_cruce_dos')),
+								'TELEFONO_1' 			=> $this->input->post('txt_telefono_uno'),
+								'FECHA_NAC' 			=> $this->input->post('txt_fecha_nac'),           
+								'TELEFONO_2' 			=> $this->input->post('txt_telefono_dos'),
+								'DOMICILIO' 			=> strtoupper($this->input->post('txt_domicilio')),
+								'PAIS' 					=> strtoupper($this->input->post('txt_pais')),        
+								'ESTADO' 				=> strtoupper($this->input->post('txt_estado')),
+								'MUNICIPIO' 			=> strtoupper($this->input->post('txt_municipio')),         
+								'CODIGO_P'      		=> $this->input->post('txt_cp'),
+								'COLONIA' 				=> strtoupper($this->input->post('txt_colonia')),   
+								'EMAIL' 				=> $this->input->post('txt_email')
+			 			);
 		$params_usuario = array('RFC'=>$this->data['RFC']);
 		$this->db->select('RFC');
 		$validar_usuario = $this->db->get_where('tbl_cliente',$params_usuario);
@@ -134,7 +147,7 @@ class Customers extends CI_Model
 	}
 	public function get_cliente(){
 		$param = array('RFC'=>strtoupper($this->input->post('cliente')));
-		$this->db->select('RFC as txt_rfc,NOMBRE as txt_nombre,TIPO_CONTRIBUYENTE as contribuyente,R_SOCIAL as txt_razon,APEPAT as txt_apepat,APEMAT as txt_apemat,FECHA_NAC as txt_fecha_nac,'.
+		$this->db->select('RFC as txt_rfc,ID_VENDEDOR as txt_vendedores, NOMBRE as txt_nombre,TIPO_CONTRIBUYENTE as contribuyente,R_SOCIAL as txt_razon,APEPAT as txt_apepat,APEMAT as txt_apemat,FECHA_NAC as txt_fecha_nac,'.
 						'DOMICILIO as txt_domicilio,NUM_EXT as txt_num_ext,NUM_INT as txt_num_int,COLONIA as txt_colonia,'.
 						'CRUCE_1 as txt_cruce_uno,CRUCE_2 as txt_cruce_dos,CODIGO_P as txt_cp,TELEFONO_1 as txt_telefono_uno,TELEFONO_2 as txt_telefono_dos,'.
 						'EMAIL as txt_email');
@@ -177,18 +190,31 @@ class Customers extends CI_Model
 	}
 	public function update_cliente(){
 		
-		$this->id_cliente =  $this->session->userdata('rfc_cliente');
-		$this->email =  $this->session->userdata('email_cliente');
+		$this->id_cliente 	=  $this->session->userdata('rfc_cliente');
+		$this->email 		=  $this->session->userdata('email_cliente');
+        if( $this->input->post("txt_vendedores") == "0" ) {
+			$id_vendedor = NULL;	
+		} else {
+			$id_vendedor = $this->input->post("txt_vendedores");
+		}
 		$this->data = array(
-				'RFC' => strtoupper($this->input->post('txt_rfc')),     'R_SOCIAL' => strtoupper($this->input->post('txt_razon')),     
-				'NUM_EXT'   => $this->input->post('txt_num_ext'),
-				'NOMBRE' => strtoupper($this->input->post('txt_nombre')),     'NUM_INT'   => $this->input->post('txt_num_int'),
-				'APEPAT' => strtoupper($this->input->post('txt_apepat')),     'CRUCE_1'    => strtoupper($this->input->post('txt_cruce_uno')),
-				'APEMAT' => strtoupper($this->input->post('txt_apemat')),     'CRUCE_2'    => strtoupper($this->input->post('txt_cruce_dos')),
-				'TELEFONO_1' => $this->input->post('txt_telefono_uno'),        'FECHA_NAC' => $this->input->post('txt_fecha_nac'),           
-				'TELEFONO_2' => $this->input->post('txt_telefono_dos'),        'DOMICILIO' => strtoupper($this->input->post('txt_domicilio')),        
-				'CODIGO_P'      => $this->input->post('txt_cp'),              'COLONIA' => strtoupper($this->input->post('txt_colonia')),   
-				'EMAIL' => $this->input->post('txt_email')
+				'RFC' 			=> strtoupper($this->input->post('txt_rfc')),
+				'ID_VENDEDOR' 	=> $id_vendedor,
+				'R_SOCIAL' 		=> strtoupper($this->input->post('txt_razon')),     
+				'NUM_EXT'   	=> $this->input->post('txt_num_ext'),
+				'NOMBRE' 		=> strtoupper($this->input->post('txt_nombre')),
+				'NUM_INT'   	=> $this->input->post('txt_num_int'),
+				'APEPAT' 		=> strtoupper($this->input->post('txt_apepat')),
+				'CRUCE_1'   	=> strtoupper($this->input->post('txt_cruce_uno')),
+				'APEMAT' 		=> strtoupper($this->input->post('txt_apemat')),
+				'CRUCE_2'    	=> strtoupper($this->input->post('txt_cruce_dos')),
+				'TELEFONO_1' 	=> $this->input->post('txt_telefono_uno'),
+				'FECHA_NAC' 	=> $this->input->post('txt_fecha_nac'),           
+				'TELEFONO_2' 	=> $this->input->post('txt_telefono_dos'),
+				'DOMICILIO' 	=> strtoupper($this->input->post('txt_domicilio')),        
+				'CODIGO_P'      => $this->input->post('txt_cp'),
+				'COLONIA' 		=> strtoupper($this->input->post('txt_colonia')),   
+				'EMAIL' 		=> $this->input->post('txt_email')
  			);
 		if($this->data['RFC'] !== $this->id_cliente){
 				$param_cliente = array('RFC'=>$this->data['RFC']);
