@@ -9,19 +9,17 @@
     });
 </script>
 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="page-title">
-                            <h1>Perfil de usuario
-                                
-                            </h1>
-                            <ol class="breadcrumb">
-                                <h4><li class="active"><i class="fa fa-user"></i> Usuario</li></h4>
-                                <li class="pull-right">
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                    
+    <div class="col-lg-12">
+        <div class="page-title">
+            <h1>
+                Perfil de usuario
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active"><i class="fa fa-desktop"></i><a href="<?php echo base_url() ?>home.html"> Inicio</a></li>
+                <li ><i class="active fa fa-user"></i> Mi perfil</li>
+            </ol>
+        </div>
+    </div>          
 </div>
 
 <div class="row">

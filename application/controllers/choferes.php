@@ -206,10 +206,10 @@ class Choferes extends CI_Controller
 				$total+= $tmp;
 				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
 				$char.="<td align='center'>".$current['FECHA']."</td>";
-				$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
-				$char.="<td width='420'>".$current['NOMBRECH']."</td>";				
+				$char.="<td width='420' align='center'>".utf8_decode($current['RUTA'])."</td>";
+				$char.="<td width='420'>".utf8_decode($current['NOMBRECH'])."</td>";				
 				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
-				$char.="<td width='420'><b>".$current['OBSERVACIONES']."</b></td>";
+				$char.="<td width='420'><b>".utf8_decode($current['OBSERVACIONES'])."</b></td>";
 				$char.="</tr>";
 
 			}
@@ -252,15 +252,15 @@ class Choferes extends CI_Controller
 				
 				$char.="<td align='center'>".$current['FECHA']."</td>";
 				/*$char.="<td width='420'>".$current['LUGAR_REF']." <strong> A </strong> ".$current['DOMICILIO']."</td>";*/				
-				$char.="<td width='420'>".strtoupper($current['DOMICILIO'])."</td>";
-				$char.="<td width='420'>".strtoupper($current['LUGAR_REF'])."</td>";
+				$char.="<td width='420'>".strtoupper(utf8_decode($current['DOMICILIO']))."</td>";
+				$char.="<td width='420'>".strtoupper(utf8_decode($current['LUGAR_REF']))."</td>";
 				$char.="<td>".$current['HORA']."</td>";
-				$char.="<td width='200'>".$current['MODELO']." ".$current['COLOR']."</td>";
-				$char.="<td width='200'>".$current['NOMBRECH']."</td>";
-				$char.="<td width='200'>".$current['N_PASAJERO']."</td>";
-				$char.="<td width='200'>".$nombre."</td>";
-				$char.="<td width='200'>".$current['N_SOLICITANTE']."</td>";
-				$char.="<td width='200'><b>".$current['OBSERVACIONES']."</b></td>";
+				$char.="<td width='200'>".utf8_decode($current['MODELO'])." ".$current['COLOR']."</td>";
+				$char.="<td width='200'>".utf8_decode($current['NOMBRECH'])."</td>";
+				$char.="<td width='200'>".utf8_decode($current['N_PASAJERO'])."</td>";
+				$char.="<td width='200'>".utf8_decode($nombre)."</td>";
+				$char.="<td width='200'>".utf8_decode($current['N_SOLICITANTE'])."</td>";
+				$char.="<td width='200'><b>".utf8_decode($current['OBSERVACIONES'])."</b></td>";
 				$char.="</tr>";
 			}
 			$char.="</tbody></table>";

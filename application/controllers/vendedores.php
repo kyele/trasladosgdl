@@ -212,13 +212,13 @@ class Vendedores extends CI_Controller
 			$tmp  = str_replace($remove,'',$current['MONTO']);
 			$total+= $tmp;
 			$char.="<td align='center'>".$current['ID']."</td>";
-			$char.="<td align='center'>".$current['NOMBRE_AGENCIA']."</td>";
-			$char.="<td align='center'>".$abreviacion."</td>";
-			$char.="<td align='center'>".$current['NOMBRE_V']."</td>";
+			$char.="<td align='center'>".utf8_decode($current['NOMBRE_AGENCIA'])."</td>";
+			$char.="<td align='center'>".utf8_decode($abreviacion)."</td>";
+			$char.="<td align='center'>".utf8_decode($current['NOMBRE_V'])."</td>";
 			if( $current['CLIENTE_ALT']  == '' ){
-				$char.="<td width='420' align='center'><b>".$current['CLIENTE_ALT']."</b></td>";	
+				$char.="<td width='420' align='center'><b>".utf8_decode($current['CLIENTE_ALT'])."</b></td>";	
 			} else {
-				$char.="<td width='420' align='center'><b>".$current['CLIENTE']."</b></td>";
+				$char.="<td width='420' align='center'><b>".utf8_decode($current['CLIENTE'])."</b></td>";
 			}
 			$char.="<td align='right'><b>$".$current['MONTO']."</b></td>";
 			$char.="<td align='right'><b>$".$comision."</b></td>";
@@ -284,13 +284,13 @@ class Vendedores extends CI_Controller
 			$tmp  = str_replace($remove,'',$current['MONTO']);
 			$total+= $tmp;
 			$char.="<td align='center'>".$current['ID']."</td>";
-			$char.="<td align='center'>".$current['NOMBRE_AGENCIA']."</td>";
-			$char.="<td align='center'>".$abreviacion."</td>";
-			$char.="<td align='center'>".$current['NOMBRE_V']."</td>";
+			$char.="<td align='center'>".utf8_decode($current['NOMBRE_AGENCIA'])."</td>";
+			$char.="<td align='center'>".utf8_decode($abreviacion)."</td>";
+			$char.="<td align='center'>".utf8_decode($current['NOMBRE_V'])."</td>";
 			if( $current['CLIENTE_ALT']  == '' ){
-				$char.="<td width='420' align='center'><b>".$current['CLIENTE_ALT']."</b></td>";	
+				$char.="<td width='420' align='center'><b>".utf8_decode($current['CLIENTE_ALT'])."</b></td>";	
 			} else {
-				$char.="<td width='420' align='center'><b>".$current['CLIENTE']."</b></td>";
+				$char.="<td width='420' align='center'><b>".utf8_decode($current['CLIENTE'])."</b></td>";
 			}
 			$char.="<td align='right'><b>$".$current['MONTO']."</b></td>";
 			$char.="<td align='right'><b>$".$comision."</b></td>";

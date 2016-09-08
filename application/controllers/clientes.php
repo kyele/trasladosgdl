@@ -225,7 +225,7 @@ class Clientes extends CI_Controller
 				$this->form_validation->set_rules('txt_fecha_nac', 'Fecha de Nacimiento', 'trim|required|exact_length[10]|xss_clean');
 			}
 			$this->form_validation->set_rules('txt_rfc', 'RFC', 'required|trim|xss_clean|exact_length[12]');
-			$this->form_validation->set_rules('txt_razon','Razón Social', 'required|trim|xss_clean');
+			//$this->form_validation->set_rules('txt_razon','Razón Social', 'required|trim|xss_clean');
 			
 			$this->form_validation->set_rules('txt_domicilio', 'Domicilio', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('txt_colonia', 'Colonia', 'trim|required|xss_clean');
@@ -273,6 +273,7 @@ class Clientes extends CI_Controller
 			."<th>Ruta</th>"
 			."<th>Hora</th>"
 			."<th>Pasajero</th>"
+			."<th>Chofer</th>"
 			."<th width='400'>Cliente</th>"
 			."<th>Solicitante</th>"
 			."<th>Monto</th>"
@@ -291,13 +292,14 @@ class Clientes extends CI_Controller
 				$char.="<td align='center'>".$current['FECHA']."</td>";
 				$char.="<td>".strtoupper($current['RUTA'])."</td>";
 				$char.="<td>".$current['HORA']."</td>";
-				$char.="<td>".$current['NOMBRE_PASAJERO']."</td>";
+				$char.="<td>".utf8_decode($current['NOMBRE_PASAJERO'])."</td>";
+				$char.="<td>".utf8_decode($current['CHOFER'])."</td>";
 				$char.="<td width='400'>".$nombre."</td>";
-				$char.="<td>".$current['NOMBRE_SOLICITANTE']."</td>";
+				$char.="<td>".utf8_decode($current['NOMBRE_SOLICITANTE'])."</td>";
 				$char.="<td><b>".$current['MONTO']."</b></td>";
 				$char.="<td>".$current['BAUCHER']."</td>";
 				$char.="<td>".$current['CECO']."</td>";
-				$char.="<td width='200'><b>".$current['OBSERVACIONES']."</b></td>";
+				$char.="<td width='200'><b>".utf8_decode($current['OBSERVACIONES'])."</b></td>";
 				$char.="</tr>";
 			}
 			setlocale(LC_MONETARY, "en_US");
@@ -341,13 +343,13 @@ class Clientes extends CI_Controller
 				$char.= "<tr width='800'>";
 				$nombre = 	($current['CLIENTE'] != "")?$current['CLIENTE']:($current['CLIENTE_ALT']);
 				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
-				$char.="<td width='500'>".$nombre."</td>";
+				$char.="<td width='500'>".utf8_decode($nombre)."</td>";
 				$char.="<td>".$current['N_PASAJERO']."</td>";
-				$char.="<td>".$current['NOMBRECH']."</td>";
+				$char.="<td>".utf8_decode($current['NOMBRECH'])."</td>";
 				$char.="<td>".$current['MODELO']."</td>";
 				//$char.="<td>".$current['NUMTRASLADOS']."</td>";
 				$char.="<td>$".$current['MONTO']."</td>";
-				$char.="<td width='200'><b>".$current['OBSERVACIONES']."</b></td>";
+				$char.="<td width='200'><b>".utf8_decode($current['OBSERVACIONES'])."</b></td>";
 				$char.="</tr>";
 				$monto = str_replace(',','',$current['MONTO']);
 				$total+= $monto;

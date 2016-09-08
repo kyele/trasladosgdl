@@ -226,11 +226,11 @@ class Vehiculos extends CI_Controller
 				$total+= $tmp;
 				$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
 				$char.="<td align='center'>".$current['FECHA']."</td>";
-				$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
-				$char.="<td width='420'>".$current['MODELO']."(".$current['COLOR'].")</td>";
+				$char.="<td width='420' align='center'>".utf8_decode($current['RUTA'])."</td>";
+				$char.="<td width='420'>".utf8_decode($current['MODELO'])."(".$current['COLOR'].")</td>";
 				$char.="<td width='420' align='center'>".$current['MATRICULA']."</td>";
 				$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
-                $char.="<td width='420' align='center'>".$current['OBSERVACIONES']."</td>";
+                $char.="<td width='420' align='center'>".utf8_decode($current['OBSERVACIONES'])."</td>";
 				$char.="</tr>";
 
 			}

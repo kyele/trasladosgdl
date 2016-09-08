@@ -305,15 +305,15 @@ class Usuarios extends CI_Controller
 			$char.="<td align='center'>".$current['IDTRASLADO']."</td>";
 			$char.="<td align='center'>".$current['FECHA_ALTA']."</td>";
 			if( $current['R_SOCIAL']  == '' ){
-				$char.="<td width='420' align='center'><b>".$current['NOMBRECL']."</b></td>";	
+				$char.="<td width='420' align='center'><b>".utf8_decode($current['NOMBRECL'])."</b></td>";	
 			} else {
-				$char.="<td width='420' align='center'><b>".$current['R_SOCIAL']."</b></td>";
+				$char.="<td width='420' align='center'><b>".utf8_decode($current['R_SOCIAL'])."</b></td>";
 			}
 			$char.="<td align='center'>".$current['FECHA']."</td>";
-			$char.="<td width='420' align='center'>".$current['RUTA']."</td>";
-			$char.="<td width='420'>".$current['NOMBREUS']."</td>";				
+			$char.="<td width='420' align='center'>".utf8_decode($current['RUTA'])."</td>";
+			$char.="<td width='420'>".utf8_decode($current['NOMBREUS'])."</td>";
 			$char.="<td width='420'><b>".$current['MONTO']."</b></td>";
-			$char.="<td width='420'><b>".$current['OBSERVACIONES']."</b></td>";
+			$char.="<td width='420'><b>".utf8_decode($current['OBSERVACIONES'])."</b></td>";
 			$char.="</tr>";
 
 		}

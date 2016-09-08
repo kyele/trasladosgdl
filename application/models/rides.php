@@ -266,7 +266,7 @@ class Rides extends CI_Model
 
 			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.PAGADO,tbl_traslados.MONTO,IDCOMPROBANTE,tbl_cliente.COLOR,tbl_traslados.ESTATUS";
 			$betweenT = "BETWEEN '$this->fecha_ini' AND '$this->fecha_fin'";
-			$where = " tbl_cliente.RFC = '$cliente' AND ";
+			$where = " tbl_cliente.RFC = '$cliente' AND tbl_traslados.ESTATUS != 'C' AND ";
 
 		}
 		$this->db->select($queryChar,FALSE);
@@ -377,23 +377,24 @@ class Rides extends CI_Model
 			}
 		$param = array('IDTRASLADO'=>$id_traslado);
 		$this->data = array(
-				'DOMICILIO'=>strtoupper($this->input->post('txt_domicilio'.$prefix)),
-				'NUM_EXT'=>$this->input->post('txt_num_ext'.$prefix),
-				'COLONIA'=>strtoupper($this->input->post('txt_colonia'.$prefix)),
-				'CRUCE1'=>strtoupper($this->input->post('txt_cruce_uno'.$prefix)),
-				'CRUCE2'=>strtoupper($this->input->post('txt_cruce_dos'.$prefix)),
-				'LUGAR_REF'=>strtoupper($this->input->post('txt_referencial').$prefix),
-				'NOMBRE_PASAJERO'=>strtoupper($this->input->post('txt_nombre_pasajero'.$prefix)),
-				'NUM_PASAJEROS'=>$this->input->post('txt_num_pasajeros'.$prefix),
-				'NOMBRE_SOLICITANTE'=>$this->input->post('txt_nombre_solicitante'.$prefix),
-				'FECHA'=>$this->input->post('txt_fecha'.$prefix),
-				'HORA'=>$this->input->post('txt_hora'.$prefix),
-				'IDCHOFER'=>$this->input->post('txt_conductor'.$prefix),
-				'IDVEHICULO'=>$this->input->post('txt_vehiculo'.$prefix),
-				'BAUCHER'=>strtoupper($this->input->post('txt_baucher'.$prefix)),
-				'CECO'=>strtoupper($this->input->post('txt_ceco'.$prefix)),
-				'MONTO'=>$this->input->post('txt_monto_traslado'.$prefix),
-				'OBSERVACIONES'=>strtoupper($this->input->post('txt_observaciones'.$prefix))
+				'IDCLIENTE' 		=> $this->input->post('txt_cliente'.$prefix),
+				'DOMICILIO'			=> strtoupper($this->input->post('txt_domicilio'.$prefix)),
+				'NUM_EXT'			=> $this->input->post('txt_num_ext'.$prefix),
+				'COLONIA'			=> strtoupper($this->input->post('txt_colonia'.$prefix)),
+				'CRUCE1'			=> strtoupper($this->input->post('txt_cruce_uno'.$prefix)),
+				'CRUCE2'			=> strtoupper($this->input->post('txt_cruce_dos'.$prefix)),
+				'LUGAR_REF'			=> strtoupper($this->input->post('txt_referencial').$prefix),
+				'NOMBRE_PASAJERO'	=> strtoupper($this->input->post('txt_nombre_pasajero'.$prefix)),
+				'NUM_PASAJEROS'		=> $this->input->post('txt_num_pasajeros'.$prefix),
+				'NOMBRE_SOLICITANTE'=> $this->input->post('txt_nombre_solicitante'.$prefix),
+				'FECHA'				=> $this->input->post('txt_fecha'.$prefix),
+				'HORA'				=> $this->input->post('txt_hora'.$prefix),
+				'IDCHOFER'			=> $this->input->post('txt_conductor'.$prefix),
+				'IDVEHICULO'		=> $this->input->post('txt_vehiculo'.$prefix),
+				'BAUCHER'			=> strtoupper($this->input->post('txt_baucher'.$prefix)),
+				'CECO'				=> strtoupper($this->input->post('txt_ceco'.$prefix)),
+				'MONTO'				=> $this->input->post('txt_monto_traslado'.$prefix),
+				'OBSERVACIONES'		=> strtoupper($this->input->post('txt_observaciones'.$prefix))
 			);
 		$this->db->trans_begin();
 		$this->db->update('tbl_traslados',$this->data,$param);
