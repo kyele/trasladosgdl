@@ -93,9 +93,9 @@
                                 <?php
                                     foreach ($traslados as $item) {
                                 ?>
-                                <?php  if($item["ESTATUS"] ==="EC") { $class  = "warning ".$item['RFC']; } else if($item["ESTATUS"]=="C"){ $class  = "danger ".$item['RFC']; }else{$class  =  "success ".$item['RFC'];} ?>
+                                <?php  if($item["ESTATUS"] ==="EC") { $class  = "warning ".$item['ID']; } else if($item["ESTATUS"]=="C"){ $class  = "danger ".$item['ID']; }else{$class  =  "success ".$item['ID'];} ?>
                                     <tr  id="field_ride_<?php echo $item['ID'] ?>" class='<?php echo $class ?>' style="background:<?php echo $item['COLOR'];?> " >
-                                        <td style="background:<?php echo $item['COLOR'];?> "><input type="color" data-id="<?php echo $item['RFC'] ?>" value="<?php echo $item['COLOR'] ?>"></td>
+                                        <td style="background:<?php echo $item['COLOR'];?> "><input type="color" data-id="<?php echo $item['ID'] ?>" value="<?php echo $item['COLOR'] ?>"></td>
                                         <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['ID'] ?></td>
                                         <td style="background:<?php echo $item['COLOR'];?> "><?php echo ($item['CLIENTE']=='')?$item['NOMBRE']:$item['CLIENTE'] ?></td>
                                         <td style="background:<?php echo $item['COLOR'];?> "><?php echo $item['N_PASAJERO'] ?></td>

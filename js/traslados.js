@@ -506,14 +506,11 @@ var rides = {
             dataType:'json',
             data:{'id':id,'color':color},
             success:function(data){
-
                 (data.status)?function(){
-
                     $('.'+id+' > td').css('background',color);
                     $('[data-id="'+id+'"]').val(color);
                     $.bootstrapGrowl(
-                        data.msg,
-                        {
+                        data.msg, {
                             type:'success',
                             align:'center',
                             width:'auto',
@@ -656,10 +653,12 @@ var rides = {
         });
         $('#table_traslados').on('click','a.cancelar_traslado',function(e){
             e.preventDefault();
-
-            rides.cancellation($(this).data('traslado'),$(this).data('status'));
+            color = ( $(this).data('status') == 'C' )? '#FA0E0E' : '#FFFFFF';
+            rides.cancellation($(this).data('traslado') , $(this).data('status'));
+            rides.changeColor( $(this).data('traslado') , color );
         });
         $('#table_traslados').on('change',":input[type='color']",function(){
+            //console.log($(this).data('id'));
             var id = $(this).data('id');
             var color = $(this).val();
             rides.changeColor(id,color);

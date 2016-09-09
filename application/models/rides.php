@@ -252,7 +252,7 @@ class Rides extends CI_Model
 		$where = '';
 		if($from ==='traslados'){
 			$betweenT = "BETWEEN '$fecha_ini' AND '$fecha_fin'";
-			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS,tbl_traslados.IDCOMPROBANTE,tbl_cliente.COLOR";
+			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.HORA,tbl_traslados.ESTATUS,tbl_traslados.IDCOMPROBANTE,tbl_traslados.COLOR";
 		}else{
 
 			$ini = DateTime::createFromFormat('d/m/Y', $this->input->post('txt_fecha_i'));
@@ -264,7 +264,7 @@ class Rides extends CI_Model
 			$this->cliente   = $this->input->post('txt_cliente');
 			$betweenT = '';
 
-			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.PAGADO,tbl_traslados.MONTO,IDCOMPROBANTE,tbl_cliente.COLOR,tbl_traslados.ESTATUS";
+			$queryChar = "tbl_cliente.RFC,tbl_traslados.IDTRASLADO as ID,tbl_cliente.R_SOCIAL AS CLIENTE,tbl_traslados.NOMBRE_PASAJERO AS N_PASAJERO,CONCAT(tbl_traslados.DOMICILIO, ' - ' , tbl_traslados.LUGAR_REF ) as RUTA,CONCAT(tbl_cliente.NOMBRE ,' ', tbl_cliente.APEPAT,' ',tbl_cliente.APEMAT) as NOMBRE,CONCAT(tbl_chofer.NOMBRE,' ',tbl_chofer.APEPAT,' ',tbl_chofer.APEMAT) as NOMBRECH,tbl_modelo.MODELO,DATE_FORMAT(tbl_traslados.FECHA_PAGO,'%d-%m-%Y') as FECHA_PAGO,DATE_FORMAT(tbl_traslados.FECHA,'%d-%m-%Y') as FECHA,tbl_traslados.PAGADO,tbl_traslados.MONTO,IDCOMPROBANTE,tbl_traslados.COLOR,tbl_traslados.ESTATUS";
 			$betweenT = "BETWEEN '$this->fecha_ini' AND '$this->fecha_fin'";
 			$where = " tbl_cliente.RFC = '$cliente' AND tbl_traslados.ESTATUS != 'C' AND ";
 
@@ -556,12 +556,12 @@ class Rides extends CI_Model
 
 	}
     public function color_ride(){
-        $this->id_cliente = $this->input->post('id');
-        $color  = $this->input->post('color');
+        $this->id_traslado 	= $this->input->post('id');
+        $color  			= $this->input->post('color');
         $this->db->trans_begin();
-        $param = array('RFC'=>$this->id_cliente);
-        $param1 = array('COLOR'=>$color);
-        $this->db->update('tbl_cliente ',$param1,$param);
+        $param = array( 'IDTRASLADO' => $this->id_traslado);
+        $param1 = array( 'COLOR' => $color );
+        $this->db->update( 'tbl_traslados' , $param1 , $param );
         if($this->db->trans_status() === TRUE){
             $this->db->trans_commit();
             return array('status' => TRUE,'msg'=>'<b>El color ha sido modificado.</b>');

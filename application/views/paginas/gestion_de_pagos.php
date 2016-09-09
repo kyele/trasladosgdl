@@ -205,7 +205,7 @@
                             <div class="form-group col-sm-6" id="form_group_txt_rfc">
                                 <label for="txt_km_init">Tipo Comprobante</label>
                                 <select class="form-control input-sm" name="txt_tipo_lote" id="txt_tipo_lote" value="<?php echo set_value('txt_tipo_lote'); ?>">
-                                  <option value="NOTA">NOTA DE CREDITO</option>
+                                  <option value="NOTA">PAGARE</option>
                                   <option value="FACTURA">FACTURA</option>
                                 </select>
                             </div>
@@ -264,7 +264,7 @@
                             <div class="form-group col-sm-6" id="form_group_txt_rfc">
                                 <label for="txt_km_init">Tipo Comprobante</label>
                                 <select class="form-control input-sm" name="txt_tipo_lote" id="txt_tipo_lote" value="<?php echo set_value('txt_tipo_lote'); ?>">
-                                  <option value="NOTA">NOTA DE CREDITO</option>
+                                  <option value="NOTA">PAGARE</option>
                                   <option value="FACTURA">FACTURA</option>
                                 </select>
                             </div>

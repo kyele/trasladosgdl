@@ -845,6 +845,16 @@ a:focus {
     background-color: #e74c3c;
 }
 
+.portlet-gray,
+.portlet-gray>.portlet-heading {
+    border-color: #7E7E7E;
+}
+
+.portlet-gray>.portlet-heading {
+    color: #fff;
+    background-color: #7E7E7E;
+}
+
 .portlet-purple,
 .portlet-purple>.portlet-heading {
     border-color: #8e44ad;
@@ -1177,6 +1187,11 @@ fieldset[disabled] .btn-blue.active {
     border-color: #db4839;
     color: #fff;
     background-color: #e74c3c;
+}
+.btn-gris {
+    border-color: #000;
+    color: #fff;
+    background-color: #444;
 }
 
 .btn-red:hover,
@@ -1573,7 +1588,12 @@ a.google-plus-link:hover {
 /* -- Login Page Styles */
 
  .login {
-    background-color: #34495e;
+    /*background-color: #34495e;*/
+    background-image: url("../img/fondo1.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center top;
+    background-attachment: fixed;
 }
 
 .login-banner {

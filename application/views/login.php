@@ -14,11 +14,15 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-4 col-md-offset-4">
+            <div class="col-md-5 col-md-offset-3">
                 <div class="login-banner text-center">
-                    <h4><i class="fa fa-gears"></i> Iniciar Sesión para Acceder al Sistema <br><br> <h3>Traslados GDL<h3></h4>
+                    <h3 class="text-danger">TRASLADOS GDL</h3>
+                    <h4 class="text-danger">
+                        <i class="fa fa-gears"></i> Iniciar Sesión para Acceder al Sistema 
+                        <br><br>
+                    </h4>
                 </div>
-                <div class="portlet portlet-red">
+                <div class="portlet portlet-gray">
                     <div class="portlet-heading login-heading">
                         <div class="portlet-title">
                             <h4><strong><span class="glyphicon glyphicon-lock"></span> Login </strong>
@@ -47,7 +51,7 @@
                                 <?php echo validation_errors(); ?>
                                 <br>
 
-                                <button type="submit" name="submit" class="btn btn-lg btn-red btn-block">Ingresar</button>
+                                <button type="submit" name="submit" class="btn btn-lg btn-gris btn-block">Ingresar</button>
                                 <!-- <a href="#" class="btn btn-lg btn-red btn-block">Entrar</a> -->
                             </fieldset>
                             <br>
